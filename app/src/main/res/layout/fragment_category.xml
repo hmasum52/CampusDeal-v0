@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeFragment">
+    tools:context=".CategoryFragment">
 
     <TextView
         style="@style/MaterialAlertDialog.Material3.Title.Text.CenterStacked"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fontFamily="@font/open_sans"
-        android:text="Home Fragment" />
+        android:text="Category Fragment" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

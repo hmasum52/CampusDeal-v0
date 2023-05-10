@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeFragment">
+    tools:context=".SearchFragment">
 
     <TextView
         style="@style/MaterialAlertDialog.Material3.Title.Text.CenterStacked"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fontFamily="@font/open_sans"
-        android:text="Home Fragment" />
+        android:text="Search Fragment" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
