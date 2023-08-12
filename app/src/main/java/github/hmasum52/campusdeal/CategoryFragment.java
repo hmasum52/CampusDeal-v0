@@ -45,6 +45,6 @@ public class CategoryFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        mVB.categoryTest.setText(String.valueOf("Category :  "+name));
+        mVB.categoryTest.setText(name);
     }
 }

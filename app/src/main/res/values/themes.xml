@@ -7,8 +7,8 @@
 
         <!--https://developer.android.com/develop/ui/views/text-and-emoji/fonts-in-xml-->
         <!--https://stackoverflow.com/a/45978777/13877490-->
-        <item name="android:fontFamily">@font/open_sans</item>
-        <item name="fontFamily">@font/open_sans</item>
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="fontFamily">@font/poppins</item>
     </style>
 
     <style name="Theme.CampusDeal" parent="Base.Theme.CampusDeal" />

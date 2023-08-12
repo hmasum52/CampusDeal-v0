@@ -10,7 +10,7 @@
         style="@style/MaterialAlertDialog.Material3.Title.Text.CenterStacked"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fontFamily="@font/open_sans"
-        android:text="Category Fragment" />
+        android:textStyle="bold"
+        tools:text="Category Name Here" />
 
 </FrameLayout>
