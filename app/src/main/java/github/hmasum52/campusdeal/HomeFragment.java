@@ -45,13 +45,26 @@ public class HomeFragment extends Fragment {
         // https://androidwave.com/viewpager2-with-tablayout-android-example/
         // https://developer.android.com/guide/navigation/advanced/swipe-view-2
         // https://www.geeksforgeeks.org/how-to-implement-dynamic-tablayout-in-android/
+
+
+        // categories
+        // Books, Stationary, Electronics, Accessories, Clothes,
+        // Tutoring, Musical Instruments, Sports
+        ArrayList<String> categoryList = new ArrayList<String>() {{
+            add("Books");
+            add("Stationary");
+            add("Electronics");
+            add("Accessories");
+            add("Clothes");
+            add("Sports");
+            add("Tutoring");
+            add("Musical Instruments");
+        }};
+
+
         ArrayList<Fragment> fragments = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            Bundle b = new Bundle();
-            b.putInt("position", i);
-            Fragment frag = new CategoryFragment();
-            frag.setArguments(b);
-            fragments.add(frag);
+        for (int i = 0; i < categoryList.size(); i++) {
+            fragments.add(new CategoryFragment(categoryList.get(i)));
         }
 
         mVB.pager.setOffscreenPageLimit(2);
@@ -62,7 +75,7 @@ public class HomeFragment extends Fragment {
 
         // tab layout mediator to connect viewpager2 with tablayout
         new TabLayoutMediator(mVB.tabLayout, mVB.pager, ((TabLayout.Tab tab, int position) -> {
-            tab.setText("page name: "+position);
+            tab.setText(categoryList.get(position));
         })).attach();
     }
 }

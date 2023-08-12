@@ -17,9 +17,11 @@ public class CategoryFragment extends Fragment {
 
     // view binding
     private FragmentCategoryBinding mVB;
+    private String name;
 
-    public CategoryFragment() {
+    public CategoryFragment(String name) {
         // Required empty public constructor
+        this.name = name;
     }
 
 
@@ -43,6 +45,6 @@ public class CategoryFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        mVB.categoryTest.setText(String.valueOf("Category :  " + getArguments().getInt("position")));
+        mVB.categoryTest.setText(String.valueOf("Category :  "+name));
     }
 }
