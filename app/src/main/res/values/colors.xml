@@ -19,4 +19,6 @@
     <color name="c_gray500">#969899</color>
     <color name="c_orange_yellow">#F8BA00</color>
     <color name="c_green">#11FF00</color>
+    <color name="c_teal300">#00c1a2</color>
+    <color name="c_hello_t1">#0DA9AB</color>
 </resources>
