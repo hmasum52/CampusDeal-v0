@@ -1,4 +1,4 @@
-package github.hmasum52.campusdeal;
+package github.hmasum52.campusdeal.fragment;
 
 import android.os.Bundle;
 

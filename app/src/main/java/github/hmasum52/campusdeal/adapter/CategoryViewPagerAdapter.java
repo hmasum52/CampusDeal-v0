@@ -1,7 +1,5 @@
 package github.hmasum52.campusdeal.adapter;
 
-import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -9,8 +7,6 @@ import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import java.util.ArrayList;
-
-import github.hmasum52.campusdeal.CategoryFragment;
 
 public class CategoryViewPagerAdapter extends FragmentStateAdapter {
     // all the category fragments
