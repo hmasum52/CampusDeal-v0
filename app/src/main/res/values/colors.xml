@@ -21,4 +21,6 @@
     <color name="c_green">#11FF00</color>
     <color name="c_teal300">#00c1a2</color>
     <color name="c_hello_t1">#0DA9AB</color>
+    <color name="box_border">#DDE1EB</color>
+    <color name="placeholder_text">#B2BAC6</color>
 </resources>
