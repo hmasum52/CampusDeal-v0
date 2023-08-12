@@ -3,35 +3,62 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/onBoardingFragment">
+
+    <fragment android:id="@+id/onBoardingFragment"
+        android:name="github.hmasum52.campusdeal.fragment.OnBoardingFragment"
+        tools:layout="@layout/fragment_on_boarding"
+        android:label="fragment_on_boarding" />
+        />
     <fragment
         android:id="@+id/homeFragment"
-        android:name="github.hmasum52.campusdeal.HomeFragment"
+        android:name="github.hmasum52.campusdeal.fragment.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <argument
+            android:name="showBottomNav"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="github.hmasum52.campusdeal.SearchFragment"
+        android:name="github.hmasum52.campusdeal.fragment.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <argument
+            android:name="showBottomNav"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="github.hmasum52.campusdeal.ProfileFragment"
+        android:name="github.hmasum52.campusdeal.fragment.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile">
+        <argument
+            android:name="showBottomNav"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </fragment>
     <fragment
         android:id="@+id/productFragment"
-        android:name="github.hmasum52.campusdeal.ProductFragment"
+        android:name="github.hmasum52.campusdeal.fragment.ProductFragment"
         android:label="fragment_product"
         tools:layout="@layout/fragment_product" />
     <fragment
         android:id="@+id/categoryFragment"
-        android:name="github.hmasum52.campusdeal.CategoryFragment"
+        android:name="github.hmasum52.campusdeal.fragment.CategoryFragment"
         android:label="fragment_category"
         tools:layout="@layout/fragment_category" />
     <fragment
         android:id="@+id/cartFragment"
-        android:name="github.hmasum52.campusdeal.CartFragment"
+        android:name="github.hmasum52.campusdeal.fragment.CartFragment"
         android:label="fragment_cart"
-        tools:layout="@layout/fragment_cart" />
+        tools:layout="@layout/fragment_cart" >
+        <argument
+            android:name="showBottomNav"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </fragment>
+
 </navigation>

@@ -2,4 +2,7 @@
     <string name="app_name">CampusDeal</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="i_m_already_a_member">I\'m already a member</string>
+    <string name="get_started">Get started</string>
+    <string name="app_theme_text">Connect with fellow students within your campus community. Buy and sell items directly with your peers</string>
 </resources>
