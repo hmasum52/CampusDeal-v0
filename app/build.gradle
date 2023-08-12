@@ -53,4 +53,7 @@ dependencies {
     // https://stackoverflow.com/a/75624885
     implementation "com.google.dagger:hilt-android:2.44"
     annotationProcessor  "com.google.dagger:hilt-compiler:2.44"
+
+    // lottie animation
+    implementation 'com.airbnb.android:lottie:6.1.0'
 }
