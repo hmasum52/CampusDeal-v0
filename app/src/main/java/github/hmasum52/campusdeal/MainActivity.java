@@ -7,8 +7,10 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import github.hmasum52.campusdeal.databinding.ActivityMainBinding;
 
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding mVB;
