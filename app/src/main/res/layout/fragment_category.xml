@@ -6,6 +6,7 @@
     tools:context=".CategoryFragment">
 
     <TextView
+        android:id="@+id/category_test"
         style="@style/MaterialAlertDialog.Material3.Title.Text.CenterStacked"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
