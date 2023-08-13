@@ -4,6 +4,7 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="colorPrimary">@android:color/black</item>
+        <item name="colorSecondary">@color/c_teal300</item>
 
         <!--https://developer.android.com/develop/ui/views/text-and-emoji/fonts-in-xml-->
         <!--https://stackoverflow.com/a/45978777/13877490-->
@@ -12,4 +13,18 @@
     </style>
 
     <style name="Theme.CampusDeal" parent="Base.Theme.CampusDeal" />
+
+    <style name="FirebaseUI.Button" parent="@style/Widget.MaterialComponents.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="FirebaseUI.Button.AccountChooser.EmailButton" parent="FirebaseUI.Button.AccountChooser.BaseButton">
+        <item name="icon">@drawable/fui_ic_mail_white_24dp</item>
+        <item name="backgroundTint">@color/black</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+    </style>
+
+
 </resources>
