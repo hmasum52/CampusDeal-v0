@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--    https://github.com/enggAkash/ProfileIconFromNameInitials/blob/main/app/src/main/res/drawable/name_bg.xml-->
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+android:shape="oval">
+
+<size
+    android:width="64dp"
+    android:height="64dp" />
+
+<solid android:color="@color/c_teal300" />
+
+</shape>

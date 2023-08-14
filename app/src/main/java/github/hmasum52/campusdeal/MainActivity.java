@@ -66,12 +66,9 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
         });
     }
 
-//    public void navigateToNewStartDestination(Integer fragmentId, Bundle bundle) {
-//        if(!isValidFragmentId(fragmentId))
-//            return;
-//        navController.navigate(fragmentId, bundle);
-//        this.setStartDestination(fragmentId);
-//    }
+    public static void navigateToNewStartDestination(Activity activity, Integer fragmentId) {
+        MainActivity.navigateToNewStartDestination(activity, fragmentId, fragmentId);
+    }
     public static void navigateToNewStartDestination(Activity activity, Integer transition, Integer fragmentId) {
         NavController navController = Navigation.findNavController(activity, R.id.nav_host_frag);
         if(!isValidFragmentId(navController, fragmentId))

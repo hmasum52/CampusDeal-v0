@@ -70,4 +70,11 @@ dependencies {
 
     // firebase firestore
     implementation 'com.google.firebase:firebase-firestore:24.7.0'
+
+    // Glide to render network image
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
+
+    // circular image view for profile image
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
 }

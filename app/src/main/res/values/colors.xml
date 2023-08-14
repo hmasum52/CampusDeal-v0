@@ -23,4 +23,5 @@
     <color name="c_hello_t1">#0DA9AB</color>
     <color name="box_border">#DDE1EB</color>
     <color name="placeholder_text">#B2BAC6</color>
+    <color name="text_light">#9b9b9b</color>
 </resources>

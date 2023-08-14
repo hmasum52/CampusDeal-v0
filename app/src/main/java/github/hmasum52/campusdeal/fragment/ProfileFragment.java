@@ -8,59 +8,101 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import github.hmasum52.campusdeal.R;
+import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+import github.hmasum52.campusdeal.MainActivity;
+import github.hmasum52.campusdeal.R;
+import github.hmasum52.campusdeal.adapter.ProfileOptionListAdapter;
+import github.hmasum52.campusdeal.databinding.FragmentProfileBinding;
+import github.hmasum52.campusdeal.util.ProfileOption;
+
+@AndroidEntryPoint
 public class ProfileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private FragmentProfileBinding mVB;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    @Inject
+    FirebaseUser fUser;
 
-    public ProfileFragment() {
-        // Required empty public constructor
-    }
+    @Inject
+    FirebaseAuth fAuth;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mVB = FragmentProfileBinding.inflate(inflater, container, false);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        return mVB.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // check if user has profile image
+        if(fUser.getPhotoUrl() != null){
+            // load the image using glide
+            Glide.with(this)
+                    .load(fUser.getPhotoUrl())
+                    .placeholder(R.drawable.avatar_bg)
+                    .into(mVB.profileImage);
+        }else{
+            // set name initial to nameInitialTV
+            mVB.nameInitialsText.setText(fUser.getDisplayName().substring(0,1));
+        }
+
+        // set the name to username text view
+        mVB.usernameTv.setText(fUser.getDisplayName());
+
+        // set the email to email text view
+        mVB.emailTv.setText(fUser.getEmail());
+
+        // option recycler view init
+        optionRecyclerViewInit();
+
+        // sign out button init
+        // sign out button click listener
+        mVB.signOutBtn.setOnClickListener(v -> {
+            signOut();
+        });
+    }
+
+    private void signOut(){
+        // sign out the user
+        // https://firebase.google.com/docs/auth/android/firebaseui#sign_out
+        fAuth.signOut();
+        // navigate to onboarding fragment
+        MainActivity.navigateToNewStartDestination(getActivity(), R.id.onBoardingFragment);
+    }
+
+    private void optionRecyclerViewInit() {
+
+        // make a list of profile options
+        // options: my orders, my wishlist, my cart, my address, my account
+        List<ProfileOption> profileOptionList = new ArrayList<ProfileOption>() {
+            {
+                add(new ProfileOption("My Orders", "View your orders"));
+                add(new ProfileOption("My Wishlist", "View your wishlist"));
+                add(new ProfileOption("My Cart", "View your cart"));
+                add(new ProfileOption("My Address", "View your address"));
+                add(new ProfileOption("Edit Account", "View your account"));
+            }
+        };
+
+        // set the adapter
+        ProfileOptionListAdapter adapter = new ProfileOptionListAdapter(profileOptionList);
+        adapter.setOnItemClickListener((view, position) -> {
+                    // TODO: 8/3/2021 handle click
+                });
+        mVB.optionListRv.setAdapter(adapter);
     }
 }
