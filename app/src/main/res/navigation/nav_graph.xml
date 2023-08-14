@@ -8,7 +8,11 @@
     <fragment android:id="@+id/onBoardingFragment"
         android:name="github.hmasum52.campusdeal.fragment.OnBoardingFragment"
         tools:layout="@layout/fragment_on_boarding"
-        android:label="fragment_on_boarding" />
+        android:label="fragment_on_boarding" >
+        <action
+            android:id="@+id/action_onBoardingFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
         />
     <fragment
         android:id="@+id/homeFragment"

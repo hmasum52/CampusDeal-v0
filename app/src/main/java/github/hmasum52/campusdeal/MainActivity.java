@@ -17,8 +17,7 @@ import java.util.Map;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import github.hmasum52.campusdeal.databinding.ActivityMainBinding;
-
-//@AndroidEntryPoint
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity implements NavController.OnDestinationChangedListener {
 
     private ActivityMainBinding mVB;

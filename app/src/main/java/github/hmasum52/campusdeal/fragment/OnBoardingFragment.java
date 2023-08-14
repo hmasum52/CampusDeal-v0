@@ -10,6 +10,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,14 +32,20 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 import github.hmasum52.campusdeal.R;
 import github.hmasum52.campusdeal.databinding.FragmentLoginBinding;
 import github.hmasum52.campusdeal.databinding.FragmentOnBoardingBinding;
 
-
+@AndroidEntryPoint
 public class OnBoardingFragment extends Fragment {
 
     private FragmentOnBoardingBinding mVB;
+
+    @Inject
+    FirebaseAuth auth;
 
 
     // firebase auth
@@ -83,6 +90,12 @@ public class OnBoardingFragment extends Fragment {
 
 
         mVB.getStartBtn.setOnClickListener(v -> {
+            // check if user is already logged in
+            if(auth.getCurrentUser() != null){
+                // navigate to home screen
+                NavHostFragment.findNavController(this).navigate(R.id.action_onBoardingFragment_to_homeFragment);
+                return;
+            }
             signInLauncher.launch(signInIntent);
         });
     }
@@ -93,6 +106,9 @@ public class OnBoardingFragment extends Fragment {
             // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             Log.d("MainActivity", user.toString());
+
+            // navigate using nav controller
+            NavHostFragment.findNavController(this).navigate(R.id.action_onBoardingFragment_to_homeFragment);
             // ...
         } else {
             // Sign in failed. If response is null the user canceled the
