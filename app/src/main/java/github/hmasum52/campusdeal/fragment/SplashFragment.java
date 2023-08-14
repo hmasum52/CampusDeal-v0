@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import github.hmasum52.campusdeal.MainActivity;
 import github.hmasum52.campusdeal.R;
 import github.hmasum52.campusdeal.databinding.FragmentSplashBinding;
 
@@ -48,14 +49,20 @@ public class SplashFragment extends Fragment {
                 // check if user is logged in
                 if(auth.getCurrentUser() != null) {
                     // user is logged in
-                    // go to home fragment using NavHostFragment
-                    NavHostFragment.findNavController(SplashFragment.this)
-                            .navigate(R.id.action_splashFragment_to_homeFragment);
+                    // go to home fragment using
+                    MainActivity.navigateToNewStartDestination(
+                            getActivity(),
+                            R.id.action_splashFragment_to_homeFragment,
+                            R.id.homeFragment // new start destination
+                    );
                 }else{
                     // user is not logged in
-                    // go to login fragment using NavHostFragment
-                    NavHostFragment.findNavController(SplashFragment.this)
-                            .navigate(R.id.action_splashFragment_to_onBoardingFragment);
+                    // go to login fragment
+                    MainActivity.navigateToNewStartDestination(
+                            getActivity(),
+                            R.id.action_splashFragment_to_onBoardingFragment,
+                            R.id.onBoardingFragment // new start destination
+                    );
                 }
             }
 

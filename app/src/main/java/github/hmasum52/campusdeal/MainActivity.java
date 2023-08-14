@@ -6,11 +6,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavArgument;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
+import androidx.navigation.NavGraph;
+import androidx.navigation.NavInflater;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 
 import java.util.Map;
@@ -20,8 +24,11 @@ import dagger.hilt.android.AndroidEntryPoint;
 import github.hmasum52.campusdeal.databinding.ActivityMainBinding;
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity implements NavController.OnDestinationChangedListener {
+    public static final String TAG = "MainActivity";
 
     private ActivityMainBinding mVB;
+
+    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
         super.setContentView(mVB.getRoot());
 
         // set up bottom navigation bar
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_frag);
+        navController = Navigation.findNavController(this, R.id.nav_host_frag);
         // after set up with navController, it will automatically handle the navigation
         // when user click on the bottom navigation bar
         NavigationUI.setupWithNavController(mVB.bottomNavigation, navController);
@@ -58,4 +65,39 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
             }
         });
     }
+
+//    public void navigateToNewStartDestination(Integer fragmentId, Bundle bundle) {
+//        if(!isValidFragmentId(fragmentId))
+//            return;
+//        navController.navigate(fragmentId, bundle);
+//        this.setStartDestination(fragmentId);
+//    }
+    public static void navigateToNewStartDestination(Activity activity, Integer transition, Integer fragmentId) {
+        NavController navController = Navigation.findNavController(activity, R.id.nav_host_frag);
+        if(!isValidFragmentId(navController, fragmentId))
+            return;
+        navController.navigate(transition);
+        setStartDestination(navController, fragmentId);
+    }
+
+    private static boolean isValidFragmentId(NavController navController, Integer fragmentId){
+        return navController.getCurrentDestination().getId()!=fragmentId;
+    }
+
+    /**
+     * change the start destination of navController\
+     * @param fragmentId is the id of fragment we want to set as start destination(ex: R.id.dashboardFrag)
+     *
+     */
+    public static void setStartDestination(NavController navController, Integer fragmentId) {
+        NavInflater inflater = navController.getNavInflater();//navHostFragment.getNavController().getNavInflater();
+        //NavGraph navGraph = inflater.inflate(R.navigation.main_nav_graph);
+        NavGraph navGraph = inflater.inflate(R.navigation.nav_graph);
+        navGraph.setStartDestination(fragmentId);
+        //navHostFragment.getNavController().setGraph(navGraph);
+        navController.setGraph(navGraph);
+        Log.d(TAG, "setStartDestination(): new start fragment: " + Objects.requireNonNull(navController.getCurrentDestination()).getLabel());
+    }
+
+
 }
