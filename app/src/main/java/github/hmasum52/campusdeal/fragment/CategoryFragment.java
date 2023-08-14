@@ -19,6 +19,10 @@ public class CategoryFragment extends Fragment {
     private FragmentCategoryBinding mVB;
     private String name;
 
+    public CategoryFragment(){
+
+    }
+
     public CategoryFragment(String name) {
         // Required empty public constructor
         this.name = name;

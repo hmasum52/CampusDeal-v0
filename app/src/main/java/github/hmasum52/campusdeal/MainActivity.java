@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.view.View;
 
 import java.util.Map;
+import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import github.hmasum52.campusdeal.databinding.ActivityMainBinding;
@@ -46,7 +47,10 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
         Map<String, NavArgument> args = navDestination.getArguments();
 
         new Handler().post( ()-> {
-            boolean showBottomNav = args.containsKey("showBottomNav") && args.get("showBottomNav").getDefaultValue().equals(true);
+            boolean showBottomNav = args.containsKey("showBottomNav")
+                    && Objects.equals(
+                            Objects.requireNonNull(args.get("showBottomNav")).getDefaultValue()
+                            , true);
             if(showBottomNav){
                 mVB.bottomNavigation.setVisibility(View.VISIBLE);
             }else{
