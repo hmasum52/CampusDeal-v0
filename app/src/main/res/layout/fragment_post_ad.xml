@@ -123,27 +123,27 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="?actionBarSize"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/selected_category_icon"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:backgroundTint="@color/bg_light"
                     android:src="@drawable/ic_widgets_24"
                     app:civ_border_color="@color/bg_light"
-                    app:civ_border_width="5dp"
+                    app:civ_border_width="8dp"
                     android:layout_marginStart="16dp"
                     app:civ_circle_background_color="@color/bg_light" />
 
                 <TextView
-                    android:id="@+id/textView11"
+                    android:id="@+id/selected_category_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
-                    android:text="Select Category" />
+                    android:text="@string/select_category" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

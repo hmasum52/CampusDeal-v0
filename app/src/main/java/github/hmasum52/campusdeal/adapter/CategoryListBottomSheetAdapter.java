@@ -24,7 +24,15 @@ public class CategoryListBottomSheetAdapter extends RecyclerView.Adapter<Categor
         Log.d("CategoryListBottomSheetAdapter", "CategoryListBottomSheetAdapter: "+categoryList.size());
     }
 
+    private OnItemClickListener listener;
 
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.listener = listener;
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(int position);
+    }
 
     @NonNull
     @Override
@@ -35,7 +43,9 @@ public class CategoryListBottomSheetAdapter extends RecyclerView.Adapter<Categor
     @Override
     public void onBindViewHolder(@NonNull CategoryListBottomSheetAdapter.ViewHolder holder, int position) {
         holder.itemView.setOnClickListener(v -> {
-
+            if(listener!=null){
+                listener.onItemClick(position);
+            }
         });
 
         holder.mVB.categoryNameTv.setText(categoryList.get(position));

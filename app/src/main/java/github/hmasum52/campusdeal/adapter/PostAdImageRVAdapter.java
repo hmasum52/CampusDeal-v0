@@ -20,10 +20,10 @@ import github.hmasum52.campusdeal.R;
 import github.hmasum52.campusdeal.databinding.CardPostAdImageBinding;
 
 // recycler view adapter for add product image
-public class AddProductImageRVAdapter extends RecyclerView.Adapter<AddProductImageRVAdapter.ViewHolder>{
+public class PostAdImageRVAdapter extends RecyclerView.Adapter<PostAdImageRVAdapter.ViewHolder>{
     private final List<Uri> imageUriList;
 
-    public AddProductImageRVAdapter(Fragment hostFragment) {
+    public PostAdImageRVAdapter(Fragment hostFragment) {
         this.imageUriList = new ArrayList<>();
     }
 
@@ -54,14 +54,14 @@ public class AddProductImageRVAdapter extends RecyclerView.Adapter<AddProductIma
 
     @NonNull
     @Override
-    public AddProductImageRVAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PostAdImageRVAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_post_ad_image, parent, false);
         return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AddProductImageRVAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PostAdImageRVAdapter.ViewHolder holder, int position) {
         if(position == imageUriList.size()){
             holder.mVB.image.setVisibility(View.GONE);
             holder.itemView.setOnClickListener(v -> {

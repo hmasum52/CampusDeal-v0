@@ -8,4 +8,5 @@
     <string name="welcome_msg">Welcome to\n<font color="#00c1a2">Campus</font>Deal</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_out">Sign Out</string>
+    <string name="select_category">Select Category</string>
 </resources>

@@ -13,19 +13,18 @@ import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
-import github.hmasum52.campusdeal.R;
-import github.hmasum52.campusdeal.adapter.AddProductImageRVAdapter;
+import github.hmasum52.campusdeal.adapter.PostAdImageRVAdapter;
 import github.hmasum52.campusdeal.adapter.CategoryListBottomSheetAdapter;
 import github.hmasum52.campusdeal.databinding.BottomDialogCategoryListBinding;
 import github.hmasum52.campusdeal.databinding.FragmentPostAdBinding;
@@ -39,7 +38,7 @@ public class PostAdFragment extends Fragment {
 
     private FragmentPostAdBinding mVB;
 
-    private  AddProductImageRVAdapter adapter;
+    private PostAdImageRVAdapter adapter;
 
     // pick image from gallery // https://developer.android.com/training/data-storage/shared/photopicker
     ////                // Registers a photo picker activity launcher in multi-select mode.
@@ -90,8 +89,33 @@ public class PostAdFragment extends Fragment {
             NavHostFragment.findNavController(this).popBackStack();
         });
 
-        // add product image recycler view adapter
-        adapter = new AddProductImageRVAdapter(this);
+        // add ad image recycler view adapter
+        initAdImageSelectRecyclerView();
+
+        // https://www.section.io/engineering-education/bottom-sheet-dialogs-using-android-studio/
+        // open bottom dialog on category card click
+        mVB.selectCategoryCard.setOnClickListener(v -> {
+            CategoryListBottomSheetFragment bottomSheetFragment = new CategoryListBottomSheetFragment();
+            bottomSheetFragment.setOnItemClickListener(position -> {
+                // set category name
+                mVB.selectedCategoryTv.setText(Constants.categoryList.get(position));
+                // set category icon
+                mVB.selectedCategoryIcon.setImageDrawable(
+                        ResourcesCompat.getDrawable(
+                                getResources(),
+                                Constants.categoryIconList.get(position),
+                                null
+                        )
+                );
+                // dismiss the bottom sheet
+                bottomSheetFragment.dismiss();
+            });
+            bottomSheetFragment.show(getChildFragmentManager(), bottomSheetFragment.getTag());
+        });
+    }
+
+    void initAdImageSelectRecyclerView(){
+        adapter = new PostAdImageRVAdapter(this);
         mVB.imageRv.setAdapter(adapter);
         adapter.setOnImageAddListener(() -> {
             // pick image from gallery
@@ -100,23 +124,20 @@ public class PostAdFragment extends Fragment {
                     .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE) // ignore the error
                     .build());
         });
-
-
-        // https://www.section.io/engineering-education/bottom-sheet-dialogs-using-android-studio/
-        // open bottom dialog on category card click
-        mVB.selectCategoryCard.setOnClickListener(v -> {
-            CategoryListBottomSheetFragment bottomSheetFragment = new CategoryListBottomSheetFragment();
-            bottomSheetFragment.show(getChildFragmentManager(), bottomSheetFragment.getTag());
-        });
     }
-
 
     // https://www.youtube.com/watch?v=bXzNIUKYHF0
     public static class CategoryListBottomSheetFragment extends BottomSheetDialogFragment {
         // view binding
         private BottomDialogCategoryListBinding mVB;
 
-        // on create view
+        private CategoryListBottomSheetAdapter.OnItemClickListener listener;
+
+        public void setOnItemClickListener(CategoryListBottomSheetAdapter.OnItemClickListener listener){
+            this.listener = listener;
+        }
+
+        // on create view0
 
         @Nullable
         @Override
@@ -130,9 +151,10 @@ public class PostAdFragment extends Fragment {
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
             // set up recycler view
-            mVB.categoryListRv.setAdapter(new CategoryListBottomSheetAdapter(Constants.categoryList));
+            // adapter
+            CategoryListBottomSheetAdapter adapter = new CategoryListBottomSheetAdapter(Constants.categoryList);
+            adapter.setOnItemClickListener(listener);
+            mVB.categoryListRv.setAdapter(adapter);
         }
     }
-
-
 }
