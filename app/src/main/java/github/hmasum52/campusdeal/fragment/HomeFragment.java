@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import github.hmasum52.campusdeal.R;
 import github.hmasum52.campusdeal.adapter.CategoryViewPagerAdapter;
 import github.hmasum52.campusdeal.databinding.FragmentHomeBinding;
 import github.hmasum52.campusdeal.model.User;
@@ -58,6 +60,12 @@ public class HomeFragment extends Fragment {
         // https://developer.android.com/guide/navigation/advanced/swipe-view-2
         // https://www.geeksforgeeks.org/how-to-implement-dynamic-tablayout-in-android/
         createUserIsNotExists();
+
+        // add product floating action button listener
+        mVB.addProductFab.setOnClickListener(v -> {
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_homeFragment_to_addProductFragment);
+        });
 
         // categories
         // Books, Stationary, Electronics, Accessories, Clothes,

@@ -36,6 +36,11 @@
             android:name="showBottomNav"
             app:argType="boolean"
             android:defaultValue="true" />
+        <action
+            android:id="@+id/action_homeFragment_to_addProductFragment"
+            app:destination="@id/addProductFragment"
+            app:enterAnim="@anim/from_bottom"
+            app:popExitAnim="@anim/to_bottom" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -81,6 +86,11 @@
         android:id="@+id/loginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/addProductFragment"
+        android:name="github.hmasum52.campusdeal.fragment.PostAdFragment"
+        android:label="fragment_add_product"
+        tools:layout="@layout/fragment_post_ad" />
 
 
 </navigation>

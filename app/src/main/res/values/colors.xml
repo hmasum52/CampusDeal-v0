@@ -24,4 +24,5 @@
     <color name="box_border">#DDE1EB</color>
     <color name="placeholder_text">#B2BAC6</color>
     <color name="text_light">#9b9b9b</color>
+    <color name="bg_light">#F2F2F2</color>
 </resources>

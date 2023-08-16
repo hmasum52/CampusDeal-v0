@@ -71,6 +71,9 @@ dependencies {
     // firebase firestore
     implementation 'com.google.firebase:firebase-firestore:24.7.0'
 
+    // firebase storage
+    implementation 'com.google.firebase:firebase-storage:20.2.1'
+
     // Glide to render network image
     implementation 'com.github.bumptech.glide:glide:4.15.1'
 
