@@ -15,14 +15,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import github.hmasum52.campusdeal.R;
 import github.hmasum52.campusdeal.adapter.AddProductImageRVAdapter;
+import github.hmasum52.campusdeal.adapter.CategoryListBottomSheetAdapter;
+import github.hmasum52.campusdeal.databinding.BottomDialogCategoryListBinding;
 import github.hmasum52.campusdeal.databinding.FragmentPostAdBinding;
+import github.hmasum52.campusdeal.util.Constants;
 
 @AndroidEntryPoint
 public class PostAdFragment extends Fragment {
@@ -93,5 +100,39 @@ public class PostAdFragment extends Fragment {
                     .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE) // ignore the error
                     .build());
         });
+
+
+        // https://www.section.io/engineering-education/bottom-sheet-dialogs-using-android-studio/
+        // open bottom dialog on category card click
+        mVB.selectCategoryCard.setOnClickListener(v -> {
+            CategoryListBottomSheetFragment bottomSheetFragment = new CategoryListBottomSheetFragment();
+            bottomSheetFragment.show(getChildFragmentManager(), bottomSheetFragment.getTag());
+        });
     }
+
+
+    // https://www.youtube.com/watch?v=bXzNIUKYHF0
+    public static class CategoryListBottomSheetFragment extends BottomSheetDialogFragment {
+        // view binding
+        private BottomDialogCategoryListBinding mVB;
+
+        // on create view
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            mVB = BottomDialogCategoryListBinding.inflate(inflater, container, false);
+            return mVB.getRoot();
+        }
+
+        // on view created
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            // set up recycler view
+            mVB.categoryListRv.setAdapter(new CategoryListBottomSheetAdapter(Constants.categoryList));
+        }
+    }
+
+
 }

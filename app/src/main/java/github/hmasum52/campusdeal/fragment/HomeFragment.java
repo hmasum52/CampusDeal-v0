@@ -70,21 +70,12 @@ public class HomeFragment extends Fragment {
         // categories
         // Books, Stationary, Electronics, Accessories, Clothes,
         // Tutoring, Musical Instruments, Sports
-        ArrayList<String> categoryList = new ArrayList<String>() {{
-            add("Books");
-            add("Stationary");
-            add("Electronics");
-            add("Accessories");
-            add("Clothes");
-            add("Sports");
-            add("Tutoring");
-            add("Musical Instruments");
-        }};
+
 
 
         ArrayList<Fragment> fragments = new ArrayList<>();
-        for (int i = 0; i < categoryList.size(); i++) {
-            fragments.add(new CategoryFragment(categoryList.get(i)));
+        for (int i = 0; i < Constants.categoryList.size(); i++) {
+            fragments.add(new CategoryFragment(Constants.categoryList.get(i)));
         }
 
         mVB.pager.setOffscreenPageLimit(2);
@@ -95,7 +86,7 @@ public class HomeFragment extends Fragment {
 
         // tab layout mediator to connect viewpager2 with tablayout
         new TabLayoutMediator(mVB.tabLayout, mVB.pager, ((TabLayout.Tab tab, int position) -> {
-            tab.setText(categoryList.get(position));
+            tab.setText(Constants.categoryList.get(position));
         })).attach();
     }
 
