@@ -80,6 +80,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView9">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/title_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Title" />
@@ -96,6 +97,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/description_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Describe your item" />
@@ -170,10 +172,11 @@
             app:layout_constraintTop_toBottomOf="@+id/textView12">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/price_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:hint="Price(BDT)" />
+                android:hint="@string/price_bdt" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.constraintlayout.widget.Guideline
@@ -184,7 +187,7 @@
             app:layout_constraintGuide_percent="0.5" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switch1"
+            android:id="@+id/negotiable_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
@@ -204,13 +207,13 @@
             app:layout_constraintTop_toTopOf="@+id/textInputLayout4" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button3"
+            android:id="@+id/ad_post_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:text="Post"
+            android:text="@string/post"
             app:cornerRadius="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

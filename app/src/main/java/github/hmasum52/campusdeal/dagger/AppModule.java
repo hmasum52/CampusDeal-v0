@@ -3,6 +3,7 @@ package github.hmasum52.campusdeal.dagger;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 import javax.inject.Singleton;
 
@@ -35,5 +36,12 @@ public class AppModule{
     @Singleton
     public static FirebaseUser provideFirebaseUser(){
         return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    // firebase storage provider
+    @Provides
+    @Singleton
+    public static FirebaseStorage provideFirebaseStorage(){
+        return FirebaseStorage.getInstance();
     }
 }
