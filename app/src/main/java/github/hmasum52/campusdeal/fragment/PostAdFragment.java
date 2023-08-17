@@ -130,8 +130,6 @@ public class PostAdFragment extends Fragment {
         
         // post ad button click listener
         mVB.adPostBtn.setOnClickListener(v -> {
-            uploadDialog = new LoadingDialogBar(getContext(), R.layout.loading_dialog);
-            uploadDialog.showDialog("Posting Ad", R.id.loading_msg_tv);
             uploadAdToFirebase();
         });
     }
@@ -143,7 +141,8 @@ public class PostAdFragment extends Fragment {
         if(!ok){
             return;
         }
-
+        uploadDialog = new LoadingDialogBar(getContext(), R.layout.loading_dialog);
+        uploadDialog.showDialog("Posting Ad", R.id.loading_msg_tv);
         // 1st upload all the images to firebase storage
         // upload image then call uploadAdToFireStore method
         uploadImages(new ArrayList<>());
