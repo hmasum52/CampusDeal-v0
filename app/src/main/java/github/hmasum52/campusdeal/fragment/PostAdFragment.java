@@ -127,6 +127,12 @@ public class PostAdFragment extends Fragment {
             });
             bottomSheetFragment.show(getChildFragmentManager(), bottomSheetFragment.getTag());
         });
+
+        // location input button click listener
+        mVB.selectLocationCard.setOnClickListener(v -> {
+            // go to google map fragment
+            NavHostFragment.findNavController(this).navigate(R.id.action_addProductFragment_to_mapLocationInputFragment);
+        });
         
         // post ad button click listener
         mVB.adPostBtn.setOnClickListener(v -> {

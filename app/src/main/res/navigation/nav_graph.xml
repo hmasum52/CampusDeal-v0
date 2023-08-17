@@ -90,7 +90,17 @@
         android:id="@+id/addProductFragment"
         android:name="github.hmasum52.campusdeal.fragment.PostAdFragment"
         android:label="fragment_add_product"
-        tools:layout="@layout/fragment_post_ad" />
-
+        tools:layout="@layout/fragment_post_ad" >
+        <action
+            android:id="@+id/action_addProductFragment_to_mapLocationInputFragment"
+            app:destination="@id/mapLocationInputFragment"
+            app:enterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment android:id="@+id/mapLocationInputFragment"
+        android:name="github.hmasum52.campusdeal.fragment.GoogleMapFragment"
+        android:label="fragment_google_map"
+        tools:layout="@layout/fragment_google_map"
+        />
 
 </navigation>
