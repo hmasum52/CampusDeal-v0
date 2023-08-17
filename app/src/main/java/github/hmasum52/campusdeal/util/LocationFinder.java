@@ -1,13 +1,16 @@
 package github.hmasum52.campusdeal.util;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.util.Log;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -15,13 +18,16 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.maps.model.LatLng;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.components.ActivityComponent;
 import github.hmasum52.campusdeal.MainActivity;
 
-public class DeviceLocationFinder {
+public class LocationFinder {
     //to get the device location
     public final static int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 101;
     public static final String TAG = "DeviceLocationFinder->";
-    private final MainActivity mainActivity;
+    private final FragmentActivity activity;
     private LatLng deviceLatLng = null;
     private OnDeviceLocationFoundListener onDeviceLocationFoundListener;
 
@@ -34,10 +40,11 @@ public class DeviceLocationFinder {
     private final ActivityResultLauncher<String> requestPermissionLauncher;
 
 
-    public DeviceLocationFinder(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
+    @Inject
+    public LocationFinder(FragmentActivity activity) {
+        this.activity = activity;
 
-        requestPermissionLauncher = mainActivity
+        requestPermissionLauncher = activity
                 .registerForActivityResult(new ActivityResultContracts.RequestPermission()
                         , isGranted -> {
                             Log.d(TAG, "DeviceLocationFinder: registerForActivityResult: isGranted: "+isGranted);
@@ -59,6 +66,7 @@ public class DeviceLocationFinder {
                         });
 
         this.getLocationPermission();
+        Log.d(TAG, "DeviceLocationFinder: init done");
     }
 
     public interface OnDeviceLocationFoundListener {
@@ -67,7 +75,7 @@ public class DeviceLocationFinder {
 
     public boolean isPermissionGranted() {
         return ContextCompat.checkSelfPermission(
-                mainActivity,
+                activity,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
@@ -90,7 +98,7 @@ public class DeviceLocationFinder {
     private void getDeviceLocation(){
         // Construct a FusedLocationProviderClient.
         FusedLocationProviderClient mFusedLocationProviderClient
-                = LocationServices.getFusedLocationProviderClient(mainActivity);
+                = LocationServices.getFusedLocationProviderClient(activity);
         /**
          * Get the best and most recent location of the device, which may be null in rare
          * cases when a location is not available.

@@ -20,11 +20,18 @@ import android.view.View;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 import github.hmasum52.campusdeal.databinding.ActivityMainBinding;
+import github.hmasum52.campusdeal.util.LocationFinder;
+
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity implements NavController.OnDestinationChangedListener {
     public static final String TAG = "MainActivity";
+
+    @Inject
+    LocationFinder finder;
 
     private ActivityMainBinding mVB;
 
