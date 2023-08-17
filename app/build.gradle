@@ -80,4 +80,7 @@ dependencies {
     // circular image view for profile image
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
+    //for fused location
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+
 }

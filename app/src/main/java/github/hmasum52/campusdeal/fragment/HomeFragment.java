@@ -2,6 +2,7 @@ package github.hmasum52.campusdeal.fragment;
 
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -46,6 +47,7 @@ public class HomeFragment extends Fragment {
     @Inject
     FirebaseUser fUser;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,6 +91,7 @@ public class HomeFragment extends Fragment {
             tab.setText(Constants.categoryList.get(position));
         })).attach();
     }
+
 
     private void createUserIsNotExists() {
         // check if the user data is in users firestore collection
