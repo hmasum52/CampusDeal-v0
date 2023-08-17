@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
     id 'dagger.hilt.android.plugin'
     id 'com.google.gms.google-services'
+    // for map api key
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -82,5 +84,8 @@ dependencies {
 
     //for fused location
     implementation 'com.google.android.gms:play-services-location:21.0.1'
+
+    // https://developers.google.com/maps/documentation/android-sdk/start
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
 
 }

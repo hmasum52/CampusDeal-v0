@@ -134,9 +134,6 @@ public class DeviceLocationFinder {
             // get the location permission from user
             // this will prompt user a dialog to give the location permission
             requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
-            /*ActivityCompat.requestPermissions(activity,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);*/
     }
 }
 
