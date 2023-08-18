@@ -38,6 +38,13 @@ public class PostAdImageRVAdapter extends RecyclerView.Adapter<PostAdImageRVAdap
         notifyDataSetChanged();
     }
 
+    // update list and ui
+    public void setImageUriList(List<Uri> imageUriList){
+        this.imageUriList.clear();
+        this.imageUriList.addAll(imageUriList);
+        notifyDataSetChanged();
+    }
+
 
     // listener
     private OnImageAddListener mOnImageAddListener;

@@ -14,6 +14,8 @@ public class Ad {
     private boolean urgent;
 
     private String sellerId;
+
+    private String sellerName;
     private Date uploadDate;
     private List<String> imageUriList;
 
@@ -31,6 +33,7 @@ public class Ad {
             boolean negotiable,
             boolean urgent,
             String sellerId,
+            String sellerName,
             Date uploadDate,
             List<String> imageUriList,
             AdLocation adLocation
@@ -43,6 +46,7 @@ public class Ad {
         this.negotiable = negotiable;
         this.urgent = urgent;
         this.sellerId = sellerId;
+        this.sellerName = sellerName;
         this.uploadDate = uploadDate;
         this.imageUriList = imageUriList;
         this.adLocation = adLocation;
@@ -80,6 +84,10 @@ public class Ad {
         return sellerId;
     }
 
+    public String getSellerName() {
+        return sellerName;
+    }
+
     public Date getUploadDate() {
         return uploadDate;
     }
@@ -102,6 +110,7 @@ public class Ad {
                 ", price=" + price +
                 ", negotiable=" + negotiable +
                 ", sellerId='" + sellerId + '\'' +
+                ", sellerName='" + sellerName + '\'' +
                 ", uploadDate=" + uploadDate +
                 ", imageUriList=" + imageUriList +
                 ", adLocation=" + adLocation +

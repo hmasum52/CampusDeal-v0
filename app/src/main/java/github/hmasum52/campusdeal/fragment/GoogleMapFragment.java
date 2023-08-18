@@ -85,7 +85,7 @@ public class GoogleMapFragment extends Fragment
                     navController.getPreviousBackStackEntry()
                             .getSavedStateHandle()
                             .set("location", Parcels.wrap(adLocation));
-                    navController.popBackStack();
+                    navController.popBackStack(R.id.addProductFragment, false, true);
                 }
 
             }else{

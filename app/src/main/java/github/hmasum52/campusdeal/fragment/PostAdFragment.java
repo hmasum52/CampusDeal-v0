@@ -1,9 +1,11 @@
 package github.hmasum52.campusdeal.fragment;
 
+import android.graphics.Bitmap;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +32,8 @@ import com.google.firebase.storage.UploadTask;
 
 import org.parceler.Parcels;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -286,7 +290,7 @@ public class PostAdFragment extends Fragment {
 
         // upload the file
 
-        fileRef.putFile(uri)
+        /*fileRef.putFile(uri)
                 .addOnSuccessListener((UploadTask.TaskSnapshot taskSnapshot) -> {
                     // get the download url
                     fileRef.getDownloadUrl().addOnSuccessListener((Uri downloadUri) -> {
@@ -308,7 +312,42 @@ public class PostAdFragment extends Fragment {
                     Log.d("PostAdFragment", "uploadImagesToFirebaseStorage: "+e.getMessage());
                     Toast.makeText(getContext(), "Failed to upload image", Toast.LENGTH_SHORT).show();
                     uploadDialog.hideDialog();
-                });
+                });*/
+
+        // https://stackoverflow.com/questions/41611294/how-to-reduce-the-size-of-image-before-uploading-it-to-firebase-storage
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 25, baos);
+            byte[] data = baos.toByteArray();
+
+            fileRef.putBytes(data)
+                    .addOnSuccessListener((UploadTask.TaskSnapshot taskSnapshot) -> {
+                        // get the download url
+                        fileRef.getDownloadUrl().addOnSuccessListener((Uri downloadUri) -> {
+                            // add the download url to the list
+                            Log.d("PostAdFragment", "uploadImagesToFirebaseStorage: "+downloadUri.toString());
+                            imageDownloadUrls.add(downloadUri.toString());
+
+                            // //if same size so all image is uploaded, then sent list of url to to some method to upload the ad
+                            if(imageDownloadUrls.size() == adapter.getImageUriList().size()){
+                                // upload the ad to firebase firestore
+                                uploadAdToFireStore(imageDownloadUrls);
+                            }else{
+                                // upload the next image
+                                uploadImages(imageDownloadUrls);
+                            }
+                        });
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.d("PostAdFragment", "uploadImagesToFirebaseStorage: "+e.getMessage());
+                        Toast.makeText(getContext(), "Failed to upload image", Toast.LENGTH_SHORT).show();
+                        uploadDialog.hideDialog();
+                    });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     private void uploadAdToFireStore(List<String> imageDownloadUrls) {
@@ -322,8 +361,10 @@ public class PostAdFragment extends Fragment {
         boolean negotiable = mVB.negotiableSwitch.isChecked();
         boolean urgent = mVB.urgentSwitch.isChecked();
         String sellerId = fAuth.getUid();
+        String sellerName = fAuth.getCurrentUser().getDisplayName();
 
-        Ad ad = new Ad(id, title, description, category, price, negotiable, urgent, sellerId, new Date(), imageDownloadUrls, adLocation);
+        Ad ad = new Ad(id, title, description, category, price,
+                negotiable, urgent, sellerId, sellerName, new Date(), imageDownloadUrls, adLocation);
 
         // upload the ad to firebase firestore
         fStore.collection("ads")

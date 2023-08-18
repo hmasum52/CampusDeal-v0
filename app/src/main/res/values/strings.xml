@@ -18,4 +18,6 @@
     <string name="using_device_location_tap_to_change">Using device location. Tap to change the location.</string>
     <string name="tap_to_change">Tap to change the location.</string>
     <string name="urgent">Urgent</string>
+    <string name="see_all">See all</string>
+    <string name="urgent_selling">Urgent Selling</string>
 </resources>
