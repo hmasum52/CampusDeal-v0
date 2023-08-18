@@ -20,6 +20,9 @@ jobs:
       - name: copy the local properties file
         run: echo ${{ secrets.LOCAL_PROPERTIES }} | base64 --decode > local.properties
 
+      - name: copy google service json to the appropriate path
+        run: echo ${{ secrets.GOOGLE_SERVICES_JSON }} | base64 --decode > app/google-services.json
+
       - name: grant permission
         run: chmod +x gradlew
       - name: print present working directory
