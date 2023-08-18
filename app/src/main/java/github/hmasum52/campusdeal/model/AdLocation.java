@@ -2,6 +2,9 @@ package github.hmasum52.campusdeal.model;
 
 import androidx.annotation.NonNull;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class AdLocation {
     String addressLine;
     String locality;
@@ -11,6 +14,9 @@ public class AdLocation {
     String countryCode;
     double latitude;
     double longitude;
+
+    public AdLocation() {
+    }
 
     public AdLocation(String addressLine, String locality, String subAdminArea, String adminArea, String countryName, String countryCode, double latitude, double longitude) {
         this.addressLine = addressLine;

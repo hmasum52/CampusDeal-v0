@@ -2,6 +2,7 @@ package github.hmasum52.campusdeal.fragment;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -23,6 +25,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,6 +43,7 @@ import github.hmasum52.campusdeal.adapter.CategoryListBottomSheetAdapter;
 import github.hmasum52.campusdeal.databinding.BottomDialogCategoryListBinding;
 import github.hmasum52.campusdeal.databinding.FragmentPostAdBinding;
 import github.hmasum52.campusdeal.model.Ad;
+import github.hmasum52.campusdeal.model.AdLocation;
 import github.hmasum52.campusdeal.util.Constants;
 import github.hmasum52.campusdeal.util.LoadingDialogBar;
 
@@ -59,6 +64,7 @@ public class PostAdFragment extends Fragment {
     private PostAdImageRVAdapter adapter;
 
     private LoadingDialogBar uploadDialog;
+
 
     // pick image from gallery // https://developer.android.com/training/data-storage/shared/photopicker
     ////                // Registers a photo picker activity launcher in multi-select mode.
@@ -93,11 +99,42 @@ public class PostAdFragment extends Fragment {
         mVB = FragmentPostAdBinding.inflate(inflater, container, false);
         return mVB.getRoot();
     }
-    
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // get arguments
+        if(getArguments()!=null){
+            AdLocation adLocation = Parcels.unwrap(getArguments().getParcelable("location"));
+            Log.d("PostAdFragment", "onStart: "+adLocation.toString());
+            mVB.selectedLocationTv.setText(adLocation.getFullAddress());
+        }
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // get NavController
+        // https://www.youtube.com/watch?v=WBbsvqSu0is // parcelable
+        // https://code.tutsplus.com/how-to-pass-data-between-activities-with-android-parcelable--cms-29559t
+        // https://www.youtube.com/watch?v=sNeRRewIF2s
+        // https://stackoverflow.com/questions/51326437/navigation-component-popbackstack-with-arguments
+        // https://github.com/johncarl81/parceler
+        NavController navController = NavHostFragment.findNavController(this);
+        if(navController.getCurrentBackStackEntry() != null){
+            navController.getCurrentBackStackEntry()
+                    .getSavedStateHandle()
+                    .getLiveData("location")
+                    .observe(getViewLifecycleOwner(), parcelable -> {
+                        AdLocation adLocation =  Parcels.unwrap((Parcelable) parcelable);
+                        Log.d("PostAdFragment", "onViewCreated: "+adLocation.toString());
+                        mVB.selectedLocationTv.setText(adLocation.getFullAddress());
+                    });
+        }
+
+
 
         // back button listener
         mVB.backButtonIv.setOnClickListener(v -> {
@@ -246,7 +283,7 @@ public class PostAdFragment extends Fragment {
         boolean negotiable = mVB.negotiableSwitch.isChecked();
         String sellerId = fAuth.getUid();
 
-        Ad ad = new Ad(id, title, description, category, price, negotiable, sellerId, new Date(), imageDownloadUrls);
+        Ad ad = new Ad(id, title, description, category, price, negotiable, sellerId, new Date(), imageDownloadUrls, null);
 
         // upload the ad to firebase firestore
         fStore.collection("ads")

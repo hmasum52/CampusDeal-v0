@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,6 +26,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.parceler.Parcel;
+import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.List;
@@ -66,6 +71,27 @@ public class GoogleMapFragment extends Fragment
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mVB.pickLocationBtn.setOnClickListener(v -> {
+            // send location to post ad fragment
+            if(adLocation != null){
+                // https://developer.android.com/guide/components/activities/parcelables-and-bundles
+                //Bundle bundle = new Bundle();
+               // bundle.putParcelable("location", Parcels.wrap(adLocation));
+               // getParentFragmentManager().setFragmentResult("location", bundle);
+               // getParentFragmentManager().popBackStack();
+                NavController navController = NavHostFragment.findNavController(this);
+                if(navController.getPreviousBackStackEntry() != null){
+                    navController.getPreviousBackStackEntry()
+                            .getSavedStateHandle()
+                            .set("location", Parcels.wrap(adLocation));
+                    navController.popBackStack();
+                }
+
+            }else{
+                Toast.makeText(getActivity(), "Pick a location", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

@@ -88,4 +88,9 @@ dependencies {
     // https://developers.google.com/maps/documentation/android-sdk/start
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
 
+
+    // https://github.com/johncarl81/parceler
+    implementation 'org.parceler:parceler-api:1.1.12'
+    annotationProcessor 'org.parceler:parceler:1.1.12'
+
 }
