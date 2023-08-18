@@ -23,6 +23,9 @@ public class AdViewModel extends ViewModel {
     public static final String TAG = "AdViewModel";
 
     Map<String, MutableLiveData<List<Ad>>>   urgentAdListMap = new HashMap<>();
+    Map<String, MutableLiveData<List<Ad>>>  allUrgentAdListMap = new HashMap<>();
+    Map<String, MutableLiveData<List<Ad>>>  topNewAdListMap = new HashMap<>();
+    Map<String, MutableLiveData<List<Ad>>>  allNewAdListMap = new HashMap<>();
 
 
     FirebaseFirestore db;
@@ -38,6 +41,7 @@ public class AdViewModel extends ViewModel {
         db.collection("ads")
                 .whereEqualTo("category", category)
                 .whereEqualTo("urgent", true)
+                .limit(5)
                 .get().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 List<Ad> urgentAdList = task.getResult().toObjects(Ad.class);
