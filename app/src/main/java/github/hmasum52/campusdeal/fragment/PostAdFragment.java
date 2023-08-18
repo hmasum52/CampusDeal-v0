@@ -301,9 +301,10 @@ public class PostAdFragment extends Fragment {
         String category = mVB.selectedCategoryTv.getText().toString();
         double price = Double.parseDouble(mVB.priceEt.getText().toString());
         boolean negotiable = mVB.negotiableSwitch.isChecked();
+        boolean urgent = mVB.urgentSwitch.isChecked();
         String sellerId = fAuth.getUid();
 
-        Ad ad = new Ad(id, title, description, category, price, negotiable, sellerId, new Date(), imageDownloadUrls, adLocation);
+        Ad ad = new Ad(id, title, description, category, price, negotiable, urgent, sellerId, new Date(), imageDownloadUrls, adLocation);
 
         // upload the ad to firebase firestore
         fStore.collection("ads")

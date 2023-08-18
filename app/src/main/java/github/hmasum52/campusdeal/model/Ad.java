@@ -10,6 +10,9 @@ public class Ad {
     private String category;
     private double price;
     private boolean negotiable;
+
+    private boolean urgent;
+
     private String sellerId;
     private Date uploadDate;
     private List<String> imageUriList;
@@ -26,6 +29,7 @@ public class Ad {
             String category,
             double price,
             boolean negotiable,
+            boolean urgent,
             String sellerId,
             Date uploadDate,
             List<String> imageUriList,
@@ -37,6 +41,7 @@ public class Ad {
         this.category = category;
         this.price = price;
         this.negotiable = negotiable;
+        this.urgent = urgent;
         this.sellerId = sellerId;
         this.uploadDate = uploadDate;
         this.imageUriList = imageUriList;
@@ -65,6 +70,10 @@ public class Ad {
 
     public boolean isNegotiable() {
         return negotiable;
+    }
+
+    public boolean isUrgent() {
+        return urgent;
     }
 
     public String getSellerId() {
