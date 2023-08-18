@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // workflow test
         super.onCreate(savedInstanceState);
         mVB = ActivityMainBinding.inflate(super.getLayoutInflater());
         super.setContentView(mVB.getRoot());
