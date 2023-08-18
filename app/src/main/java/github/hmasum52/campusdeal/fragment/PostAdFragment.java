@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -48,6 +49,7 @@ import github.hmasum52.campusdeal.model.AdLocation;
 import github.hmasum52.campusdeal.util.Constants;
 import github.hmasum52.campusdeal.util.LoadingDialogBar;
 import github.hmasum52.campusdeal.util.LocationFinder;
+import github.hmasum52.campusdeal.viewmodel.AdPostViewModel;
 
 @AndroidEntryPoint
 public class PostAdFragment extends Fragment {
@@ -75,6 +77,8 @@ public class PostAdFragment extends Fragment {
 
     private AdLocation adLocation;
 
+     private AdPostViewModel adPostViewModel;
+
 
     // pick image from gallery // https://developer.android.com/training/data-storage/shared/photopicker
     ////                // Registers a photo picker activity launcher in multi-select mode.
@@ -90,18 +94,24 @@ public class PostAdFragment extends Fragment {
                         Toast.makeText(getContext(), "You can select up to 5 images", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    for (Uri uri : uris) {
-                        Log.d("PhotoPicker", "Uri: " + uri.toString());
-                        if(adapter!=null){
-                            Log.d("PhotoPicker", "adding uri to recycler view");
-                            adapter.addImage(uri);
-                        }
-                    }
+                    adPostViewModel.setImageUriList(uris);
+//                    for (Uri uri : uris) {
+//                        Log.d("PhotoPicker", "Uri: " + uri.toString());
+//                        if(adapter!=null){
+//                            Log.d("PhotoPicker", "adding uri to recycler view");
+//                            adapter.addImage(uri);
+//                        }
+//                    }
                 } else {
                     Log.d("PhotoPicker", "No media selected");
                 }
             });
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        adPostViewModel =  new ViewModelProvider(this).get(AdPostViewModel.class);
+    }
 
     @Nullable
     @Override
@@ -118,6 +128,26 @@ public class PostAdFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // add ad image recycler view adapter
+        initAdImageSelectRecyclerView();
+
+        adPostViewModel.getCategoryIndex().observe(getViewLifecycleOwner(), position -> {
+            // set category name
+            mVB.selectedCategoryTv.setText(Constants.categoryList.get(position));
+            // set category icon
+            mVB.selectedCategoryIcon.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                            getResources(),
+                            Constants.categoryIconList.get(position),
+                            null
+                    )
+            );
+        });
+
+        adPostViewModel.getImageUriList().observe(getViewLifecycleOwner(), uris -> {
+            adapter.setImageUriList(uris);
+        });
 
         // use device location
         locationFinder.requestDeviceLocation(latLng -> {
@@ -155,24 +185,13 @@ public class PostAdFragment extends Fragment {
             NavHostFragment.findNavController(this).popBackStack();
         });
 
-        // add ad image recycler view adapter
-        initAdImageSelectRecyclerView();
 
         // https://www.section.io/engineering-education/bottom-sheet-dialogs-using-android-studio/
         // open bottom dialog on category card click
         mVB.selectCategoryCard.setOnClickListener(v -> {
             CategoryListBottomSheetFragment bottomSheetFragment = new CategoryListBottomSheetFragment();
             bottomSheetFragment.setOnItemClickListener(position -> {
-                // set category name
-                mVB.selectedCategoryTv.setText(Constants.categoryList.get(position));
-                // set category icon
-                mVB.selectedCategoryIcon.setImageDrawable(
-                        ResourcesCompat.getDrawable(
-                                getResources(),
-                                Constants.categoryIconList.get(position),
-                                null
-                        )
-                );
+                adPostViewModel.setCategoryIndex(position);
                 // dismiss the bottom sheet
                 bottomSheetFragment.dismiss();
             });
