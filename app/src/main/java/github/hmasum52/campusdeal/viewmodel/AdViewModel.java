@@ -1,5 +1,7 @@
 package github.hmasum52.campusdeal.viewmodel;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
@@ -18,6 +20,7 @@ import github.hmasum52.campusdeal.model.Ad;
 
 @HiltViewModel
 public class AdViewModel extends ViewModel {
+    public static final String TAG = "AdViewModel";
 
     Map<String, MutableLiveData<List<Ad>>>   urgentAdListMap = new HashMap<>();
 
@@ -31,15 +34,18 @@ public class AdViewModel extends ViewModel {
 
     // fetch urgent ad list from firebase fire store ads collection
     public void fetchUrgentAdList(String category){
-        urgentAdListMap.put(category, new MutableLiveData<>());
+        Log.d(TAG, "fetchUrgentAdList: fetching urgent ad list for category: "+category);
         db.collection("ads")
                 .whereEqualTo("category", category)
                 .whereEqualTo("urgent", true)
                 .get().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 List<Ad> urgentAdList = task.getResult().toObjects(Ad.class);
-                if(urgentAdListMap.get(category) != null)
-                    Objects.requireNonNull(urgentAdListMap.get(category)).setValue(urgentAdList);
+                if(urgentAdListMap.get(category) == null){
+                    urgentAdListMap.put(category, new MutableLiveData<>());
+                }
+                Objects.requireNonNull(urgentAdListMap.get(category)).setValue(urgentAdList);
+                Log.d(TAG, "fetchUrgentAdList: updated urgent ad list for category: "+category+"total urgent ads = "+urgentAdList.size());
             }
         });
     }
@@ -47,9 +53,9 @@ public class AdViewModel extends ViewModel {
     public MutableLiveData<List<Ad>> getUrgentAdList(String category){
         // check if the list is already fetched
         if(urgentAdListMap.get(category) == null){
+            urgentAdListMap.put(category, new MutableLiveData<>());
             fetchUrgentAdList(category);
         }
-
         return urgentAdListMap.get(category);
     }
 

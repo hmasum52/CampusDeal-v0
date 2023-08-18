@@ -5,7 +5,10 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,6 +59,14 @@ public class CategoryFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        // get the category name from savedStateHandle
+        SavedStateHandle savedStateHandle = NavHostFragment.findNavController(this)
+                .getCurrentBackStackEntry()
+                .getSavedStateHandle();
+        if(name== null && savedStateHandle.contains("category")){
+            name = savedStateHandle.get("category");
+        }
+
         adViewModel.getUrgentAdList(name).observe(getViewLifecycleOwner(), ads -> {
             Log.d(TAG, "onViewCreated: category name = "+name);
             Log.d(TAG, "onViewCreated: total urgent ads = "+ads.size());
@@ -64,5 +75,22 @@ public class CategoryFragment extends Fragment {
             }
             mVB.urgentRv.setAdapter(new AdItemAdapter(ads));
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //refresh the list
+        adViewModel.fetchUrgentAdList(name);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        NavHostFragment.findNavController(this)
+                .getCurrentBackStackEntry()
+                .getSavedStateHandle()
+                .set("category", name);
     }
 }

@@ -25,51 +25,62 @@
 <!--        location text view: a subtitle-->
         <TextView
             android:id="@+id/location_tv"
-            style="@style/TextAppearance.Material3.BodySmall"
+            style="@style/TextAppearance.Material3.LabelSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="2dp"
             android:background="@drawable/location_background"
             android:paddingHorizontal="8dp"
             android:textColor="@color/white"
+            android:textSize="11sp"
             app:layout_constraintBottom_toBottomOf="@+id/thumb_image"
-            app:layout_constraintStart_toStartOf="@+id/title_tv"
+            app:layout_constraintStart_toStartOf="parent"
             tools:text="location" />
 
         <TextView
+            style="@style/TextAppearance.Material3.LabelLarge"
+            android:textColor="@color/text_blue_gray"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:id="@+id/title_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/thumb_image"
-            tools:text="Product Name" />
+            tools:text="Product Name Very very long" />
 
         <TextView
-            style="@style/TextAppearance.Material3.BodySmall"
             android:id="@+id/price_desc"
-            android:layout_width="wrap_content"
+            style="@style/TextAppearance.Material3.LabelLarge"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textColor="@color/text_dark"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/title_tv"
             app:layout_constraintStart_toStartOf="@+id/title_tv"
             app:layout_constraintTop_toBottomOf="@+id/title_tv"
-            tools:text="Tk 100 • Urgent • Negotiable" />
+            tools:text="Tk 100000000 • Urgent • Negotiable" />
 
         <TextView
-            style="@style/TextAppearance.Material3.BodySmall"
             android:id="@+id/owner_name_tv"
-            android:layout_width="wrap_content"
+            style="@style/TextAppearance.Material3.BodySmall"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="Owner name"
+            app:layout_constraintEnd_toEndOf="@+id/price_desc"
             app:layout_constraintStart_toStartOf="@+id/price_desc"
-            app:layout_constraintTop_toBottomOf="@+id/price_desc" />
+            app:layout_constraintTop_toBottomOf="@+id/price_desc"
+            tools:text="Owner name" />
 
 
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/owner_name_tv"
@@ -77,15 +88,15 @@
             app:srcCompat="@drawable/ic_distance_svgrepo_com" />
 
         <TextView
-            style="@style/TextAppearance.Material3.BodySmall"
             android:id="@+id/distance_tv"
+            style="@style/TextAppearance.Material3.BodySmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="2dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView3"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
             app:layout_constraintTop_toTopOf="@+id/imageView3"
-            tools:text="3.5km" />
+            tools:text="103.5km" />
 
         <ImageView
             android:id="@+id/imageView4"
@@ -99,17 +110,16 @@
 
         <TextView
 
-            style="@style/TextAppearance.Material3.BodySmall"
             android:id="@+id/time_tv"
+            style="@style/TextAppearance.Material3.BodySmall"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            tools:text="2 weeks ago"
+            android:layout_marginStart="2dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView4"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/owner_name_tv"
             app:layout_constraintStart_toEndOf="@+id/imageView4"
-            app:layout_constraintTop_toTopOf="@+id/imageView4" />
+            app:layout_constraintTop_toTopOf="@+id/imageView4"
+            tools:text="2 weeks ago" />
 
 
 
