@@ -14,10 +14,23 @@ public class Ad {
     private Date uploadDate;
     private List<String> imageUriList;
 
+    private AdLocation adLocation;
+
     public Ad() {
     }
 
-    public Ad(String id, String title, String description, String category, double price, boolean negotiable, String sellerId, Date uploadDate, List<String> imageUriList) {
+    public Ad(
+            String id,
+            String title,
+            String description,
+            String category,
+            double price,
+            boolean negotiable,
+            String sellerId,
+            Date uploadDate,
+            List<String> imageUriList,
+            AdLocation adLocation
+    ) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -27,6 +40,7 @@ public class Ad {
         this.sellerId = sellerId;
         this.uploadDate = uploadDate;
         this.imageUriList = imageUriList;
+        this.adLocation = adLocation;
     }
 
     public String getId() {
@@ -65,6 +79,10 @@ public class Ad {
         return imageUriList;
     }
 
+    public AdLocation getAdLocation() {
+        return adLocation;
+    }
+
     @Override
     public String toString() {
         return "Ad{" +
@@ -77,6 +95,7 @@ public class Ad {
                 ", sellerId='" + sellerId + '\'' +
                 ", uploadDate=" + uploadDate +
                 ", imageUriList=" + imageUriList +
+                ", adLocation=" + adLocation +
                 '}';
     }
 }

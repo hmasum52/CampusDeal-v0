@@ -1,5 +1,6 @@
 package github.hmasum52.campusdeal.fragment;
 
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -46,6 +47,7 @@ import github.hmasum52.campusdeal.model.Ad;
 import github.hmasum52.campusdeal.model.AdLocation;
 import github.hmasum52.campusdeal.util.Constants;
 import github.hmasum52.campusdeal.util.LoadingDialogBar;
+import github.hmasum52.campusdeal.util.LocationFinder;
 
 @AndroidEntryPoint
 public class PostAdFragment extends Fragment {
@@ -64,6 +66,14 @@ public class PostAdFragment extends Fragment {
     private PostAdImageRVAdapter adapter;
 
     private LoadingDialogBar uploadDialog;
+
+    @Inject
+    Geocoder geocoder;
+
+    @Inject
+    LocationFinder locationFinder;
+
+    private AdLocation adLocation;
 
 
     // pick image from gallery // https://developer.android.com/training/data-storage/shared/photopicker
@@ -100,21 +110,24 @@ public class PostAdFragment extends Fragment {
         return mVB.getRoot();
     }
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // get arguments
-        if(getArguments()!=null){
-            AdLocation adLocation = Parcels.unwrap(getArguments().getParcelable("location"));
-            Log.d("PostAdFragment", "onStart: "+adLocation.toString());
-            mVB.selectedLocationTv.setText(adLocation.getFullAddress());
-        }
+    void updateLocation(@NonNull AdLocation location){
+        this.adLocation = location;
+        mVB.selectedLocationTv.setText(location.getFullAddress());
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // use device location
+        locationFinder.requestDeviceLocation(latLng -> {
+            AdLocation location =  locationFinder.getAdLocation(latLng);
+            if(location != null){
+                mVB.usingDeviceLocationTv.setText(getContext().getString(R.string.using_device_location_tap_to_change));
+                updateLocation(location);
+            }
+        });
+
 
         // get NavController
         // https://www.youtube.com/watch?v=WBbsvqSu0is // parcelable
@@ -128,9 +141,10 @@ public class PostAdFragment extends Fragment {
                     .getSavedStateHandle()
                     .getLiveData("location")
                     .observe(getViewLifecycleOwner(), parcelable -> {
+                        mVB.usingDeviceLocationTv.setText(getContext().getString(R.string.tap_to_change));
                         AdLocation adLocation =  Parcels.unwrap((Parcelable) parcelable);
                         Log.d("PostAdFragment", "onViewCreated: "+adLocation.toString());
-                        mVB.selectedLocationTv.setText(adLocation.getFullAddress());
+                        updateLocation(adLocation);
                     });
         }
 
@@ -227,6 +241,12 @@ public class PostAdFragment extends Fragment {
             return false;
         }
 
+        // check if location is selected
+        if(adLocation == null){
+            Toast.makeText(getContext(), "Please select a location", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         return true;
     }
 
@@ -283,7 +303,7 @@ public class PostAdFragment extends Fragment {
         boolean negotiable = mVB.negotiableSwitch.isChecked();
         String sellerId = fAuth.getUid();
 
-        Ad ad = new Ad(id, title, description, category, price, negotiable, sellerId, new Date(), imageDownloadUrls, null);
+        Ad ad = new Ad(id, title, description, category, price, negotiable, sellerId, new Date(), imageDownloadUrls, adLocation);
 
         // upload the ad to firebase firestore
         fStore.collection("ads")

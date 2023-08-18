@@ -3,8 +3,11 @@ package github.hmasum52.campusdeal.util;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -18,10 +21,15 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 import javax.inject.Inject;
 
 import dagger.hilt.android.components.ActivityComponent;
 import github.hmasum52.campusdeal.MainActivity;
+import github.hmasum52.campusdeal.model.AdLocation;
 
 public class LocationFinder {
     //to get the device location
@@ -40,9 +48,14 @@ public class LocationFinder {
     private final ActivityResultLauncher<String> requestPermissionLauncher;
 
 
+    private Geocoder geocoder;
+
+
     @Inject
     public LocationFinder(FragmentActivity activity) {
         this.activity = activity;
+
+        geocoder =  new Geocoder(activity, Locale.getDefault());
 
         requestPermissionLauncher = activity
                 .registerForActivityResult(new ActivityResultContracts.RequestPermission()
@@ -142,6 +155,42 @@ public class LocationFinder {
             // get the location permission from user
             // this will prompt user a dialog to give the location permission
             requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+    }
+
+    // latlng  to
+    public AdLocation getAdLocation(LatLng latLng){
+        AdLocation adLocation = null;
+        try {
+            Address address;
+            List<Address> addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+            if (addressList.size() > 0){
+                address = addressList.get(0);
+                // make address text from address object
+                Log.d(TAG, "findAddress: " + address.toString());
+                StringBuilder addressText = new StringBuilder();
+
+                // add address line
+                for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
+                    addressText.append(address.getAddressLine(i)).append(", ");
+                }
+
+
+                adLocation = new AdLocation(
+                        addressText.toString(),
+                        address.getLocality(),
+                        address.getSubAdminArea(),
+                        address.getAdminArea(),
+                        address.getCountryName(),
+                        address.getCountryCode(),
+                        latLng.latitude,
+                        latLng.longitude
+                );
+            }
+        } catch (IOException e) {
+            // make toast
+            Log.e(TAG, "findAddress: "+e.getMessage());
+        }
+        return adLocation;
     }
 }
 

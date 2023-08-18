@@ -232,36 +232,51 @@
             android:id="@+id/selectLocationCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="@+id/textInputLayout3"
-            app:layout_constraintStart_toStartOf="@+id/textView10"
-            app:layout_constraintTop_toBottomOf="@+id/textView11">
+            app:layout_constraintStart_toStartOf="@+id/using_device_location_tv"
+            app:layout_constraintTop_toBottomOf="@+id/using_device_location_tv">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:padding="10dp"
+                android:minHeight="56dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/selected_location_icon"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_marginStart="16dp"
+
                     android:backgroundTint="@color/bg_light"
                     android:src="@drawable/baseline_add_location_alt_24"
                     app:civ_border_color="@color/bg_light"
                     app:civ_border_width="8dp"
-                    app:civ_circle_background_color="@color/bg_light" />
+                    app:civ_circle_background_color="@color/bg_light"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/selected_location_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:text="@string/select_location" />
-            </LinearLayout>
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/select_location"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/selected_location_icon"
+                    app:layout_constraintTop_toTopOf="@+id/selected_location_icon" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/using_device_location_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/using_device_location_tap_to_change"
+            app:layout_constraintEnd_toEndOf="@+id/ad_post_btn"
+            app:layout_constraintStart_toStartOf="@+id/textView11"
+            app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
