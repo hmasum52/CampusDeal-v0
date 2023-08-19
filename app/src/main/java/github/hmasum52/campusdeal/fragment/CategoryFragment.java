@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
@@ -15,10 +14,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import dagger.hilt.android.AndroidEntryPoint;
 import github.hmasum52.campusdeal.adapter.AdItemAdapter;
 import github.hmasum52.campusdeal.databinding.FragmentCategoryBinding;
 import github.hmasum52.campusdeal.model.Ad;
+import github.hmasum52.campusdeal.model.StateData;
 import github.hmasum52.campusdeal.viewmodel.AdViewModel;
 
 @AndroidEntryPoint
@@ -26,7 +28,7 @@ public class CategoryFragment extends Fragment {
 
     // view binding
     private FragmentCategoryBinding mVB;
-    private String name;
+    private String categoryName;
 
     private static final String TAG = "CategoryFragment";
     private AdViewModel adViewModel;
@@ -37,7 +39,7 @@ public class CategoryFragment extends Fragment {
 
     public CategoryFragment(String name) {
         // Required empty public constructor
-        this.name = name;
+        this.categoryName = name;
     }
 
 
@@ -60,21 +62,63 @@ public class CategoryFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         // get the category name from savedStateHandle
+        restoreSavedState();
+
+        // shared view model
+        // get the top 5 urgent ad list
+        adViewModel.getTopUrgentAdList(categoryName, 5).observe(requireActivity(), this::updateTopUrgentAdRecyclerView);
+
+        // get all Product
+        adViewModel.getAllAds(categoryName).observe(requireActivity(), this::updateAllAdRecyclerView);
+    }
+
+
+
+    // restore data from savedStateHandle
+    void restoreSavedState(){
         SavedStateHandle savedStateHandle = NavHostFragment.findNavController(this)
                 .getCurrentBackStackEntry()
                 .getSavedStateHandle();
-        if(name== null && savedStateHandle.contains("category")){
-            name = savedStateHandle.get("category");
+        if(categoryName == null && savedStateHandle.contains("category")){
+            categoryName = savedStateHandle.get("category");
         }
+    }
 
-        adViewModel.getUrgentAdList(name).observe(getViewLifecycleOwner(), ads -> {
-            Log.d(TAG, "onViewCreated: category name = "+name);
-            Log.d(TAG, "onViewCreated: total urgent ads = "+ads.size());
-            for (Ad a : ads){
-                Log.d(TAG, "onViewCreated: "+a.toString());
-            }
-            mVB.urgentRv.setAdapter(new AdItemAdapter(ads));
-        });
+    // update top urgent Ad RecyclerView
+    void updateTopUrgentAdRecyclerView(@NonNull StateData<List<Ad>> ads){
+        Log.d(TAG, "updateTopUrgentAdRecyclerView: category name = "+ categoryName);
+        switch (ads.getStatus()){
+            case SUCCESS:
+                Log.d(TAG, "updateTopUrgentAdRecyclerView: total urgent ads = "+ads.getData().size());
+                for (Ad a : ads.getData()){
+                    Log.d(TAG, "updateTopUrgentAdRecyclerView: "+a.toString());
+                }
+                mVB.urgentRv.setAdapter(new AdItemAdapter(ads.getData()));
+                break;
+            case ERROR:
+                Log.d(TAG, "updateTopUrgentAdRecyclerView:"+ads.getError().getMessage());
+                break;
+            case LOADING:
+                break;
+            case COMPLETE:
+                break;
+        }
+    }
+
+    private void updateAllAdRecyclerView(StateData<List<Ad>> adsSateData) {
+        Log.d(TAG, "updateAllAdRecyclerView: category name = "+ categoryName);
+        switch (adsSateData.getStatus()){
+            case SUCCESS:
+                mVB.allAdRv.setAdapter(new AdItemAdapter(adsSateData.getData()));
+                break;
+            case ERROR:
+                Log.d(TAG, "updateAllAdRecyclerView: "+adsSateData.getError().getMessage());
+                break;
+            case LOADING:
+                break;
+            case COMPLETE:
+                break;
+        }
     }
 
     @Override
@@ -82,7 +126,7 @@ public class CategoryFragment extends Fragment {
         super.onResume();
 
         //refresh the list
-        adViewModel.fetchUrgentAdList(name);
+        adViewModel.fetchUrgentAdList(categoryName, 5);
     }
 
     @Override
@@ -91,6 +135,6 @@ public class CategoryFragment extends Fragment {
         NavHostFragment.findNavController(this)
                 .getCurrentBackStackEntry()
                 .getSavedStateHandle()
-                .set("category", name);
+                .set("category", categoryName);
     }
 }

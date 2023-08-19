@@ -1,108 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.CategoryFragment">
 
-    <TextView
-        android:id="@+id/urgent_selling_tv"
-        style="@style/MaterialAlertDialog.Material3.Title.Text.CenterStacked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/urgent_selling" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/urgent_selling_tv"
+            style="@style/MaterialAlertDialog.Material3.Title.Text.CenterStacked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/urgent_and_new"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/urgent_rv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintStart_toStartOf="@+id/urgent_selling_tv"
-        app:layout_constraintTop_toBottomOf="@+id/urgent_selling_tv"
-        tools:itemCount="5"
-        tools:listitem="@layout/card_ad" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/urgent_rv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="@+id/urgent_selling_tv"
+            app:layout_constraintTop_toBottomOf="@+id/urgent_selling_tv"
+            tools:itemCount="5"
+            tools:listitem="@layout/card_ad" />
 
-    <TextView
-        android:id="@+id/see_urgent_all"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="@string/see_all"
-        app:layout_constraintBottom_toBottomOf="@+id/urgent_selling_tv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/urgent_selling_tv" />
 
-    <TextView
-        android:id="@+id/New"
-        style="@style/MaterialAlertDialog.Material3.Title.Text.CenterStacked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/urgent_rv"
-        android:text="Newest" />
+        <TextView
+            android:id="@+id/All"
+            style="@style/MaterialAlertDialog.Material3.Title.Text.CenterStacked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="All"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/urgent_rv"
+            app:layout_constraintTop_toBottomOf="@+id/urgent_rv" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/newest_rv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintStart_toStartOf="@+id/urgent_selling_tv"
-        app:layout_constraintTop_toBottomOf="@+id/New"
-        tools:itemCount="5"
-        tools:listitem="@layout/card_ad" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/all_ad_rv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/urgent_selling_tv"
+            app:layout_constraintTop_toBottomOf="@+id/All"
+            app:spanCount="2"
+            tools:itemCount="5"
+            tools:listitem="@layout/card_ad" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/see_newest_all"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="@string/see_all"
-        app:layout_constraintBottom_toBottomOf="@+id/New"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/New" />
 
-    <TextView
-        android:id="@+id/All"
-        style="@style/MaterialAlertDialog.Material3.Title.Text.CenterStacked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newest_rv"
-        android:text="All" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/all_ad_rv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintStart_toStartOf="@+id/urgent_selling_tv"
-        app:layout_constraintTop_toBottomOf="@+id/All"
-        tools:itemCount="5"
-        tools:listitem="@layout/card_ad" />
 
-    <TextView
-        android:id="@+id/see_all_ad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="@string/see_all"
-        app:layout_constraintBottom_toBottomOf="@+id/All"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/All" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
