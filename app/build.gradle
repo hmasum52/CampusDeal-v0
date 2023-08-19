@@ -20,6 +20,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // https://developer.android.com/build/building-cmdline#groovy
+    // https://developer.android.com/studio/publish/app-signing#secure-shared-keystore
     signingConfigs {
 
         release {
