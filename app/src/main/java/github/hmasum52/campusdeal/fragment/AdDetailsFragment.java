@@ -1,5 +1,7 @@
 package github.hmasum52.campusdeal.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -80,6 +82,13 @@ public class AdDetailsFragment extends Fragment {
 
        // get ownerInfo
         getOwnerInfo();
+
+        mVB.contact.setOnClickListener(v -> {
+            startMailSendIntent(
+                    "Want to buy "+ad.getTitle(),
+                    mVB.ownerEmail.getText().toString(),
+                    "Hi, I am interested in your ad for selling "+ad.getTitle()+" on CampusDeal App.");
+        });
     }
 
     private  void getOwnerInfo(){
@@ -103,4 +112,24 @@ public class AdDetailsFragment extends Fragment {
                     mVB.ownerName.setText("Unknown");
                 });
     }
+
+    private void startMailSendIntent(String subject, String to, String body) {
+        String[] addresses = {to};
+
+        Intent selectorIntent = new Intent(Intent.ACTION_SENDTO);
+        selectorIntent.setData(Uri.parse("mailto:"));
+
+        final Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+        emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        emailIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, addresses);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, body);
+        emailIntent.setSelector(selectorIntent);
+
+        startActivity(Intent.createChooser(emailIntent, "Send email..."));
+    }
+
 }

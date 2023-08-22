@@ -42,4 +42,12 @@
             android:value="${MAPS_API_KEY}" />
     </application>
 
+    <!--email sending for android 11+-->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.SEND"/>
+            <data android:mimeType="*/*" />
+        </intent>
+    </queries>
+
 </manifest>
