@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -79,9 +81,16 @@ public class ProfileFragment extends Fragment {
     private void signOut(){
         // sign out the user
         // https://firebase.google.com/docs/auth/android/firebaseui#sign_out
-        fAuth.signOut();
-        // navigate to onboarding fragment
-        MainActivity.navigateToNewStartDestination(getActivity(), R.id.onBoardingFragment);
+        // if sign in with google then also sign out from google
+        // https://stackoverflow.com/q/70101036/13877490
+        // https://stackoverflow.com/questions/38707133/google-firebase-sign-out-and-forget-user-in-android-app
+        AuthUI.getInstance()
+                .signOut(requireContext())
+                .addOnCompleteListener(task -> {
+                    // navigate to onboarding fragment
+                    MainActivity.navigateToNewStartDestination(ProfileFragment.this.getActivity(), R.id.onBoardingFragment);
+                });
+
     }
 
     private void optionRecyclerViewInit() {
