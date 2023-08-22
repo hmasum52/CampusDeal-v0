@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.parceler.Parcels;
@@ -58,6 +59,11 @@ public class AdDetailsFragment extends Fragment {
         AdImageViewPagerAdapter adapter = new AdImageViewPagerAdapter(ad.getImageUriList());
         mVB.imageVp.setAdapter(adapter);
         adapter.differ.submitList(ad.getImageUriList());
+
+        // add dot indicator to view pager
+        // https://github.com/AdrianKuta/ViewPagerDotsIndicator
+        new TabLayoutMediator(mVB.dotIndicator, mVB.imageVp, (tab, position) -> {
+        }).attach();
 
         // set upload date in dd MMM yyyy format
         mVB.uploadDate.setText(DateFormat.getDateInstance(DateFormat.MEDIUM).format(ad.getUploadDate()));
