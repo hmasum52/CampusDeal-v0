@@ -8,6 +8,6 @@ android:shape="oval">
     android:width="64dp"
     android:height="64dp" />
 
-<solid android:color="@color/c_teal300" />
+<solid android:color="@color/colorPrimary" />
 
 </shape>

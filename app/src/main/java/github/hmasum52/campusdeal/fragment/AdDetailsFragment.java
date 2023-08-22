@@ -104,7 +104,9 @@ public class AdDetailsFragment extends Fragment {
                     // set owner email
                     mVB.ownerEmail.setText(user.getEmail());
                     // set owner profile image
-                    Glide.with(this).load(user.getProfileImageUrl()).into(mVB.ownerAvatar);
+                    if(user.getProfileImageUrl()!=null)
+                        Glide.with(this).load(user.getProfileImageUrl()).into(mVB.ownerAvatar);
+                    else mVB.avatarText.setText(user.getName().substring(0,1));
                 })
                 .addOnFailureListener(e -> {
                     // if failed to get owner info

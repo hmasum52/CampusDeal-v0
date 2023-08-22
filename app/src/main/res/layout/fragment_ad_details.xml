@@ -174,9 +174,21 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@tools:sample/avatars">
+                    android:src="@drawable/avatar_bg">
 
                 </de.hdodenhof.circleimageview.CircleImageView>
+
+                <TextView
+                    android:id="@+id/avatar_text"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    tools:text="L"
+                    android:textColor="@color/white"
+                    style="@style/MaterialAlertDialog.Material3.Title.Text.CenterStacked"
+                    app:layout_constraintBottom_toBottomOf="@+id/owner_avatar"
+                    app:layout_constraintEnd_toEndOf="@+id/owner_avatar"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/owner_avatar" />
 
                 <TextView
                     android:id="@+id/owner_name"
@@ -214,6 +226,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
