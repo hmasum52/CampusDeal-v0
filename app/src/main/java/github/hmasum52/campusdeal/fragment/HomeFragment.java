@@ -2,7 +2,6 @@ package github.hmasum52.campusdeal.fragment;
 
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -16,8 +15,10 @@ import android.view.ViewGroup;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.parceler.Parcel;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -77,14 +78,25 @@ public class HomeFragment extends Fragment {
 
         ArrayList<Fragment> fragments = new ArrayList<>();
         for (int i = 0; i < Constants.categoryList.size(); i++) {
-            fragments.add(new CategoryFragment(Constants.categoryList.get(i)));
+            fragments.add(new CategoryFragment(
+                    Constants.categoryList.get(i),
+                    ad -> {
+                        // open ad details fragment
+                        // send ad objecdt to ad details fragment
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("ad", Parcels.wrap(ad));
+                        NavHostFragment.findNavController(this)
+                                .navigate(R.id.action_homeFragment_to_adDetailsFragment, bundle);
+                    }
+            ));
         }
 
         mVB.pager.setOffscreenPageLimit(2);
 
         mVB.pager.setAdapter(new CategoryViewPagerAdapter(fragments,
                 getChildFragmentManager(),
-                getLifecycle()));
+                getLifecycle())
+        );
 
         // tab layout mediator to connect viewpager2 with tablayout
         new TabLayoutMediator(mVB.tabLayout, mVB.pager, ((TabLayout.Tab tab, int position) -> {

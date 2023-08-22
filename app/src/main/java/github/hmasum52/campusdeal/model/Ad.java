@@ -1,8 +1,11 @@
 package github.hmasum52.campusdeal.model;
 
+import org.parceler.Parcel;
+
 import java.util.Date;
 import java.util.List;
 
+@Parcel
 public class Ad {
     private String id;
     private String title;
