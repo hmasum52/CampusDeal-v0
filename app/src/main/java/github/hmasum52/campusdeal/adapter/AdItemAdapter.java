@@ -30,6 +30,12 @@ public class AdItemAdapter extends RecyclerView.Adapter<AdItemAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
+    private RecyclerItemClickListener<Ad> recyclerItemClickListener;
+
+    public void setRecyclerItemClickListener(RecyclerItemClickListener<Ad> recyclerItemClickListener) {
+        this.recyclerItemClickListener = recyclerItemClickListener;
+    }
+
     @NonNull
     @Override
     public AdItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -46,8 +52,8 @@ public class AdItemAdapter extends RecyclerView.Adapter<AdItemAdapter.ViewHolder
         // https://futurestud.io/tutorials/glide-image-resizing-scaling
         Glide.with(holder.itemView.getContext())
                 .load(ad.getImageUriList().get(0))
-                .override(300, 300)
-                .centerCrop()
+                //.override(300, 300)
+                //.centerCrop()
                 .into(holder.mVB.thumbImage);
 
         // set location
@@ -76,6 +82,13 @@ public class AdItemAdapter extends RecyclerView.Adapter<AdItemAdapter.ViewHolder
         // set upload date
         String timeAlgo = calculateTimeAlgo(ad.getUploadDate());
         holder.mVB.timeTv.setText(timeAlgo);
+
+        // set click listener
+        holder.itemView.setOnClickListener(v -> {
+            if(recyclerItemClickListener!=null){
+                recyclerItemClickListener.onItemClick(ad);
+            }
+        });
 
     }
 
