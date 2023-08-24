@@ -76,6 +76,8 @@ public class CategoryFragment extends Fragment {
         Log.d(TAG, "onViewCreated: called "+this);
         Log.d(TAG, "onViewCreated: category name = "+ categoryName);
 
+        setLoading(true);
+
         onAdClickListener = ad -> {
             // open ad details fragment
             // send ad objecdt to ad details fragment
@@ -114,20 +116,40 @@ public class CategoryFragment extends Fragment {
     }
 
 
+    private void setLoading(boolean isLoading){
+        if(isLoading) {
+            mVB.loadingPb.setVisibility(View.VISIBLE);
+            mVB.urgentSellingTv.setVisibility(View.GONE);
+            mVB.urgentRv.setVisibility(View.GONE);
+            mVB.All.setVisibility(View.GONE);
+            mVB.allAdRv.setVisibility(View.GONE);
+        }else{
+            mVB.loadingPb.setVisibility(View.GONE);
+            mVB.urgentSellingTv.setVisibility(View.VISIBLE);
+            mVB.urgentRv.setVisibility(View.VISIBLE);
+            mVB.All.setVisibility(View.VISIBLE);
+            mVB.allAdRv.setVisibility(View.VISIBLE);
+        }
+    }
+
     // update top urgent Ad RecyclerView
     void updateTopUrgentAdRecyclerView(@NonNull StateData<List<Ad>> ads){
         Log.d(TAG, "updateTopUrgentAdRecyclerView: category name = "+ categoryName);
         switch (ads.getStatus()){
             case SUCCESS:
+                setLoading(false);
                 Log.d(TAG, "updateTopUrgentAdRecyclerView: total urgent ads = "+ads.getData().size());
                 urgentAdItemAdapter.differ.submitList(ads.getData());
                 break;
             case ERROR:
                 Log.d(TAG, "updateTopUrgentAdRecyclerView:"+ads.getError().getMessage());
+                setLoading(false);
                 break;
             case LOADING:
+                setLoading(true);
                 break;
             case COMPLETE:
+                setLoading(false);
                 break;
         }
     }
@@ -136,16 +158,20 @@ public class CategoryFragment extends Fragment {
         Log.d(TAG, "updateAllAdRecyclerView: category name = "+ categoryName);
         switch (adsSateData.getStatus()){
             case SUCCESS:
+                setLoading(false);
                 assert adsSateData.getData() != null;
                 //setUpWithAdapter(adsSateData.getData(), mVB.allAdRv);
                 allAdItemAdapter.differ.submitList(adsSateData.getData());
                 break;
             case ERROR:
+                setLoading(false);
                 Log.d(TAG, "updateAllAdRecyclerView: "+adsSateData.getError().getMessage());
                 break;
             case LOADING:
+                setLoading(true);
                 break;
             case COMPLETE:
+                setLoading(false);
                 break;
         }
     }
