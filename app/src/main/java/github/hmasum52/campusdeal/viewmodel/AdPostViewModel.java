@@ -1,11 +1,9 @@
 package github.hmasum52.campusdeal.viewmodel;
 
-import android.content.Context;
 import android.net.Uri;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
 import java.util.List;
@@ -13,8 +11,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
-import dagger.hilt.android.qualifiers.ApplicationContext;
-import dagger.hilt.android.scopes.ViewModelScoped;
 
 @HiltViewModel
 public class AdPostViewModel extends ViewModel {
@@ -38,8 +34,14 @@ public class AdPostViewModel extends ViewModel {
     }
 
     // set image uri list
-    public void setImageUriList(List<Uri> imageUriList) {
-        mImageUriList.setValue(imageUriList);
+    public void addToImageUriList(List<Uri> imageUriList) {
+        if (mImageUriList.getValue() == null) {
+            mImageUriList.setValue(imageUriList);
+            return;
+        }
+        List<Uri> currentImageUriList = mImageUriList.getValue();
+        currentImageUriList.addAll(imageUriList);
+        mImageUriList.setValue(currentImageUriList);
     }
 
     // get category index live data

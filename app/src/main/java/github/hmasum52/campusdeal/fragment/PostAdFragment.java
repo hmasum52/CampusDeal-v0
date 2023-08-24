@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 
@@ -94,18 +93,19 @@ public class PostAdFragment extends Fragment {
                 if (!uris.isEmpty()) {
                     Log.d("PhotoPicker", "Number of items selected: " + uris.size());
                     // if uris size is greater than 5 then show error
-                    if(uris.size()>5){
-                        Toast.makeText(getContext(), "You can select up to 5 images", Toast.LENGTH_SHORT).show();
+                    int allowedImageCount = 5 - adapter.getImageUriList().size();
+
+                    if(uris.size()>allowedImageCount){
+                        String  msg = "You can add maximum 5 images";
+                        if(allowedImageCount == 0){
+                            msg = "You can't add more images";
+                        }else if (allowedImageCount < 5) {
+                            msg = "You can add "+allowedImageCount+" more images";
+                        }
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    adPostViewModel.setImageUriList(uris);
-//                    for (Uri uri : uris) {
-//                        Log.d("PhotoPicker", "Uri: " + uri.toString());
-//                        if(adapter!=null){
-//                            Log.d("PhotoPicker", "adding uri to recycler view");
-//                            adapter.addImage(uri);
-//                        }
-//                    }
+                    adPostViewModel.addToImageUriList(uris);
                 } else {
                     Log.d("PhotoPicker", "No media selected");
                 }
