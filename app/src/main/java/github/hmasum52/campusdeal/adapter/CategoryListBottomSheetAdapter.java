@@ -52,7 +52,7 @@ public class CategoryListBottomSheetAdapter extends RecyclerView.Adapter<Categor
         holder.mVB.categoryIcon.setImageDrawable(
                 ResourcesCompat.getDrawable(
                         holder.itemView.getContext().getResources(),
-                        Constants.categoryIconList.get(position),
+                        Constants.CATEGORY_ICON_LIST.get(position),
                         null
                 )
         );

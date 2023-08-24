@@ -138,12 +138,12 @@ public class PostAdFragment extends Fragment {
 
         adPostViewModel.getCategoryIndex().observe(getViewLifecycleOwner(), position -> {
             // set category name
-            mVB.selectedCategoryTv.setText(Constants.categoryList.get(position));
+            mVB.selectedCategoryTv.setText(Constants.CATEGORY_LIST.get(position));
             // set category icon
             mVB.selectedCategoryIcon.setImageDrawable(
                     ResourcesCompat.getDrawable(
                             getResources(),
-                            Constants.categoryIconList.get(position),
+                            Constants.CATEGORY_ICON_LIST.get(position),
                             null
                     )
             );
@@ -436,7 +436,7 @@ public class PostAdFragment extends Fragment {
             super.onViewCreated(view, savedInstanceState);
             // set up recycler view
             // adapter
-            CategoryListBottomSheetAdapter adapter = new CategoryListBottomSheetAdapter(Constants.categoryList);
+            CategoryListBottomSheetAdapter adapter = new CategoryListBottomSheetAdapter(Constants.CATEGORY_LIST);
             adapter.setOnItemClickListener(listener);
             mVB.categoryListRv.setAdapter(adapter);
         }

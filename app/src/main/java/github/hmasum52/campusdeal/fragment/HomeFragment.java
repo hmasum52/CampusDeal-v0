@@ -17,7 +17,6 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.parceler.Parcel;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -77,9 +76,9 @@ public class HomeFragment extends Fragment {
 
 
         ArrayList<Fragment> fragments = new ArrayList<>();
-        for (int i = 0; i < Constants.categoryList.size(); i++) {
+        for (int i = 0; i < Constants.CATEGORY_LIST.size(); i++) {
             fragments.add(new CategoryFragment(
-                    Constants.categoryList.get(i),
+                    Constants.CATEGORY_LIST.get(i),
                     ad -> {
                         // open ad details fragment
                         // send ad objecdt to ad details fragment
@@ -100,7 +99,7 @@ public class HomeFragment extends Fragment {
 
         // tab layout mediator to connect viewpager2 with tablayout
         new TabLayoutMediator(mVB.tabLayout, mVB.pager, ((TabLayout.Tab tab, int position) -> {
-            tab.setText(Constants.categoryList.get(position));
+            tab.setText(Constants.CATEGORY_LIST.get(position));
         })).attach();
     }
 

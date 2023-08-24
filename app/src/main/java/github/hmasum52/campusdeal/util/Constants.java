@@ -14,7 +14,7 @@ public class Constants {
     // product collection
     public static final String AD_COLLECTION = "ads";
 
-    public static final ArrayList<String> categoryList = new ArrayList<String>() {{
+    public static final ArrayList<String> CATEGORY_LIST = new ArrayList<String>() {{
         add("Books");
         add("Stationery");
         add("Electronics and Gadgets");
@@ -25,7 +25,7 @@ public class Constants {
     }};
 
     // category icons
-    public  static  final List<Integer> categoryIconList = new ArrayList<Integer>() {{
+    public  static  final List<Integer> CATEGORY_ICON_LIST = new ArrayList<Integer>() {{
         add(R.drawable.books_svgrepo_com);
         add(R.drawable.stationery_compass_svgrepo_com);
         add(R.drawable.game_console_psp_svgrepo_com);
