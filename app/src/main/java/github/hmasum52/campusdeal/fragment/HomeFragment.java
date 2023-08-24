@@ -73,29 +73,19 @@ public class HomeFragment extends Fragment {
         // Books, Stationary, Electronics, Accessories, Clothes,
         // Tutoring, Musical Instruments, Sports
 
-
-
         ArrayList<Fragment> fragments = new ArrayList<>();
         for (int i = 0; i < Constants.CATEGORY_LIST.size(); i++) {
-            fragments.add(new CategoryFragment(
-                    Constants.CATEGORY_LIST.get(i),
-                    ad -> {
-                        // open ad details fragment
-                        // send ad objecdt to ad details fragment
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable("ad", Parcels.wrap(ad));
-                        NavHostFragment.findNavController(this)
-                                .navigate(R.id.action_homeFragment_to_adDetailsFragment, bundle);
-                    }
-            ));
+            fragments.add(new CategoryFragment(Constants.CATEGORY_LIST.get(i)));
         }
 
         mVB.pager.setOffscreenPageLimit(2);
-
-        mVB.pager.setAdapter(new CategoryViewPagerAdapter(fragments,
+        // clear previous adapter before setting new one
+        CategoryViewPagerAdapter adapter = new CategoryViewPagerAdapter(
+                fragments,
                 getChildFragmentManager(),
-                getLifecycle())
+                getLifecycle()
         );
+        mVB.pager.setAdapter(adapter);
 
         // tab layout mediator to connect viewpager2 with tablayout
         new TabLayoutMediator(mVB.tabLayout, mVB.pager, ((TabLayout.Tab tab, int position) -> {

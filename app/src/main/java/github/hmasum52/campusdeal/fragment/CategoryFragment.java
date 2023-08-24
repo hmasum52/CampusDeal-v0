@@ -5,15 +5,15 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -24,6 +24,7 @@ import github.hmasum52.campusdeal.adapter.RecyclerItemClickListener;
 import github.hmasum52.campusdeal.databinding.FragmentCategoryBinding;
 import github.hmasum52.campusdeal.model.Ad;
 import github.hmasum52.campusdeal.model.StateData;
+import github.hmasum52.campusdeal.util.Constants;
 import github.hmasum52.campusdeal.viewmodel.AdViewModel;
 
 @AndroidEntryPoint
@@ -46,22 +47,20 @@ public class CategoryFragment extends Fragment {
 
 
 
-    public CategoryFragment(String name, RecyclerItemClickListener<Ad> recyclerItemClickListener) {
+    public CategoryFragment(String name) {
         // Required empty public constructor
         this.categoryName = name;
-        this.onAdClickListener = recyclerItemClickListener;
     }
 
     private RecyclerItemClickListener<Ad> onAdClickListener;
 
-
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // init adViewModel
+        Log.d(TAG, "onCreate: called "+this);
+        updateCategoryName();
+        // init view models
         adViewModel = new ViewModelProvider(this).get(AdViewModel.class);
-        adViewModel.onAdClickListener = onAdClickListener;
     }
 
     @Override
@@ -74,8 +73,17 @@ public class CategoryFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        // get the category name from savedStateHandle
-        restoreSavedState();
+        Log.d(TAG, "onViewCreated: called "+this);
+        Log.d(TAG, "onViewCreated: category name = "+ categoryName);
+
+        onAdClickListener = ad -> {
+            // open ad details fragment
+            // send ad objecdt to ad details fragment
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("ad", Parcels.wrap(ad));
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_homeFragment_to_adDetailsFragment, bundle);
+        };
 
         // set adapters
         allAdItemAdapter = new AdItemAdapter();
@@ -93,17 +101,18 @@ public class CategoryFragment extends Fragment {
         adViewModel.getAllAds(categoryName).observe(requireActivity(), this::updateAllAdRecyclerView);
     }
 
-
-
-    // restore data from savedStateHandle
-    void restoreSavedState(){
-        SavedStateHandle savedStateHandle = NavHostFragment.findNavController(this)
-                .getCurrentBackStackEntry()
-                .getSavedStateHandle();
-        if(categoryName == null && savedStateHandle.contains("category")){
-            categoryName = savedStateHandle.get("category");
-        }
+    // get category name from class tag
+    private void updateCategoryName(){
+        //get fragment tag set by the view pager
+        // https://stackoverflow.com/questions/55728719/get-current-fragment-with-viewpager2
+        int startIndex = this.toString().indexOf("tag=") + 4; // Start index of the tag value
+        int endIndex = this.toString().indexOf(")", startIndex); // End index of the tag value
+        String fragmentTag = this.toString().substring(startIndex, endIndex);
+        Log.d(TAG, "onViewCreated: fragment tag = "+fragmentTag);
+        int index = Integer.parseInt(fragmentTag.substring(1));
+        categoryName = Constants.CATEGORY_LIST.get(index);
     }
+
 
     // update top urgent Ad RecyclerView
     void updateTopUrgentAdRecyclerView(@NonNull StateData<List<Ad>> ads){
@@ -111,10 +120,6 @@ public class CategoryFragment extends Fragment {
         switch (ads.getStatus()){
             case SUCCESS:
                 Log.d(TAG, "updateTopUrgentAdRecyclerView: total urgent ads = "+ads.getData().size());
-                /*for (Ad a : ads.getData()){
-                    Log.d(TAG, "updateTopUrgentAdRecyclerView: "+a.toString());
-                }*/
-                //setUpWithAdapter(ads.getData(), mVB.urgentRv);
                 urgentAdItemAdapter.differ.submitList(ads.getData());
                 break;
             case ERROR:
@@ -157,12 +162,4 @@ public class CategoryFragment extends Fragment {
         adViewModel.fetchAds(categoryName, -1);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        NavHostFragment.findNavController(this)
-                .getCurrentBackStackEntry()
-                .getSavedStateHandle()
-                .set("category", categoryName);
-    }
 }
