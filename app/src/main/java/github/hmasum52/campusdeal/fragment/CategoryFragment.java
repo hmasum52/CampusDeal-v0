@@ -39,18 +39,17 @@ public class CategoryFragment extends Fragment {
     private AdItemAdapter urgentAdItemAdapter;
     private AdItemAdapter allAdItemAdapter;
 
+
     public CategoryFragment(){
 
     }
+
+
 
     public CategoryFragment(String name, RecyclerItemClickListener<Ad> recyclerItemClickListener) {
         // Required empty public constructor
         this.categoryName = name;
         this.onAdClickListener = recyclerItemClickListener;
-        allAdItemAdapter = new AdItemAdapter();
-        allAdItemAdapter.setRecyclerItemClickListener(recyclerItemClickListener);
-        urgentAdItemAdapter = new AdItemAdapter();
-        urgentAdItemAdapter.setRecyclerItemClickListener(recyclerItemClickListener);
     }
 
     private RecyclerItemClickListener<Ad> onAdClickListener;
@@ -62,6 +61,7 @@ public class CategoryFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // init adViewModel
         adViewModel = new ViewModelProvider(this).get(AdViewModel.class);
+        adViewModel.onAdClickListener = onAdClickListener;
     }
 
     @Override
@@ -78,6 +78,10 @@ public class CategoryFragment extends Fragment {
         restoreSavedState();
 
         // set adapters
+        allAdItemAdapter = new AdItemAdapter();
+        allAdItemAdapter.setRecyclerItemClickListener(onAdClickListener);
+        urgentAdItemAdapter = new AdItemAdapter();
+        urgentAdItemAdapter.setRecyclerItemClickListener(onAdClickListener);
         mVB.urgentRv.setAdapter(urgentAdItemAdapter);
         mVB.allAdRv.setAdapter(allAdItemAdapter);
 
@@ -144,6 +148,9 @@ public class CategoryFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Log.d(TAG, "onResume: category name = "+ categoryName);
+
+        onAdClickListener = adViewModel.onAdClickListener;
 
         //refresh the list
         adViewModel.fetchUrgentAdList(categoryName, 5);

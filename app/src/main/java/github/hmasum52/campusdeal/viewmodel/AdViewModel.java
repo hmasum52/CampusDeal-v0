@@ -15,12 +15,15 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
+import github.hmasum52.campusdeal.adapter.RecyclerItemClickListener;
 import github.hmasum52.campusdeal.model.Ad;
 import github.hmasum52.campusdeal.model.StateLiveData;
 
 @HiltViewModel
 public class AdViewModel extends ViewModel {
     public static final String TAG = "AdViewModel";
+
+    public RecyclerItemClickListener<Ad> onAdClickListener;
 
     // https://www.youtube.com/watch?v=suC0OM5gGAA
     Map<String, StateLiveData<List<Ad>>> topUrgentAdListMap = new HashMap<>(); // category -> list of ads

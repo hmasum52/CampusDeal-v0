@@ -22,8 +22,6 @@ import github.hmasum52.campusdeal.model.Ad;
 
 public class AdItemAdapter extends RecyclerView.Adapter<AdItemAdapter.ViewHolder> {
 
-    List<Ad>  adList;
-
     private final DiffUtil.ItemCallback<Ad> diffCallback = new DiffUtil.ItemCallback<Ad>() {
         @Override
         public boolean areItemsTheSame(@NonNull Ad oldItem, @NonNull Ad newItem) {
@@ -38,11 +36,6 @@ public class AdItemAdapter extends RecyclerView.Adapter<AdItemAdapter.ViewHolder
 
     public AsyncListDiffer<Ad> differ = new AsyncListDiffer<>(this, diffCallback);
 
-
-    void setAdList(List<Ad> adList){
-        this.adList = adList;
-        notifyDataSetChanged();
-    }
 
     private RecyclerItemClickListener<Ad> recyclerItemClickListener;
 
@@ -59,15 +52,12 @@ public class AdItemAdapter extends RecyclerView.Adapter<AdItemAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        //return adList.size();
         return differ.getCurrentList().size();
     }
 
     @Override
     public void onBindViewHolder(@NonNull AdItemAdapter.ViewHolder holder, int position) {
         // get Ad
-        //Ad ad = adList.get(position);
-        Log.d("AdItemAdapter", "onBindViewHolder: " + differ.getCurrentList().size());
         Ad ad = differ.getCurrentList().get(position);
 
         // set image with glide
