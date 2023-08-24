@@ -1,9 +1,16 @@
 package github.hmasum52.campusdeal.model;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import org.parceler.Parcel;
+import org.parceler.Parcels;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+
+import io.grpc.internal.JsonParser;
 
 @Parcel
 public class Ad {
@@ -118,5 +125,15 @@ public class Ad {
                 ", imageUriList=" + imageUriList +
                 ", adLocation=" + adLocation +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ad ad = (Ad) o;
+       // convert to json string and compare
+        Gson gson = new GsonBuilder().create();
+        return gson.toJson(this).equals(gson.toJson(ad));
     }
 }

@@ -36,6 +36,9 @@ public class CategoryFragment extends Fragment {
     private static final String TAG = "CategoryFragment";
     private AdViewModel adViewModel;
 
+    private AdItemAdapter urgentAdItemAdapter;
+    private AdItemAdapter allAdItemAdapter;
+
     public CategoryFragment(){
 
     }
@@ -44,6 +47,10 @@ public class CategoryFragment extends Fragment {
         // Required empty public constructor
         this.categoryName = name;
         this.onAdClickListener = recyclerItemClickListener;
+        allAdItemAdapter = new AdItemAdapter();
+        allAdItemAdapter.setRecyclerItemClickListener(recyclerItemClickListener);
+        urgentAdItemAdapter = new AdItemAdapter();
+        urgentAdItemAdapter.setRecyclerItemClickListener(recyclerItemClickListener);
     }
 
     private RecyclerItemClickListener<Ad> onAdClickListener;
@@ -69,6 +76,10 @@ public class CategoryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         // get the category name from savedStateHandle
         restoreSavedState();
+
+        // set adapters
+        mVB.urgentRv.setAdapter(urgentAdItemAdapter);
+        mVB.allAdRv.setAdapter(allAdItemAdapter);
 
         // shared view model
         // get the top 5 urgent ad list
@@ -99,7 +110,8 @@ public class CategoryFragment extends Fragment {
                 /*for (Ad a : ads.getData()){
                     Log.d(TAG, "updateTopUrgentAdRecyclerView: "+a.toString());
                 }*/
-                setUpWithAdapter(ads.getData(), mVB.urgentRv);
+                //setUpWithAdapter(ads.getData(), mVB.urgentRv);
+                urgentAdItemAdapter.differ.submitList(ads.getData());
                 break;
             case ERROR:
                 Log.d(TAG, "updateTopUrgentAdRecyclerView:"+ads.getError().getMessage());
@@ -116,7 +128,8 @@ public class CategoryFragment extends Fragment {
         switch (adsSateData.getStatus()){
             case SUCCESS:
                 assert adsSateData.getData() != null;
-                setUpWithAdapter(adsSateData.getData(), mVB.allAdRv);
+                //setUpWithAdapter(adsSateData.getData(), mVB.allAdRv);
+                allAdItemAdapter.differ.submitList(adsSateData.getData());
                 break;
             case ERROR:
                 Log.d(TAG, "updateAllAdRecyclerView: "+adsSateData.getError().getMessage());
@@ -128,20 +141,13 @@ public class CategoryFragment extends Fragment {
         }
     }
 
-    void setUpWithAdapter(@NonNull List<Ad> ads, RecyclerView rv){
-        AdItemAdapter itemAdapter = new AdItemAdapter(ads);
-        itemAdapter.setRecyclerItemClickListener(ad -> {
-           onAdClickListener.onItemClick(ad);
-        });
-        rv.setAdapter(itemAdapter);
-    }
-
     @Override
     public void onResume() {
         super.onResume();
 
         //refresh the list
         adViewModel.fetchUrgentAdList(categoryName, 5);
+        adViewModel.fetchAds(categoryName, -1);
     }
 
     @Override

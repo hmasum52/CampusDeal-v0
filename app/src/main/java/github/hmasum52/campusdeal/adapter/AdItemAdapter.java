@@ -1,11 +1,14 @@
 package github.hmasum52.campusdeal.adapter;
 
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -21,9 +24,20 @@ public class AdItemAdapter extends RecyclerView.Adapter<AdItemAdapter.ViewHolder
 
     List<Ad>  adList;
 
-    public AdItemAdapter(List<Ad> adList) {
-        this.adList = adList;
-    }
+    private final DiffUtil.ItemCallback<Ad> diffCallback = new DiffUtil.ItemCallback<Ad>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Ad oldItem, @NonNull Ad newItem) {
+            return oldItem.getId().equals(newItem.getId());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Ad oldItem, @NonNull Ad newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
+
+    public AsyncListDiffer<Ad> differ = new AsyncListDiffer<>(this, diffCallback);
+
 
     void setAdList(List<Ad> adList){
         this.adList = adList;
@@ -44,9 +58,17 @@ public class AdItemAdapter extends RecyclerView.Adapter<AdItemAdapter.ViewHolder
     }
 
     @Override
+    public int getItemCount() {
+        //return adList.size();
+        return differ.getCurrentList().size();
+    }
+
+    @Override
     public void onBindViewHolder(@NonNull AdItemAdapter.ViewHolder holder, int position) {
         // get Ad
-        Ad ad = adList.get(position);
+        //Ad ad = adList.get(position);
+        Log.d("AdItemAdapter", "onBindViewHolder: " + differ.getCurrentList().size());
+        Ad ad = differ.getCurrentList().get(position);
 
         // set image with glide
         // https://futurestud.io/tutorials/glide-image-resizing-scaling
@@ -150,10 +172,7 @@ public class AdItemAdapter extends RecyclerView.Adapter<AdItemAdapter.ViewHolder
         return Math.sqrt(distance)/1000.0; // return in km
     }
 
-    @Override
-    public int getItemCount() {
-        return adList.size();
-    }
+
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         CardAdBinding mVB;
