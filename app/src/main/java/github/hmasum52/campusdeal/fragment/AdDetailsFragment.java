@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -88,6 +89,31 @@ public class AdDetailsFragment extends Fragment {
                     "Want to buy "+ad.getTitle(),
                     mVB.ownerEmail.getText().toString(),
                     "Hi, I am interested in your ad for selling "+ad.getTitle()+" on CampusDeal App.");
+        });
+
+        // favorite btn
+        initFavoriteButton();
+
+        // back btn
+        initBackButton();
+    }
+
+    private void initBackButton() {
+        mVB.backBtnCard.setOnClickListener(v -> {
+            NavHostFragment.findNavController(this).popBackStack();
+        });
+    }
+
+    private void initFavoriteButton() {
+        mVB.favBtnCard.setOnClickListener(v -> {
+            Log.d("TAG", "onViewCreated: fav btn clicked");
+            if(mVB.favouriteBtn.isSelected()){
+                mVB.favouriteBtn.setSelected(false);
+                Log.d("TAG", "onViewCreated: checked");
+            }else{
+                mVB.favouriteBtn.setSelected(true);
+                Log.d("TAG", "onViewCreated: unchecked");
+            }
         });
     }
 

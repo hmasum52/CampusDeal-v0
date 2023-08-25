@@ -6,19 +6,76 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".fragment.AdDetailsFragment">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/back_btn_card"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="48dp"
+            app:cardElevation="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="@color/fui_transparent">
+
+            <ImageView
+                android:id="@+id/back_btn_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:background="@drawable/baseline_arrow_back_ios_new_24"
+                android:backgroundTint="@color/text_gray" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/fav_btn_card"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="48dp"
+            app:cardElevation="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="@color/fui_transparent">
+
+            <ImageView
+                android:id="@+id/favourite_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:background="@drawable/selector_favorite"
+                android:backgroundTint="@color/selector_favorite_color" />
+        </com.google.android.material.card.MaterialCardView>
+
+
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/image_vp"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="350dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline3"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars" />
+            app:layout_constraintVertical_bias="0.0"
+            tools:src="@tools:sample/avatars">
+
+        </androidx.viewpager2.widget.ViewPager2>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/dot_indicator"
@@ -56,7 +113,6 @@
             app:tint="@color/text_gray" />
 
         <ImageView
-            app:tint="@color/text_gray"
             android:id="@+id/imageView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,26 +120,27 @@
             android:src="@drawable/ic_distance_svgrepo_com"
             app:layout_constraintBottom_toBottomOf="@+id/upload_date"
             app:layout_constraintStart_toEndOf="@+id/upload_date"
-            app:layout_constraintTop_toTopOf="@+id/upload_date" />
+            app:layout_constraintTop_toTopOf="@+id/upload_date"
+            app:tint="@color/text_gray" />
 
         <TextView
-            android:textColor="@color/text_gray"
             android:id="@+id/distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            tools:text="3.00 Km"
+            android:textColor="@color/text_gray"
             app:layout_constraintBottom_toBottomOf="@+id/imageView8"
             app:layout_constraintStart_toEndOf="@+id/imageView8"
-            app:layout_constraintTop_toTopOf="@+id/imageView8" />
+            app:layout_constraintTop_toTopOf="@+id/imageView8"
+            tools:text="3.00 Km" />
 
         <TextView
             android:id="@+id/title"
+            style="@style/TextAppearance.Material3.BodyLarge"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
-            style="@style/TextAppearance.Material3.BodyLarge"
             android:textColor="@color/text_dark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -120,9 +177,9 @@
             app:strokeColor="@color/fui_transparent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_margin="16dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_margin="16dp">
 
                 <TextView
                     android:id="@+id/textView19"
@@ -154,8 +211,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardCornerRadius="20dp"
             app:cardBackgroundColor="@color/card_bg_dark_dark_blue"
+            app:cardCornerRadius="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/materialCardView"
             app:layout_constraintStart_toStartOf="@+id/materialCardView"
@@ -171,24 +228,24 @@
                     android:id="@+id/owner_avatar"
                     android:layout_width="?actionBarSize"
                     android:layout_height="?actionBarSize"
+                    android:src="@drawable/avatar_bg"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/avatar_bg">
+                    app:layout_constraintTop_toTopOf="parent">
 
                 </de.hdodenhof.circleimageview.CircleImageView>
 
                 <TextView
                     android:id="@+id/avatar_text"
+                    style="@style/MaterialAlertDialog.Material3.Title.Text.CenterStacked"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    tools:text="L"
                     android:textColor="@color/white"
-                    style="@style/MaterialAlertDialog.Material3.Title.Text.CenterStacked"
                     app:layout_constraintBottom_toBottomOf="@+id/owner_avatar"
                     app:layout_constraintEnd_toEndOf="@+id/owner_avatar"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/owner_avatar" />
+                    app:layout_constraintTop_toTopOf="@+id/owner_avatar"
+                    tools:text="L" />
 
                 <TextView
                     android:id="@+id/owner_name"
@@ -205,8 +262,8 @@
 
                 <TextView
                     android:id="@+id/owner_email"
-                    android:layout_width="0dp"
                     style="@style/TextAppearance.Material3.LabelSmall"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_light"
                     app:layout_constraintEnd_toEndOf="@+id/owner_name"
@@ -219,14 +276,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/colorPrimary"
-                    app:tint="@color/white"
-                    app:cornerRadius="10dp"
                     android:src="@drawable/baseline_send_24"
+                    app:cornerRadius="10dp"
                     app:iconTint="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
