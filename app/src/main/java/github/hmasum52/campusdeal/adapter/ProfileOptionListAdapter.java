@@ -19,9 +19,9 @@ public class ProfileOptionListAdapter extends RecyclerView.Adapter<ProfileOption
     private List<ProfileOption> mProfileOptionList;
 
     // click listener
-    private OnItemClickListener mOnItemClickListener;
+    private RecyclerItemClickListener<ProfileOption> mOnItemClickListener;
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+    public void setOnItemClickListener(RecyclerItemClickListener<ProfileOption> onItemClickListener){
         mOnItemClickListener = onItemClickListener;
     }
 
@@ -49,7 +49,7 @@ public class ProfileOptionListAdapter extends RecyclerView.Adapter<ProfileOption
         // set click listener
         holder.itemView.setOnClickListener(v -> {
             if(mOnItemClickListener != null){
-                mOnItemClickListener.onItemClick(position, profileOption);
+                mOnItemClickListener.onItemClick(profileOption);
             }
         });
     }
@@ -66,10 +66,5 @@ public class ProfileOptionListAdapter extends RecyclerView.Adapter<ProfileOption
             super(view);
             mVB = CardProfileMenuBinding.bind(view);
         }
-    }
-
-    // interface for click listener
-    public interface OnItemClickListener{
-        void onItemClick(int position, ProfileOption profileOption);
     }
 }

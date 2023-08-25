@@ -66,6 +66,11 @@
             android:name="showBottomNav"
             app:argType="boolean"
             android:defaultValue="true" />
+        <action
+            android:id="@+id/action_profileFragment_to_myAdsFragment"
+            app:destination="@id/myAdsFragment"
+            app:enterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
@@ -109,5 +114,16 @@
         android:name="github.hmasum52.campusdeal.fragment.AdDetailsFragment"
         android:label="fragment_ad_details"
         tools:layout="@layout/fragment_ad_details" />
+    <fragment
+        android:id="@+id/myAdsFragment"
+        android:name="github.hmasum52.campusdeal.fragment.MyAdsFragment"
+        android:label="fragment_my_ads"
+        tools:layout="@layout/fragment_my_ads" >
+        <action
+            android:id="@+id/action_myAdsFragment_to_adDetailsFragment"
+            app:destination="@id/adDetailsFragment"
+            app:enterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
 
 </navigation>

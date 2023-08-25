@@ -3,6 +3,7 @@ package github.hmasum52.campusdeal.fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,9 +108,20 @@ public class ProfileFragment extends Fragment {
 
         // set the adapter
         ProfileOptionListAdapter adapter = new ProfileOptionListAdapter(profileOptionList);
-        adapter.setOnItemClickListener((view, position) -> {
-                    // TODO: 8/3/2021 handle click
-                });
+        adapter.setOnItemClickListener((profileOption) -> {
+            // navigate to the fragment
+            switch (profileOption.getTitle()){
+                case "My Ads":
+                    NavHostFragment.findNavController(this).navigate(R.id.action_profileFragment_to_myAdsFragment);
+                    break;
+                /*case "My Wishlist":
+                    MainActivity.navigateToNewStartDestination(ProfileFragment.this.getActivity(), R.id.myWishlistFragment);
+                    break;
+                case "Edit Account":
+                    MainActivity.navigateToNewStartDestination(ProfileFragment.this.getActivity(), R.id.editAccountFragment);
+                    break;*/
+            }
+        });
         mVB.optionListRv.setAdapter(adapter);
     }
 }
