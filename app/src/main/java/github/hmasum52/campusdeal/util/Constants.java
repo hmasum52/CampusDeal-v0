@@ -15,7 +15,7 @@ public class Constants {
     public static final String WISHLIST_COLLECTION = "wishlist";
 
     // product collection
-    public static final String AD_COLLECTION = "ads";
+    public static final String ADS_COLLECTION = "ads";
 
     public static final ArrayList<String> CATEGORY_LIST = new ArrayList<String>() {{
         add("Books");

@@ -71,6 +71,11 @@
             app:destination="@id/myAdsFragment"
             app:enterAnim="@anim/from_right"
             app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_profileFragment_to_myWishlistFragment"
+            app:destination="@id/myWishlistFragment"
+            app:enterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
@@ -121,6 +126,17 @@
         tools:layout="@layout/fragment_my_ads" >
         <action
             android:id="@+id/action_myAdsFragment_to_adDetailsFragment"
+            app:destination="@id/adDetailsFragment"
+            app:enterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/myWishlistFragment"
+        android:name="github.hmasum52.campusdeal.fragment.MyWishlistFragment"
+        android:label="fragment_my_wishlist"
+        tools:layout="@layout/fragment_my_wishlist" >
+        <action
+            android:id="@+id/action_myWishlistFragment_to_adDetailsFragment"
             app:destination="@id/adDetailsFragment"
             app:enterAnim="@anim/from_right"
             app:popExitAnim="@anim/to_right" />

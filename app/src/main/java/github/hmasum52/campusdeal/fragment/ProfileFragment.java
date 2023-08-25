@@ -114,10 +114,10 @@ public class ProfileFragment extends Fragment {
                 case "My Ads":
                     NavHostFragment.findNavController(this).navigate(R.id.action_profileFragment_to_myAdsFragment);
                     break;
-                /*case "My Wishlist":
-                    MainActivity.navigateToNewStartDestination(ProfileFragment.this.getActivity(), R.id.myWishlistFragment);
+                case "My Wishlist":
+                    NavHostFragment.findNavController(this).navigate(R.id.action_profileFragment_to_myWishlistFragment);
                     break;
-                case "Edit Account":
+               /* case "Edit Account":
                     MainActivity.navigateToNewStartDestination(ProfileFragment.this.getActivity(), R.id.editAccountFragment);
                     break;*/
             }
