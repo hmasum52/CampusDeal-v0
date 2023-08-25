@@ -105,7 +105,7 @@ public class ProfileFragment extends Fragment {
             {
                 add(new ProfileOption("My Ads", R.drawable.price_tag_rotate_svgrepo_com, "View your ads"));
                 add(new ProfileOption("My Wishlist", R.drawable.baseline_favorite_24, "View your wishlist"));
-                add(new ProfileOption("Edit Account", R.drawable.baseline_edit_24,"Edit your account"));
+                //add(new ProfileOption("Edit Account", R.drawable.baseline_edit_24,"Edit your account"));
             }
         };
 
