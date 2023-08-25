@@ -17,7 +17,7 @@
 
         <!-- Cart -->
         <item
-            android:id="@+id/cartFragment"
+            android:id="@+id/dealRequestFragment"
             android:title="Cart"
             android:icon="@drawable/ic_cart"
             />

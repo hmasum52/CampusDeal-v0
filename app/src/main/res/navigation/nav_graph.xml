@@ -83,10 +83,10 @@
         android:label="fragment_category"
         tools:layout="@layout/fragment_category" />
     <fragment
-        android:id="@+id/cartFragment"
-        android:name="github.hmasum52.campusdeal.fragment.CartFragment"
-        android:label="fragment_cart"
-        tools:layout="@layout/fragment_cart" >
+        android:id="@+id/dealRequestFragment"
+        android:name="github.hmasum52.campusdeal.fragment.DealRequestFragment"
+        android:label="fragment_buy_request"
+        tools:layout="@layout/fragment_deal_request" >
         <argument
             android:name="showBottomNav"
             app:argType="boolean"

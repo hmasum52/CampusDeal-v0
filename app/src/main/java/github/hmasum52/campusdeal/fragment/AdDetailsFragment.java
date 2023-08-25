@@ -98,9 +98,19 @@ public class AdDetailsFragment extends Fragment {
         getOwnerInfo();
 
         // check if request is already sent
-        checkIfRequested();
+        checkIfUserCanMakeRequest();
 
         mVB.contact.setOnClickListener(v -> {
+            // check if owner and buyer is same
+            if(ad.getSellerId().equals(auth.getUid())){
+                Snackbar.make(mVB.getRoot(), "You can't contact yourself.", Snackbar.LENGTH_SHORT)
+                        .setBackgroundTint(
+                                ResourcesCompat.getColor(getResources(), R.color.c_red, null)
+                        ).setDuration(800)
+                        .show();
+                return;
+            }
+
             startMailSendIntent(
                     "Want to buy "+ad.getTitle(),
                     mVB.ownerEmail.getText().toString(),
@@ -115,7 +125,7 @@ public class AdDetailsFragment extends Fragment {
 
         // request to by button
         mVB.buyActionBtn.setOnClickListener(v -> {
-            requestToBuy();
+            makeDealRequest();
         });
     }
 
@@ -249,7 +259,13 @@ public class AdDetailsFragment extends Fragment {
 
     // check if request is already sent
     // if request is already sent then disable request button
-    private  void checkIfRequested(){
+    private  void checkIfUserCanMakeRequest(){
+        // disable request button if seller and buyer is same
+        if(ad.getSellerId().equals(auth.getUid())){
+            mVB.buyActionBtn.setEnabled(false);
+            mVB.buyActionBtn.setText("Your Ad.");
+            return;
+        }
         db.collection(Constants.BUY_REQUEST_COLLECTION)
                 .document(ad.getId())
                 .get()
@@ -260,11 +276,14 @@ public class AdDetailsFragment extends Fragment {
                         // set button text to requested
                         String requested = "Requested";
                         mVB.buyActionBtn.setText(requested);
+                    }else{
+                        String makeRequest = "Make Request";
+                        mVB.buyActionBtn.setText(makeRequest);
                     }
                 });
     }
 
-    private void requestToBuy(){
+    private void makeDealRequest(){
         // request to buy
         // save request to fire store in buy_request collection
         // buy_request object
