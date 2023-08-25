@@ -11,6 +11,9 @@ public class Constants {
     // user collection
     public static final String USER_COLLECTION = "users";
 
+    // user wishlist collection
+    public static final String WISHLIST_COLLECTION = "wishlist";
+
     // product collection
     public static final String AD_COLLECTION = "ads";
 
