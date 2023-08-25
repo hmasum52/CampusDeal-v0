@@ -266,7 +266,7 @@ public class AdDetailsFragment extends Fragment {
             mVB.buyActionBtn.setText("Your Ad.");
             return;
         }
-        db.collection(Constants.BUY_REQUEST_COLLECTION)
+        db.collection(Constants.DEAL_REQUEST_COLLECTION)
                 .document(ad.getId())
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -314,7 +314,7 @@ public class AdDetailsFragment extends Fragment {
         buyRequestData.put("title", ad.getTitle());
         buyRequestData.put("date", new Date());
 
-        db.collection(Constants.BUY_REQUEST_COLLECTION)
+        db.collection(Constants.DEAL_REQUEST_COLLECTION)
                 .document(ad.getId())
                 .set(buyRequestData)
                 .addOnSuccessListener(documentReference -> {
