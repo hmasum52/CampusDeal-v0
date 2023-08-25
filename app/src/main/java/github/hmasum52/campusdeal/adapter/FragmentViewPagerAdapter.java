@@ -8,13 +8,13 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import java.util.ArrayList;
 
-public class CategoryViewPagerAdapter extends FragmentStateAdapter {
+public class FragmentViewPagerAdapter extends FragmentStateAdapter {
     // all the category fragments
     // we will fetch categories from firebase
     // will dynamically make the this list
     private ArrayList<Fragment> fragmentList;
 
-    public CategoryViewPagerAdapter(
+    public FragmentViewPagerAdapter(
             ArrayList<Fragment> fragmentList,
             FragmentManager fragmentManager,
             Lifecycle lifecycle) {

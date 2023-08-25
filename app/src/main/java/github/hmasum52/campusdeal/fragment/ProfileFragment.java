@@ -88,6 +88,9 @@ public class ProfileFragment extends Fragment {
         AuthUI.getInstance()
                 .signOut(requireContext())
                 .addOnCompleteListener(task -> {
+                    // clear firebase auth cache manually
+                    // https://stackoverflow.com/a/70101192/13877490
+                    fAuth.signOut();
                     // navigate to onboarding fragment
                     MainActivity.navigateToNewStartDestination(ProfileFragment.this.getActivity(), R.id.onBoardingFragment);
                 });

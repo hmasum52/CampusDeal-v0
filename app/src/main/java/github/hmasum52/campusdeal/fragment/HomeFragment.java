@@ -17,15 +17,13 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.parceler.Parcels;
-
 import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import github.hmasum52.campusdeal.R;
-import github.hmasum52.campusdeal.adapter.CategoryViewPagerAdapter;
+import github.hmasum52.campusdeal.adapter.FragmentViewPagerAdapter;
 import github.hmasum52.campusdeal.databinding.FragmentHomeBinding;
 import github.hmasum52.campusdeal.model.User;
 import github.hmasum52.campusdeal.util.Constants;
@@ -80,7 +78,7 @@ public class HomeFragment extends Fragment {
 
         mVB.pager.setOffscreenPageLimit(2);
         // clear previous adapter before setting new one
-        CategoryViewPagerAdapter adapter = new CategoryViewPagerAdapter(
+        FragmentViewPagerAdapter adapter = new FragmentViewPagerAdapter(
                 fragments,
                 getChildFragmentManager(),
                 getLifecycle()

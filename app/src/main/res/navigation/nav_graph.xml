@@ -91,6 +91,10 @@
             android:name="showBottomNav"
             app:argType="boolean"
             android:defaultValue="true" />
+        <action
+            android:id="@+id/action_dealRequestFragment_to_adDetailsFragment"
+            app:destination="@id/adDetailsFragment"
+            app:enterAnim="@anim/from_right" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"

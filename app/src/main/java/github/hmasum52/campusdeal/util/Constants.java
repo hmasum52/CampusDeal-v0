@@ -17,6 +17,9 @@ public class Constants {
     // ads collection
     public static final String ADS_COLLECTION = "ads";
 
+    // ad key
+    public static final String AD_KEY = "ad";
+
     // buy request collection
     public static final String DEAL_REQUEST_COLLECTION = "deal_request";
 

@@ -25,6 +25,7 @@ import github.hmasum52.campusdeal.databinding.FragmentCategoryBinding;
 import github.hmasum52.campusdeal.model.Ad;
 import github.hmasum52.campusdeal.model.StateData;
 import github.hmasum52.campusdeal.util.Constants;
+import github.hmasum52.campusdeal.util.Util;
 import github.hmasum52.campusdeal.viewmodel.AdViewModel;
 
 @AndroidEntryPoint
@@ -107,11 +108,7 @@ public class CategoryFragment extends Fragment {
     private void updateCategoryName(){
         //get fragment tag set by the view pager
         // https://stackoverflow.com/questions/55728719/get-current-fragment-with-viewpager2
-        int startIndex = this.toString().indexOf("tag=") + 4; // Start index of the tag value
-        int endIndex = this.toString().indexOf(")", startIndex); // End index of the tag value
-        String fragmentTag = this.toString().substring(startIndex, endIndex);
-        Log.d(TAG, "onViewCreated: fragment tag = "+fragmentTag);
-        int index = Integer.parseInt(fragmentTag.substring(1));
+        int index = Util.getViewPagerFragmentIndex(this, Constants.CATEGORY_LIST.size());
         categoryName = Constants.CATEGORY_LIST.get(index);
     }
 
