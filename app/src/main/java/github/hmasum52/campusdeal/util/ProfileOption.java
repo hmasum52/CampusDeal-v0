@@ -1,12 +1,15 @@
 package github.hmasum52.campusdeal.util;
 
 public class ProfileOption {
+
+    private  int icon;
     private String title;
     private String description;
 
-    public ProfileOption(String title, String description) {
+    public ProfileOption(String title,int iconId, String description) {
         this.title = title;
         this.description = description;
+        this.icon = iconId;
     }
 
     public String getTitle() {
@@ -23,5 +26,9 @@ public class ProfileOption {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getIcon() {
+        return icon;
     }
 }

@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -39,6 +40,9 @@ public class ProfileOptionListAdapter extends RecyclerView.Adapter<ProfileOption
     @Override
     public void onBindViewHolder(@NonNull ProfileOptionListAdapter.ViewHolder holder, int position) {
         ProfileOption profileOption = mProfileOptionList.get(position);
+        holder.mVB.icon.setImageDrawable(
+                ResourcesCompat.getDrawable(holder.itemView.getResources(), profileOption.getIcon(), null)
+        );
         holder.mVB.optionName.setText(profileOption.getTitle());
         holder.mVB.optionDescription.setText(profileOption.getDescription());
 

@@ -99,11 +99,9 @@ public class ProfileFragment extends Fragment {
         // options: my orders, my wishlist, my cart, my address, my account
         List<ProfileOption> profileOptionList = new ArrayList<ProfileOption>() {
             {
-                add(new ProfileOption("My Orders", "View your orders"));
-                add(new ProfileOption("My Wishlist", "View your wishlist"));
-                add(new ProfileOption("My Cart", "View your cart"));
-                add(new ProfileOption("My Address", "View your address"));
-                add(new ProfileOption("Edit Account", "View your account"));
+                add(new ProfileOption("My Ads", R.drawable.price_tag_rotate_svgrepo_com, "View your ads"));
+                add(new ProfileOption("My Wishlist", R.drawable.baseline_favorite_24, "View your wishlist"));
+                add(new ProfileOption("Edit Account", R.drawable.baseline_edit_24,"Edit your account"));
             }
         };
 
