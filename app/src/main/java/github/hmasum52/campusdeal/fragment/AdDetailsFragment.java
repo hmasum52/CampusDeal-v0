@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -29,6 +30,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import github.hmasum52.campusdeal.R;
 import github.hmasum52.campusdeal.adapter.AdImageViewPagerAdapter;
 import github.hmasum52.campusdeal.databinding.FragmentAdDetailsBinding;
 import github.hmasum52.campusdeal.model.Ad;
@@ -95,6 +97,9 @@ public class AdDetailsFragment extends Fragment {
        // get ownerInfo
         getOwnerInfo();
 
+        // check if request is already sent
+        checkIfRequested();
+
         mVB.contact.setOnClickListener(v -> {
             startMailSendIntent(
                     "Want to buy "+ad.getTitle(),
@@ -107,6 +112,11 @@ public class AdDetailsFragment extends Fragment {
 
         // back btn
         initBackButton();
+
+        // request to by button
+        mVB.buyActionBtn.setOnClickListener(v -> {
+            requestToBuy();
+        });
     }
 
     private void initBackButton() {
@@ -236,4 +246,71 @@ public class AdDetailsFragment extends Fragment {
         startActivity(Intent.createChooser(emailIntent, "Send email..."));
     }
 
+
+    // check if request is already sent
+    // if request is already sent then disable request button
+    private  void checkIfRequested(){
+        db.collection(Constants.BUY_REQUEST_COLLECTION)
+                .document(ad.getId())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if(documentSnapshot.exists()){
+                        // disable request button
+                        mVB.buyActionBtn.setEnabled(false);
+                        // set button text to requested
+                        String requested = "Requested";
+                        mVB.buyActionBtn.setText(requested);
+                    }
+                });
+    }
+
+    private void requestToBuy(){
+        // request to buy
+        // save request to fire store in buy_request collection
+        // buy_request object
+        // - buyerId
+        // - buyerName
+        // - sellerId
+        // - sellerName
+        // - adId
+        // - title
+        // - date
+
+        // if owner and buyer is same
+        if(ad.getSellerId().equals(auth.getUid())){
+           Snackbar.make(mVB.getRoot(), "You can't make a request for your own add.", Snackbar.LENGTH_SHORT)
+                   .setBackgroundTint(
+                           ResourcesCompat.getColor(getResources(), R.color.c_red, null)
+                   )
+                   .show();
+            return;
+        }
+
+        Map<String, Object> buyRequestData = new HashMap<>();
+        buyRequestData.put("buyerId", auth.getUid());
+        buyRequestData.put("buyerName", auth.getCurrentUser().getDisplayName());
+        buyRequestData.put("sellerId", ad.getSellerId());
+        buyRequestData.put("sellerName", mVB.ownerName.getText().toString());
+        buyRequestData.put("adId", ad.getId());
+        buyRequestData.put("title", ad.getTitle());
+        buyRequestData.put("date", new Date());
+
+        db.collection(Constants.BUY_REQUEST_COLLECTION)
+                .document(ad.getId())
+                .set(buyRequestData)
+                .addOnSuccessListener(documentReference -> {
+                    Log.d(TAG, "requestToBuy: request sent");
+                    Snackbar.make(mVB.getRoot(), "Request sent", Snackbar.LENGTH_SHORT).show();
+                    // disable request button
+                    mVB.buyActionBtn.setEnabled(false);
+                    // set button text to requested
+                    String requested = "Requested";
+                    mVB.buyActionBtn.setText(requested);
+                })
+                .addOnFailureListener(e -> {
+                    Log.d(TAG, "requestToBuy: failed to send request");
+                    Snackbar.make(mVB.getRoot(), "Failed to send request", Snackbar.LENGTH_SHORT).show();
+                });
+
+    }
 }
