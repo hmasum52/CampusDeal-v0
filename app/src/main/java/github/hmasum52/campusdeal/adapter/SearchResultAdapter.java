@@ -1,7 +1,5 @@
 package github.hmasum52.campusdeal.adapter;
 
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +11,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.Date;
-import java.util.List;
-
 import github.hmasum52.campusdeal.R;
-import github.hmasum52.campusdeal.databinding.CardAdBinding;
+import github.hmasum52.campusdeal.databinding.CardAdHorizontalBinding;
 import github.hmasum52.campusdeal.model.Ad;
 import github.hmasum52.campusdeal.util.Util;
 
-public class AdItemAdapter extends RecyclerView.Adapter<AdItemAdapter.ViewHolder> {
+public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.ViewHolder> {
 
+    // Diffutil will be used to update the recyclerview
+    // https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil
     private final DiffUtil.ItemCallback<Ad> diffCallback = new DiffUtil.ItemCallback<Ad>() {
         @Override
         public boolean areItemsTheSame(@NonNull Ad oldItem, @NonNull Ad newItem) {
@@ -35,8 +32,8 @@ public class AdItemAdapter extends RecyclerView.Adapter<AdItemAdapter.ViewHolder
         }
     };
 
+    // ay list of ads
     public AsyncListDiffer<Ad> differ = new AsyncListDiffer<>(this, diffCallback);
-
 
     private RecyclerItemClickListener<Ad> recyclerItemClickListener;
 
@@ -46,19 +43,14 @@ public class AdItemAdapter extends RecyclerView.Adapter<AdItemAdapter.ViewHolder
 
     @NonNull
     @Override
-    public AdItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_ad, parent, false);
+    public SearchResultAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_ad_horizontal, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public int getItemCount() {
-        return differ.getCurrentList().size();
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull AdItemAdapter.ViewHolder holder, int position) {
-        // get Ad
+    public void onBindViewHolder(@NonNull SearchResultAdapter.ViewHolder holder, int position) {
+        // get ad
         Ad ad = differ.getCurrentList().get(position);
 
         // set image with glide
@@ -102,14 +94,20 @@ public class AdItemAdapter extends RecyclerView.Adapter<AdItemAdapter.ViewHolder
                 recyclerItemClickListener.onItemClick(ad);
             }
         });
-
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
-        CardAdBinding mVB;
+    @Override
+    public int getItemCount() {
+        return differ.getCurrentList().size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder{
+        CardAdHorizontalBinding mVB;
+
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            mVB = CardAdBinding.bind(itemView);
+            mVB = CardAdHorizontalBinding.bind(itemView);
         }
     }
 }

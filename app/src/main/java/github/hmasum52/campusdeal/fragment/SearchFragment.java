@@ -2,65 +2,127 @@ package github.hmasum52.campusdeal.fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import github.hmasum52.campusdeal.R;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.Filter;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SearchFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.Collections;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+import github.hmasum52.campusdeal.R;
+import github.hmasum52.campusdeal.adapter.SearchResultAdapter;
+import github.hmasum52.campusdeal.databinding.FragmentSearchBinding;
+import github.hmasum52.campusdeal.model.Ad;
+
+// https://stackoverflow.com/questions/38618953/how-to-do-a-simple-search-in-string-in-firebase-database
+// https://stackoverflow.com/questions/46568142/google-firestore-query-on-substring-of-a-property-value-text-search
+@AndroidEntryPoint
 public class SearchFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String TAG = "SearchFragment";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private FragmentSearchBinding mVB;
 
-    public SearchFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SearchFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SearchFragment newInstance(String param1, String param2) {
-        SearchFragment fragment = new SearchFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    @Inject
+    FirebaseFirestore db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false);
+        mVB = FragmentSearchBinding.inflate(inflater, container, false);
+        return mVB.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        SearchResultAdapter searchResultAdapter = new SearchResultAdapter();
+        mVB.searchResultRv.setAdapter(searchResultAdapter);
+
+
+        mVB.searchTextEdt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //Log.d(TAG, "beforeTextChanged: "+s.toString());
+                mVB.searchResultRv.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+               // Log.d(TAG, "onTextChanged: "+s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //Log.d(TAG, "afterTextChanged: "+s.toString());
+                // search in firebase by this string
+                String queryString = s.toString();
+
+                if(queryString.isEmpty()){
+                    mVB.searchResultRv.setVisibility(View.GONE);
+                    searchResultAdapter.differ.submitList(Collections.emptyList());
+                    return;
+                }
+
+                Log.d(TAG, "afterTextChanged: "+queryString);
+
+                // https://stackoverflow.com/a/62868153/13877490
+                //https://stackoverflow.com/a/75877483/13877490
+                db.collection("ads")
+                        .orderBy("title")
+                        .where(Filter.or(
+                                // query as it is
+                                Filter.and(
+                                        Filter.greaterThanOrEqualTo("title", queryString),
+                                        Filter.lessThanOrEqualTo("title", queryString + "\uf8ff")
+                                ),
+                                // capitalize first letter
+                                Filter.and(
+                                        Filter.greaterThanOrEqualTo("title", queryString.substring(0,1).toUpperCase() + queryString.substring(1)),
+                                        Filter.lessThanOrEqualTo("title", queryString.substring(0,1).toUpperCase() + queryString.substring(1) + "\uf8ff")
+                                ),
+                                // lowercase
+                                Filter.and(
+                                        Filter.greaterThanOrEqualTo("title", queryString.toLowerCase()),
+                                        Filter.lessThanOrEqualTo("title", queryString.toLowerCase() + "\uf8ff")
+                                )
+
+                         )
+                        )
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                mVB.searchResultRv.setVisibility(View.VISIBLE);
+                                // get ads
+                                Log.d(TAG, "onSuccess: "+queryDocumentSnapshots.size());
+                                // make adList
+                                List<Ad> adList = queryDocumentSnapshots.toObjects(Ad.class);
+                                searchResultAdapter.differ.submitList(adList);
+                            }
+                        }).addOnFailureListener(e -> {
+                            Log.d(TAG, "onFailure: "+e.getMessage());
+                            mVB.searchResultRv.setVisibility(View.VISIBLE);
+                        });
+
+            }
+        });
     }
 }

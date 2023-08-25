@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:minWidth="200dp"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/thumb_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="150dp"
+            android:minHeight="120dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@drawable/ic_clock_outlined" />
+
+        <!--        location text view: a subtitle-->
+        <TextView
+            android:id="@+id/location_tv"
+            style="@style/TextAppearance.Material3.LabelSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/location_background"
+            android:paddingHorizontal="8dp"
+            android:textColor="@color/white"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@+id/thumb_image"
+            app:layout_constraintStart_toStartOf="@+id/imageView3"
+            app:layout_constraintTop_toBottomOf="@+id/distance_tv"
+            app:layout_constraintVertical_bias="0.31"
+            tools:text="location" />
+
+        <TextView
+            android:id="@+id/title_tv"
+            style="@style/TextAppearance.Material3.LabelLarge"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/text_blue_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/thumb_image"
+            app:layout_constraintTop_toTopOf="@+id/thumb_image"
+            tools:text="Product Name Very very long" />
+
+        <TextView
+            android:id="@+id/price_desc"
+            style="@style/TextAppearance.Material3.LabelLarge"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_dark"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/title_tv"
+            app:layout_constraintStart_toStartOf="@+id/title_tv"
+            app:layout_constraintTop_toBottomOf="@+id/title_tv"
+            tools:text="Tk 100000000 • Urgent • Negotiable" />
+
+        <TextView
+            android:id="@+id/owner_name_tv"
+            style="@style/TextAppearance.Material3.BodySmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/price_desc"
+            app:layout_constraintStart_toStartOf="@+id/price_desc"
+            app:layout_constraintTop_toBottomOf="@+id/price_desc"
+            tools:text="Owner name" />
+
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            app:layout_constraintStart_toStartOf="@+id/owner_name_tv"
+            app:layout_constraintTop_toBottomOf="@+id/owner_name_tv"
+            app:srcCompat="@drawable/ic_distance_svgrepo_com" />
+
+        <TextView
+            android:id="@+id/distance_tv"
+            style="@style/TextAppearance.Material3.BodySmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+            app:layout_constraintStart_toEndOf="@+id/imageView3"
+            app:layout_constraintTop_toTopOf="@+id/imageView3"
+            tools:text="103.5km" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/distance_tv"
+            app:layout_constraintStart_toEndOf="@+id/distance_tv"
+            app:layout_constraintTop_toTopOf="@+id/distance_tv"
+            app:srcCompat="@drawable/ic_clock_outlined" />
+
+        <TextView
+
+            android:id="@+id/time_tv"
+            style="@style/TextAppearance.Material3.BodySmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+            app:layout_constraintEnd_toEndOf="@+id/owner_name_tv"
+            app:layout_constraintStart_toEndOf="@+id/imageView4"
+            app:layout_constraintTop_toTopOf="@+id/imageView4"
+            tools:text="2 weeks ago" />
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
