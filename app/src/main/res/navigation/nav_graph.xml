@@ -56,6 +56,11 @@
             android:name="showBottomNav"
             app:argType="boolean"
             android:defaultValue="true" />
+        <action
+            android:id="@+id/action_searchFragment_to_adDetailsFragment"
+            app:destination="@id/adDetailsFragment"
+            app:enterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -145,5 +150,10 @@
             app:enterAnim="@anim/from_right"
             app:popExitAnim="@anim/to_right" />
     </fragment>
+    <fragment
+        android:id="@+id/activeDealsFragment"
+        android:name="github.hmasum52.campusdeal.fragment.ActiveDealsFragment"
+        tools:layout="@layout/fragment_active_deals"
+        android:label="ActiveDealsFragment" />
 
 </navigation>

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,6 +20,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.parceler.Parcels;
 
 import java.util.Collections;
 import java.util.List;
@@ -55,6 +58,12 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         SearchResultAdapter searchResultAdapter = new SearchResultAdapter();
         mVB.searchResultRv.setAdapter(searchResultAdapter);
+
+        searchResultAdapter.setRecyclerItemClickListener((ad)->{
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("ad", Parcels.wrap(ad));
+            NavHostFragment.findNavController(this).navigate(R.id.action_searchFragment_to_adDetailsFragment, bundle);
+        });
 
 
         mVB.searchTextEdt.addTextChangedListener(new TextWatcher() {
