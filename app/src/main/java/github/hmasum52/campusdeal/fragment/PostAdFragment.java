@@ -50,7 +50,7 @@ import github.hmasum52.campusdeal.databinding.FragmentPostAdBinding;
 import github.hmasum52.campusdeal.model.Ad;
 import github.hmasum52.campusdeal.model.AdLocation;
 import github.hmasum52.campusdeal.util.Constants;
-import github.hmasum52.campusdeal.util.LoadingDialogBar;
+import github.hmasum52.campusdeal.util.PromptDialog;
 import github.hmasum52.campusdeal.util.LocationFinder;
 import github.hmasum52.campusdeal.viewmodel.AdPostViewModel;
 
@@ -70,7 +70,7 @@ public class PostAdFragment extends Fragment {
 
     private PostAdImageRVAdapter adapter;
 
-    private LoadingDialogBar uploadDialog;
+    private PromptDialog uploadDialog;
 
     @Inject
     Geocoder geocoder;
@@ -221,7 +221,7 @@ public class PostAdFragment extends Fragment {
         if(!ok){
             return;
         }
-        uploadDialog = new LoadingDialogBar(getContext(), R.layout.loading_dialog);
+        uploadDialog = new PromptDialog(getContext(), R.layout.dialog_loading);
         uploadDialog.showDialog("Posting Ad", R.id.loading_msg_tv);
         // 1st upload all the images to firebase storage
         // upload image then call uploadAdToFireStore method

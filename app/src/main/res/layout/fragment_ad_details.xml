@@ -317,13 +317,13 @@
             android:textColor="@color/card_bg_dark_dark_blue"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/buy_action_btn"
+            app:layout_constraintEnd_toStartOf="@+id/deal_action_btn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="$9,100" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/buy_action_btn"
+            android:id="@+id/deal_action_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Request to buy"

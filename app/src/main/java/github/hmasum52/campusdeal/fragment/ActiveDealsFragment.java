@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 import github.hmasum52.campusdeal.R;
 import github.hmasum52.campusdeal.adapter.DealRequestListAdapter;
+import github.hmasum52.campusdeal.adapter.RecyclerItemClickListener;
 import github.hmasum52.campusdeal.databinding.FragmentActiveDealsBinding;
 import github.hmasum52.campusdeal.model.Ad;
 import github.hmasum52.campusdeal.model.DealRequest;
@@ -42,6 +43,9 @@ public class ActiveDealsFragment extends Fragment {
 
     private DealRequestListAdapter adapter;
 
+    // index of this fragment in the viewpager
+    int position = 0;
+
 
     @Nullable
     @Override
@@ -54,14 +58,14 @@ public class ActiveDealsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d("ActiveDealsFragment", "onViewCreated: "+this );
-        int position = Util.getViewPagerFragmentIndex(this, 2);
+        position = Util.getViewPagerFragmentIndex(this, 2);
 
         // define adapter
         adapter = new DealRequestListAdapter(this::navigateToAdsFragment);
         mVB.dealListRv.setAdapter(adapter);
 
         Log.d(TAG, "onViewCreated: position = "+position);
-        if(position == 0){
+        if(position == 0) {
             updateRequestForYouUI();
         }
         else if(position == 1){
@@ -71,6 +75,8 @@ public class ActiveDealsFragment extends Fragment {
     }
 
     private void navigateToAdsFragment(DealRequest dealRequest) {
+        int action = position == 0 ? R.id.action_dealRequestFragment_to_adReviewFragment
+                : R.id.action_dealRequestFragment_to_adDetailsFragment;
         db.collection(Constants.ADS_COLLECTION)
                 .document(dealRequest.getAdId())
                 .get()
@@ -82,12 +88,13 @@ public class ActiveDealsFragment extends Fragment {
                         bundle.putParcelable(Constants.AD_KEY, Parcels.wrap(ad));
                         NavHostFragment.findNavController(this)
                                 .navigate(
-                                        R.id.action_dealRequestFragment_to_adDetailsFragment,
+                                        action,
                                         bundle
                                 );
                     }
                 });
     }
+
 
     private void updateRequestForYouUI() {
         Log.d(TAG, "updateRequestForYouUI: called");

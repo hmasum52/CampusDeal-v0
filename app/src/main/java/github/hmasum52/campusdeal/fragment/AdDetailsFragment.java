@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,12 +37,13 @@ import github.hmasum52.campusdeal.databinding.FragmentAdDetailsBinding;
 import github.hmasum52.campusdeal.model.Ad;
 import github.hmasum52.campusdeal.model.User;
 import github.hmasum52.campusdeal.util.Constants;
+import github.hmasum52.campusdeal.util.PromptDialog;
 
 @AndroidEntryPoint
 public class AdDetailsFragment extends Fragment {
     public static final String TAG = "AdDetailsFragment";
 
-    private FragmentAdDetailsBinding mVB;
+    protected FragmentAdDetailsBinding mVB;
 
     @Inject
     FirebaseFirestore db;
@@ -50,7 +52,10 @@ public class AdDetailsFragment extends Fragment {
     @Inject
     FirebaseAuth auth;
 
-    private Ad ad;
+    protected Ad ad;
+
+    // deal cancel prompt dialog
+    protected PromptDialog cancelDealDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,7 +76,65 @@ public class AdDetailsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        initUI();
+        // check if request is already sent
+        checkIfUserCanMakeRequest();
+    }
 
+    protected void initUI(){
+        initCancelDialog();
+
+        initAdImageViewpager2();
+
+        initAdInfoUI();
+
+        // get ownerInfo
+        updateOwnerInfoUI();
+
+        // init mail send button
+        initMailSendButton();
+
+        // favorite btn
+        initFavoriteButton();
+
+        // back btn
+        mVB.backBtnCard.setOnClickListener(v -> {
+            NavHostFragment.findNavController(this).popBackStack();
+        });
+    }
+
+    protected void setDealButtonTextAndColor(String text, int color, int textColor){
+        mVB.dealActionBtn.setText(text);
+        mVB.dealActionBtn.setBackgroundColor(
+                ResourcesCompat.getColor(getResources(), color, null)
+        );
+        mVB.dealActionBtn.setTextColor(
+                ResourcesCompat.getColor(getResources(), textColor, null)
+        );
+    }
+
+    protected void initCancelDialog(){
+        Log.d(TAG, "initCancelDialog: ");
+        cancelDealDialog = new PromptDialog(getContext(), R.layout.dialog_cancel_deal_request);
+
+        Button yesBtn = cancelDealDialog.findViewById(R.id.yes_btn);
+        Button noBtn = cancelDealDialog.findViewById(R.id.no_btn);
+
+        yesBtn.setOnClickListener(v -> {
+            cancelDealRequest();
+        });
+
+        noBtn.setOnClickListener(v -> {
+            cancelDealDialog.hideDialog();
+        });
+    }
+
+    protected boolean isOwner(){
+        return ad.getSellerId().equals(auth.getUid());
+    }
+
+
+    protected void initAdImageViewpager2(){
         AdImageViewPagerAdapter adapter = new AdImageViewPagerAdapter(ad.getImageUriList());
         mVB.imageVp.setAdapter(adapter);
         adapter.differ.submitList(ad.getImageUriList());
@@ -80,7 +143,9 @@ public class AdDetailsFragment extends Fragment {
         // https://github.com/AdrianKuta/ViewPagerDotsIndicator
         new TabLayoutMediator(mVB.dotIndicator, mVB.imageVp, (tab, position) -> {
         }).attach();
+    }
 
+    protected void initAdInfoUI() {
         // set upload date in dd MMM yyyy format
         mVB.uploadDate.setText(DateFormat.getDateInstance(DateFormat.MEDIUM).format(ad.getUploadDate()));
 
@@ -93,13 +158,9 @@ public class AdDetailsFragment extends Fragment {
         mVB.title.setText(ad.getTitle());
 
         mVB.description.setText(ad.getDescription());
+    }
 
-       // get ownerInfo
-        getOwnerInfo();
-
-        // check if request is already sent
-        checkIfUserCanMakeRequest();
-
+    protected void initMailSendButton() {
         mVB.contact.setOnClickListener(v -> {
             // check if owner and buyer is same
             if(ad.getSellerId().equals(auth.getUid())){
@@ -116,28 +177,11 @@ public class AdDetailsFragment extends Fragment {
                     mVB.ownerEmail.getText().toString(),
                     "Hi, I am interested in your ad for selling "+ad.getTitle()+" on CampusDeal App.");
         });
-
-        // favorite btn
-        initFavoriteButton();
-
-        // back btn
-        initBackButton();
-
-        // request to by button
-        mVB.buyActionBtn.setOnClickListener(v -> {
-            makeDealRequest();
-        });
-    }
-
-    private void initBackButton() {
-        mVB.backBtnCard.setOnClickListener(v -> {
-            NavHostFragment.findNavController(this).popBackStack();
-        });
     }
 
     // https://stackoverflow.com/questions/60925946/firestore-data-modeling-for-library-books-wishlist-data
     // https://stackoverflow.com/questions/74993384/how-to-make-a-wishedproduct-widget-using-firebasefirestore
-    private void initFavoriteButton() {
+    protected void initFavoriteButton() {
         mVB.favBtnCard.setOnClickListener(v -> {
             Log.d("TAG", "onViewCreated: fav btn clicked");
             if(mVB.favouriteBtn.isSelected()){
@@ -168,7 +212,7 @@ public class AdDetailsFragment extends Fragment {
                 });
     }
 
-    private void addToWishlist(){
+    protected void addToWishlist(){
 
         // wishlist object
         // https://stackoverflow.com/questions/60925946/firestore-data-modeling-for-library-books-wishlist-data
@@ -195,7 +239,7 @@ public class AdDetailsFragment extends Fragment {
                 });
     }
 
-    private void removeFromWishlist(){
+    protected void removeFromWishlist(){
         // remove from fire store users/{userId}/wishlist/{adId}
         db.collection(Constants.USER_COLLECTION)
                 .document(auth.getUid())
@@ -213,7 +257,7 @@ public class AdDetailsFragment extends Fragment {
                 });
     }
 
-    private  void getOwnerInfo(){
+    protected  void updateOwnerInfoUI(){
      // fetch owner info form fire store users collection
         db.collection(Constants.USER_COLLECTION)
                 .document(ad.getSellerId())
@@ -237,7 +281,7 @@ public class AdDetailsFragment extends Fragment {
                 });
     }
 
-    private void startMailSendIntent(String subject, String to, String body) {
+    protected void startMailSendIntent(String subject, String to, String body) {
         String[] addresses = {to};
 
         Intent selectorIntent = new Intent(Intent.ACTION_SENDTO);
@@ -262,8 +306,10 @@ public class AdDetailsFragment extends Fragment {
     private  void checkIfUserCanMakeRequest(){
         // disable request button if seller and buyer is same
         if(ad.getSellerId().equals(auth.getUid())){
-            mVB.buyActionBtn.setEnabled(false);
-            mVB.buyActionBtn.setText("Your Ad.");
+            mVB.dealActionBtn.setEnabled(false);
+            mVB.dealActionBtn.setText("Your Ad.");
+            // hide wishlist button
+            mVB.favBtnCard.setVisibility(View.GONE);
             return;
         }
         db.collection(Constants.DEAL_REQUEST_COLLECTION)
@@ -271,19 +317,23 @@ public class AdDetailsFragment extends Fragment {
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if(documentSnapshot.exists()){
-                        // disable request button
-                        mVB.buyActionBtn.setEnabled(false);
-                        // set button text to requested
-                        String requested = "Requested";
-                        mVB.buyActionBtn.setText(requested);
+                        setDealButtonTextAndColor("Cancel Request", R.color.c_red, R.color.white);
+                        // cancel deal request
+                        mVB.dealActionBtn.setOnClickListener(v->{
+                            Log.d(TAG, "cancel request button clicked");
+                            cancelDealDialog.showDialog();
+                        });
                     }else{
-                        String makeRequest = "Make Request";
-                        mVB.buyActionBtn.setText(makeRequest);
+                        setDealButtonTextAndColor("Make Request", R.color.black, R.color.white);
+                        // request to by button
+                        mVB.dealActionBtn.setOnClickListener(v -> {
+                            makeDealRequest();
+                        });
                     }
                 });
     }
 
-    private void makeDealRequest(){
+    protected void makeDealRequest(){
         // request to buy
         // save request to fire store in buy_request collection
         // buy_request object
@@ -321,15 +371,43 @@ public class AdDetailsFragment extends Fragment {
                     Log.d(TAG, "requestToBuy: request sent");
                     Snackbar.make(mVB.getRoot(), "Request sent", Snackbar.LENGTH_SHORT).show();
                     // disable request button
-                    mVB.buyActionBtn.setEnabled(false);
+                    mVB.dealActionBtn.setEnabled(false);
                     // set button text to requested
-                    String requested = "Requested";
-                    mVB.buyActionBtn.setText(requested);
+                    setDealButtonTextAndColor("Cancel Request", R.color.c_red, R.color.white);
+                    // cancel deal request
+                    mVB.dealActionBtn.setOnClickListener(v->{
+                        Log.d(TAG, "cancel request button clicked");
+                        cancelDealDialog.showDialog();
+                    });
+
                 })
                 .addOnFailureListener(e -> {
                     Log.d(TAG, "requestToBuy: failed to send request");
                     Snackbar.make(mVB.getRoot(), "Failed to send request", Snackbar.LENGTH_SHORT).show();
                 });
 
+    }
+
+    private void cancelDealRequest(){
+        // delete the deal request from the fire store
+        // path: deal_request/{ad_id}
+        db.collection(Constants.DEAL_REQUEST_COLLECTION)
+                .document(ad.getId())
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "onViewCreated: request canceled");
+                    cancelDealDialog.hideDialog();
+                    // make snake bar
+                    Snackbar.make(mVB.getRoot(), "Request canceled", Snackbar.LENGTH_SHORT)
+                            .setDuration(1000).show();
+                    // change the deal action button text and color
+                    setDealButtonTextAndColor(
+                            isOwner() ? "Edit" : "Make Request"
+                            , R.color.black, R.color.white);
+                    mVB.dealActionBtn.setOnClickListener(v->{
+                        // make deal request
+                        makeDealRequest();
+                    });
+                });
     }
 }

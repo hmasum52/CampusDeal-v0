@@ -97,9 +97,13 @@
             app:argType="boolean"
             android:defaultValue="true" />
         <action
+            android:id="@+id/action_dealRequestFragment_to_adReviewFragment"
+            app:destination="@id/adReviewFragment"
+            app:enterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_right" />
+        <action
             android:id="@+id/action_dealRequestFragment_to_adDetailsFragment"
-            app:destination="@id/adDetailsFragment"
-            app:enterAnim="@anim/from_right" />
+            app:destination="@id/adDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -155,5 +159,11 @@
         android:name="github.hmasum52.campusdeal.fragment.ActiveDealsFragment"
         tools:layout="@layout/fragment_active_deals"
         android:label="ActiveDealsFragment" />
+    <fragment
+        android:id="@+id/adReviewFragment"
+        android:name="github.hmasum52.campusdeal.fragment.AdReviewFragment"
+        android:label="AdReviewFragment"
+        tools:layout="@layout/fragment_ad_details"
+        />
 
 </navigation>
