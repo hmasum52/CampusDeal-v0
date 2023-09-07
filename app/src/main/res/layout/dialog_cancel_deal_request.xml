@@ -21,7 +21,7 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/textView17"
+                android:id="@+id/message_tv"
                 style="@style/TextAppearance.Material3.ActionBar.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -39,8 +39,8 @@
                 android:layout_marginEnd="4dp"
                 android:text="No"
                 app:layout_constraintEnd_toStartOf="@+id/guideline4"
-                app:layout_constraintStart_toStartOf="@+id/textView17"
-                app:layout_constraintTop_toBottomOf="@+id/textView17" />
+                app:layout_constraintStart_toStartOf="@+id/message_tv"
+                app:layout_constraintTop_toBottomOf="@+id/message_tv" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/yes_btn"
@@ -52,9 +52,9 @@
                 android:backgroundTint="@color/c_red"
                 android:text="Yes"
                 android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="@+id/textView17"
+                app:layout_constraintEnd_toEndOf="@+id/message_tv"
                 app:layout_constraintStart_toStartOf="@+id/guideline4"
-                app:layout_constraintTop_toBottomOf="@+id/textView17" />
+                app:layout_constraintTop_toBottomOf="@+id/message_tv" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline4"

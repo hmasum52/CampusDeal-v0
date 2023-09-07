@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.parceler.Parcels;
@@ -316,10 +317,14 @@ public class AdDetailsFragment extends Fragment {
             return;
         }
         db.collection(Constants.DEAL_REQUEST_COLLECTION)
-                .document(ad.getId())
+                .where(Filter.and(
+                        Filter.equalTo("buyerId", auth.getUid()),
+                        Filter.equalTo("adId", ad.getId())
+                ))
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
-                    if(documentSnapshot.exists()){
+                    if(!documentSnapshot.isEmpty()){
+                        Log.d(TAG, "onViewCreated: request already sent for this ad : "+ad.getId());
                         setDealButtonTextAndColor("Cancel Request", R.color.c_red, R.color.white);
                         // cancel deal request
                         mVB.dealActionBtn.setOnClickListener(v->{
@@ -367,6 +372,26 @@ public class AdDetailsFragment extends Fragment {
         buyRequestData.put("title", ad.getTitle());
         buyRequestData.put("date", new Date());
 
+        // check if request is already sent
+        db.collection(Constants.DEAL_REQUEST_COLLECTION)
+                .document(ad.getId())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if(documentSnapshot.exists()){
+                        Log.d(TAG, "onViewCreated: request already sent for this ad : "+ad.getId());
+                        Snackbar.make(mVB.getRoot(), "Request already sent", Snackbar.LENGTH_SHORT).show();
+                        return;
+                    }
+                    // if request is not sent then send request
+                    requestToBuy(buyRequestData);
+                });
+
+
+
+    }
+
+    private void requestToBuy(Map<String, Object> buyRequestData){
+        // save request to fire store in buy_request collection
         db.collection(Constants.DEAL_REQUEST_COLLECTION)
                 .document(ad.getId())
                 .set(buyRequestData)
@@ -388,7 +413,6 @@ public class AdDetailsFragment extends Fragment {
                     Log.d(TAG, "requestToBuy: failed to send request");
                     Snackbar.make(mVB.getRoot(), "Failed to send request", Snackbar.LENGTH_SHORT).show();
                 });
-
     }
 
     private void cancelDealRequest(){

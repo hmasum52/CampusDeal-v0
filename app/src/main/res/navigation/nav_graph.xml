@@ -164,6 +164,17 @@
         android:name="github.hmasum52.campusdeal.fragment.AdReviewFragment"
         android:label="AdReviewFragment"
         tools:layout="@layout/fragment_ad_details"
-        />
+        >
+        <action
+            android:id="@+id/action_adReviewFragment_to_dealDoneFragment"
+            app:destination="@id/dealDoneFragment"
+            app:enterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/dealDoneFragment"
+        android:name="github.hmasum52.campusdeal.fragment.DealDoneFragment"
+        tools:layout="@layout/fragment_deal_done"
+        android:label="DealDoneFragment" />
 
 </navigation>

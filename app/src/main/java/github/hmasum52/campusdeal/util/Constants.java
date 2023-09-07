@@ -14,6 +14,14 @@ public class Constants {
     // user wishlist collection
     public static final String WISHLIST_COLLECTION = "wishlist";
 
+    // user deals collection
+    // users/{userId}/deals/{adId}
+    public static final String USER_DEALS_COLLECTION = "deals";
+
+    // user buy history collection
+    // users/{userId}/buy_history/{adId}
+    public static final String USER_BUY_HISTORY_COLLECTION = "buy_history";
+
     // ads collection
     public static final String ADS_COLLECTION = "ads";
 
