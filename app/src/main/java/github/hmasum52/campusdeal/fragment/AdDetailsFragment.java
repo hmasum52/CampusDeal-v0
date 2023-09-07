@@ -77,8 +77,17 @@ public class AdDetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         initUI();
+
+        // get ownerInfo
+        fetchUserInfoAndUpdateUI(ad.getSellerId());
+
         // check if request is already sent
         checkIfUserCanMakeRequest();
+
+        // if owner then disable mail send button
+        if(isOwner()){
+            mVB.contact.setVisibility(View.GONE);
+        }
     }
 
     protected void initUI(){
@@ -87,9 +96,6 @@ public class AdDetailsFragment extends Fragment {
         initAdImageViewpager2();
 
         initAdInfoUI();
-
-        // get ownerInfo
-        updateOwnerInfoUI();
 
         // init mail send button
         initMailSendButton();
@@ -101,6 +107,11 @@ public class AdDetailsFragment extends Fragment {
         mVB.backBtnCard.setOnClickListener(v -> {
             NavHostFragment.findNavController(this).popBackStack();
         });
+
+        if(isOwner()){
+            // hide wishlist button
+            mVB.favBtnCard.setVisibility(View.GONE);
+        }
     }
 
     protected void setDealButtonTextAndColor(String text, int color, int textColor){
@@ -162,16 +173,6 @@ public class AdDetailsFragment extends Fragment {
 
     protected void initMailSendButton() {
         mVB.contact.setOnClickListener(v -> {
-            // check if owner and buyer is same
-            if(ad.getSellerId().equals(auth.getUid())){
-                Snackbar.make(mVB.getRoot(), "You can't contact yourself.", Snackbar.LENGTH_SHORT)
-                        .setBackgroundTint(
-                                ResourcesCompat.getColor(getResources(), R.color.c_red, null)
-                        ).setDuration(800)
-                        .show();
-                return;
-            }
-
             startMailSendIntent(
                     "Want to buy "+ad.getTitle(),
                     mVB.ownerEmail.getText().toString(),
@@ -257,10 +258,14 @@ public class AdDetailsFragment extends Fragment {
                 });
     }
 
-    protected  void updateOwnerInfoUI(){
+    /*
+    for owner if fetches the requesters info
+    for buyer if fetches the owner info
+     */
+    protected  void fetchUserInfoAndUpdateUI(String userId){
      // fetch owner info form fire store users collection
         db.collection(Constants.USER_COLLECTION)
-                .document(ad.getSellerId())
+                .document(userId)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     // get user object from documentSnapshot
@@ -308,8 +313,6 @@ public class AdDetailsFragment extends Fragment {
         if(ad.getSellerId().equals(auth.getUid())){
             mVB.dealActionBtn.setEnabled(false);
             mVB.dealActionBtn.setText("Your Ad.");
-            // hide wishlist button
-            mVB.favBtnCard.setVisibility(View.GONE);
             return;
         }
         db.collection(Constants.DEAL_REQUEST_COLLECTION)
