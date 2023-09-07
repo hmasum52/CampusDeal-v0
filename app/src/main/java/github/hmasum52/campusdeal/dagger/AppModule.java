@@ -31,13 +31,6 @@ public class AppModule{
         return FirebaseFirestore.getInstance();
     }
 
-    // provide FirebaseUser
-    @Provides
-    @Singleton
-    public static FirebaseUser provideFirebaseUser(){
-        return FirebaseAuth.getInstance().getCurrentUser();
-    }
-
     // firebase storage provider
     @Provides
     @Singleton
