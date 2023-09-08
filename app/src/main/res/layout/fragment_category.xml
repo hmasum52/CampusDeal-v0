@@ -33,6 +33,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/urgent_rv"
             android:layout_width="0dp"
+            android:minHeight="64dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -55,6 +56,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/nearest_ad_rv"
             android:layout_width="0dp"
+            android:minHeight="64dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:orientation="horizontal"
@@ -92,6 +94,38 @@
             tools:itemCount="5"
             tools:listitem="@layout/card_ad" />
 
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/no_urgent_item_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No urgent and new ads."
+            app:layout_constraintBottom_toBottomOf="@+id/urgent_rv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/urgent_rv" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/no_nearest_item_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No ads near your campus."
+            app:layout_constraintBottom_toBottomOf="@+id/nearest_ad_rv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/nearest_ad_rv" />
+
+        <TextView
+            android:id="@+id/no_item_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="No item available in this category."
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/All" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

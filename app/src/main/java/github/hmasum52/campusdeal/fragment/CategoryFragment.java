@@ -156,6 +156,11 @@ public class CategoryFragment extends Fragment {
                 setLoading(false);
                 Log.d(TAG, "updateNearestAdRecyclerView: total nearest ads = "+ads.getData().size());
                 nearestAdItemAdapter.differ.submitList(ads.getData());
+                if(nearestAdItemAdapter.differ.getCurrentList().size()==0){
+                    mVB.noNearestItemTv.setVisibility(View.VISIBLE);
+                }else{
+                    mVB.noNearestItemTv.setVisibility(View.GONE);
+                }
                 break;
             case ERROR:
                 Log.d(TAG, "updateNearestAdRecyclerView:"+ads.getError().getMessage());
@@ -195,6 +200,11 @@ public class CategoryFragment extends Fragment {
                 setLoading(false);
                 Log.d(TAG, "updateTopUrgentAdRecyclerView: total urgent ads = "+ads.getData().size());
                 urgentAdItemAdapter.differ.submitList(ads.getData());
+                if(urgentAdItemAdapter.differ.getCurrentList().size()==0){
+                    mVB.noUrgentItemTv.setVisibility(View.VISIBLE);
+                }else{
+                    mVB.noUrgentItemTv.setVisibility(View.GONE);
+                }
                 break;
             case ERROR:
                 Log.d(TAG, "updateTopUrgentAdRecyclerView:"+ads.getError().getMessage());
@@ -217,6 +227,11 @@ public class CategoryFragment extends Fragment {
                 assert adsSateData.getData() != null;
                 //setUpWithAdapter(adsSateData.getData(), mVB.allAdRv);
                 allAdItemAdapter.differ.submitList(adsSateData.getData());
+                if(allAdItemAdapter.differ.getCurrentList().size()==0){
+                    mVB.noItemTv.setVisibility(View.VISIBLE);
+                }else{
+                    mVB.noItemTv.setVisibility(View.GONE);
+                }
                 break;
             case ERROR:
                 setLoading(false);
