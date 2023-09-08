@@ -68,7 +68,7 @@ public class CategoryFragment extends Fragment {
         updateCategoryName();
         // init view models
         adViewModel = new ViewModelProvider(requireActivity()).get(AdViewModel.class);
-        userVB = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        userVB = new ViewModelProvider(this).get(UserViewModel.class);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class CategoryFragment extends Fragment {
         };
 
         userVB.getUserLiveData().observe(
-                requireActivity(),
+                getViewLifecycleOwner(),
                 userLV -> {
                     if(userLV.getStatus() == StateData.DataStatus.SUCCESS){
                         user = userLV.getData();
@@ -128,11 +128,13 @@ public class CategoryFragment extends Fragment {
 
         // shared view model
         // get the top 5 urgent ad list
-        adViewModel.getTopUrgentAdList(categoryName, 5).observe(requireActivity(), this::updateTopUrgentAdRecyclerView);
+        adViewModel.getTopUrgentAdList(categoryName, 5)
+                .observe(
+                getViewLifecycleOwner(), this::updateTopUrgentAdRecyclerView);
 
         // get top 5 nearest ad list with in 1 km
         adViewModel.getNearAdList(categoryName, user.makeCampusLatLng(), 1, 5)
-                .observe(requireActivity(), this::updateNearestAdRecyclerView);
+                .observe(getViewLifecycleOwner(), this::updateNearestAdRecyclerView);
 
         // get all Product
         adViewModel.getAllAds(categoryName).observe(requireActivity(), this::updateAllAdRecyclerView);
