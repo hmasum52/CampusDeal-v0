@@ -37,8 +37,10 @@ public class DealRequestFragment extends Fragment {
 
     private List<String> tabMenuList = new ArrayList<String>() {
         {
-            add("Request for you");
+            add("Request for you"); // deal_request/<adId>
             add("Your request");
+            add("My purchase"); // users/<uid>/deals
+            add("My sell"); // users/<uid>/buy_history
         }
     };
 
@@ -55,8 +57,10 @@ public class DealRequestFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ArrayList<Fragment> fragments = new ArrayList<>();
-        fragments.add(new ActiveDealsFragment());
-        fragments.add(new ActiveDealsFragment());
+        fragments.add(new ActiveDealsFragment()); // request for you
+        fragments.add(new ActiveDealsFragment()); // your request
+        fragments.add(new ActiveDealsFragment()); // my purchase
+        fragments.add(new ActiveDealsFragment()); // my sell
 
         mVB.pager.setAdapter(new FragmentViewPagerAdapter(
                 fragments,

@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -21,10 +22,11 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import github.hmasum52.campusdeal.R;
+import github.hmasum52.campusdeal.adapter.DealHistoryAdapter;
 import github.hmasum52.campusdeal.adapter.DealRequestListAdapter;
-import github.hmasum52.campusdeal.adapter.RecyclerItemClickListener;
 import github.hmasum52.campusdeal.databinding.FragmentActiveDealsBinding;
 import github.hmasum52.campusdeal.model.Ad;
+import github.hmasum52.campusdeal.model.Deal;
 import github.hmasum52.campusdeal.model.DealRequest;
 import github.hmasum52.campusdeal.util.Constants;
 import github.hmasum52.campusdeal.util.Util;
@@ -39,9 +41,14 @@ public class ActiveDealsFragment extends Fragment {
     @Inject
     FirebaseAuth auth;
 
+    @Inject
+    FirebaseUser fUser;
+
     private FragmentActiveDealsBinding mVB;
 
-    private DealRequestListAdapter adapter;
+    private DealRequestListAdapter dealRequestListAdapter;
+
+    private DealHistoryAdapter dealHistoryAdapter;
 
     // index of this fragment in the viewpager
     int position = 0;
@@ -58,23 +65,42 @@ public class ActiveDealsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d("ActiveDealsFragment", "onViewCreated: "+this );
-        position = Util.getViewPagerFragmentIndex(this, 2);
+        position = Util.getViewPagerFragmentIndex(this, 4);
 
-        // define adapter
-        adapter = new DealRequestListAdapter(this::navigateToAdsFragment);
-        mVB.dealListRv.setAdapter(adapter);
+        dealRequestListAdapter = new DealRequestListAdapter(this::navigateToAdsFragmentFromDealRequest);
+        dealHistoryAdapter = new DealHistoryAdapter(this::navigateToAdsFragmentFromDealHistory);
+
 
         Log.d(TAG, "onViewCreated: position = "+position);
-        if(position == 0) {
-            updateRequestForYouUI();
+        switch (position){
+            case 0: // request for you
+                // define adapter
+                Log.d(TAG, "onViewCreated: Request for you");
+                mVB.dealListRv.setAdapter(dealRequestListAdapter);
+                updateRequestForYouUI();
+                break;
+            case 1: // your request
+                Log.d(TAG, "onViewCreated: Your request");
+                dealRequestListAdapter.setBuyer(true);
+                mVB.dealListRv.setAdapter(dealRequestListAdapter);
+                updateYourRequestUI();
+                break;
+            case 2: // my purchase
+                Log.d(TAG, "onViewCreated: My purchase");
+                dealHistoryAdapter.setBuyer(true);
+                fetchDealHistory(Constants.USER_BUY_HISTORY_COLLECTION);
+                mVB.dealListRv.setAdapter(dealHistoryAdapter);
+                break;
+            case 3: // my sell
+                Log.d(TAG, "onViewCreated: My sell");
+                fetchDealHistory(Constants.USER_DEALS_COLLECTION);
+                mVB.dealListRv.setAdapter(dealHistoryAdapter);
+                break;
         }
-        else if(position == 1){
-            adapter.setBuyer(true);
-            updateYourRequestUI();
-        }
+
     }
 
-    private void navigateToAdsFragment(DealRequest dealRequest) {
+    private void navigateToAdsFragmentFromDealRequest(DealRequest dealRequest) {
         int action = position == 0 ? R.id.action_dealRequestFragment_to_adReviewFragment
                 : R.id.action_dealRequestFragment_to_adDetailsFragment;
         db.collection(Constants.ADS_COLLECTION)
@@ -95,6 +121,17 @@ public class ActiveDealsFragment extends Fragment {
                 });
     }
 
+    private void navigateToAdsFragmentFromDealHistory(Deal deal){
+        Log.d(TAG, "navigateToAdsFragmentFromDealHistory: called");
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Constants.AD_KEY, Parcels.wrap(deal.getAd()));
+        NavHostFragment.findNavController(this)
+                .navigate(
+                        R.id.action_dealRequestFragment_to_adDetailsFragment,
+                       bundle
+                );
+    }
+
 
     private void updateRequestForYouUI() {
         Log.d(TAG, "updateRequestForYouUI: called");
@@ -108,6 +145,10 @@ public class ActiveDealsFragment extends Fragment {
         String noDataMsg = "You haven't made any request yet!";
         String noDataTips = "You can see all the request you have sent here";
         fetchDataFromFireStore("buyerId", noDataMsg, noDataTips);
+    }
+
+    private void updateYourSellUI() {
+        Log.d(TAG, "updateYourSellUI: called");
     }
 
     private void updateNoItemUI(String msg, String tips) {
@@ -126,12 +167,13 @@ public class ActiveDealsFragment extends Fragment {
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     mVB.loadingPb.setVisibility(View.GONE);
+                    Log.d(TAG, "onViewCreated: total deal requests = "+queryDocumentSnapshots.size());
                     if(queryDocumentSnapshots.isEmpty()){
                         updateNoItemUI(noDataMsg, noDataTips);
                     }else{
                         mVB.noItemPlaceholder.getRoot().setVisibility(View.GONE);
                         mVB.dealListRv.setVisibility(View.VISIBLE);
-                        adapter.differ.submitList(queryDocumentSnapshots.toObjects(DealRequest.class));
+                        dealRequestListAdapter.differ.submitList(queryDocumentSnapshots.toObjects(DealRequest.class));
                     }
                 }).addOnFailureListener(
                         e -> {
@@ -142,5 +184,36 @@ public class ActiveDealsFragment extends Fragment {
                 );
     }
 
+
+    private void fetchDealHistory(String collection){
+        // fetch all the deals
+        // from users/<userId>/<collection>
+        // where <collection> is either "deals" or "buy_history"
+        // and <userId> is the current user id
+        Log.d(TAG, "fetchDealHistory: fetching deal history from collection: "+collection);
+
+        // fetch all the deals
+        db.collection(Constants.USER_COLLECTION)
+                .document(fUser.getUid())
+                .collection(collection)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    Log.d(TAG, "fetchDealHistory: total deals = "+queryDocumentSnapshots.size());
+                    if(queryDocumentSnapshots.isEmpty()){
+                        updateNoItemUI("No deal history", "You can see all the deals you have made here");
+                    }else{
+                        // hide no item placeholder
+                        mVB.noItemPlaceholder.getRoot().setVisibility(View.GONE);
+                        mVB.dealListRv.setVisibility(View.VISIBLE);
+                        // update the recycler view
+                        dealHistoryAdapter.differ.submitList(queryDocumentSnapshots.toObjects(Deal.class));
+                    }
+                }).addOnFailureListener(e -> {
+                    Log.d(TAG, "fetchDealHistory: "+e.getMessage());
+                    // show no item placeholder
+                    mVB.noItemPlaceholder.getRoot().setVisibility(View.VISIBLE);
+                    mVB.dealListRv.setVisibility(View.GONE);
+                });
+    }
 
 }
