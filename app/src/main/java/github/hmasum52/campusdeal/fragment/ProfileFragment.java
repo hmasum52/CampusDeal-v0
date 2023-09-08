@@ -105,7 +105,7 @@ public class ProfileFragment extends Fragment {
             {
                 add(new ProfileOption("My Ads", R.drawable.price_tag_rotate_svgrepo_com, "View your ads"));
                 add(new ProfileOption("My Wishlist", R.drawable.baseline_favorite_24, "View your wishlist"));
-                //add(new ProfileOption("Edit Account", R.drawable.baseline_edit_24,"Edit your account"));
+                add(new ProfileOption("Edit Profile", R.drawable.baseline_edit_24, "Edit your profile"));
             }
         };
 
@@ -120,9 +120,9 @@ public class ProfileFragment extends Fragment {
                 case "My Wishlist":
                     NavHostFragment.findNavController(this).navigate(R.id.action_profileFragment_to_myWishlistFragment);
                     break;
-               /* case "Edit Account":
-                    MainActivity.navigateToNewStartDestination(ProfileFragment.this.getActivity(), R.id.editAccountFragment);
-                    break;*/
+                case "Edit Profile":
+                    NavHostFragment.findNavController(this).navigate(R.id.action_profileFragment_to_editProfileFragment);
+                    break;
             }
         });
         mVB.optionListRv.setAdapter(adapter);

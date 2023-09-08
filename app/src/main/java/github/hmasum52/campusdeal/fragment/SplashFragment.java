@@ -132,7 +132,7 @@ public class SplashFragment extends Fragment {
         }
         Log.d("checkIfUserExist: firebase auth user display name: ", fUser.getDisplayName());
         userVM.getUserLiveData().observe(
-                requireActivity(),
+                this,
                 userState -> {
                     switch (userState.getStatus()){
                         case LOADING:

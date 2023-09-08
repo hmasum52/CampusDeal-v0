@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="16dp"
+    android:background="@color/white"
+    >
+
+    <ImageView
+        android:id="@+id/back_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_arrow_back_ios_new_24" />
+
+
+    <TextView
+        android:id="@+id/my_ads_tv"
+        style="@style/TextAppearance.Material3.ActionBar.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit Profile"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- take phone number as input in material text input editext wrapped with text input layout -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/name_til"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="16dp"
+        android:hint="Name"
+        app:layout_constraintTop_toBottomOf="@+id/my_ads_tv"
+        tools:layout_editor_absoluteX="26dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/name_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLength="11"
+            android:textColor="@color/text_dark" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- take phone number as input in material text input editext wrapped with text input layout -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/phone_number_til"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="16dp"
+        android:hint="Phone number"
+        app:layout_constraintTop_toBottomOf="@+id/name_til"
+        tools:layout_editor_absoluteX="26dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/phone_number_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:maxLength="11"
+            android:textColor="@color/text_dark" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- take campus name as input in material text input editext wrapped with text input layout -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/campus_name_til"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="16dp"
+        android:hint="Campus name"
+        app:layout_constraintTop_toBottomOf="@+id/phone_number_til"
+        tools:layout_editor_absoluteX="26dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/campus_name_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textColor="@color/text_dark" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- take university type as input in material dropdown wrapped with text input layout -->
+    <!-- https://github.com/material-components/material-components-android/blob/master/docs/components/Menu.md -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/university_type_til"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="16dp"
+        android:hint="Campus type"
+        app:layout_constraintTop_toBottomOf="@+id/campus_name_til"
+        tools:layout_editor_absoluteX="26dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/campus_type_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:textColor="@color/text_dark"
+            android:filterTouchesWhenObscured="false"
+            app:simpleItems="@array/campus_type" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- add text input which can't take input but clicking it opens map to select location -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/location_til"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="16dp"
+        android:hint="Location"
+        app:layout_constraintTop_toBottomOf="@+id/university_type_til"
+        app:startIconDrawable="@drawable/baseline_add_location_alt_24"
+        tools:layout_editor_absoluteX="26dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/location_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:inputType="none"
+            android:textColor="@color/text_dark" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- add a button to complete profile -->
+    <Button
+        android:id="@+id/update_profile_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:text="Update profile"
+        app:cornerRadius="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="25dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

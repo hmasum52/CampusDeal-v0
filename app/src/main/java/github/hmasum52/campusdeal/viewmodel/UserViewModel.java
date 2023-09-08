@@ -159,4 +159,34 @@ public class UserViewModel extends ViewModel {
 
         return profileCompleteLiveData;
     }
+
+    // update profile
+    public StateLiveData<Boolean> updateProfile(String name, String phoneNumber, Campus campus){
+        StateLiveData<Boolean> updateProfileLiveData = new StateLiveData<>();
+
+        // saving profile complete data
+        FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(fUser == null){
+            Log.d(TAG, "updateProfile: user is not logged in");
+            updateProfileLiveData.postError(new Exception("User is not logged in"));
+            return null;
+        }
+
+        // save phone number and campus to firebase
+        db.collection(Constants.USER_COLLECTION)
+                .document(fUser.getUid())
+                .update("name", name, "phone", phoneNumber, "campus", campus)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "updateProfile: profile updated successfully");
+                    updateProfileLiveData.postSuccess(true);
+                    fetchUserProfile();
+                })
+                .addOnFailureListener(e -> {
+                    Log.d(TAG, "updateProfile: failed to update profile");
+                    updateProfileLiveData.postError(e);
+                });
+
+        return updateProfileLiveData;
+    }
 }

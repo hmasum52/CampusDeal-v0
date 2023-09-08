@@ -88,6 +88,11 @@
             app:destination="@id/myWishlistFragment"
             app:enterAnim="@anim/from_right"
             app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment"
+            app:enterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
@@ -203,5 +208,10 @@
         android:name="github.hmasum52.campusdeal.fragment.DealHistoryDetailsFragment"
         tools:layout="@layout/fragment_ad_details"
         android:label="DealHistoryDetailsFragment" />
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="github.hmasum52.campusdeal.fragment.EditProfileFragment"
+        tools:layout="@layout/fragment_edit_profile"
+        android:label="EditProfileFragment" />
 
 </navigation>
