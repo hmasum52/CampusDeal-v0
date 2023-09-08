@@ -72,15 +72,15 @@ public class User{
         this.phone = phone;
     }
 
-    public void setCampus(String address) {
-        this.address = address;
+    public void setCampus(Campus campus) {
+        this.campus = campus;
     }
     public Campus getCampus() {
         return campus;
     }
 
     public boolean checkIfProfileIsComplete(){
-        return phone != null && campus != null;
+        return phone != null && campus != null && !phone.isEmpty();
     }
 
 

@@ -80,12 +80,13 @@ public class GoogleMapFragment extends Fragment
                // bundle.putParcelable("location", Parcels.wrap(adLocation));
                // getParentFragmentManager().setFragmentResult("location", bundle);
                // getParentFragmentManager().popBackStack();
+                Log.d(TAG, "onViewCreated: poping back stack with location "+adLocation.getFullAddress());
                 NavController navController = NavHostFragment.findNavController(this);
                 if(navController.getPreviousBackStackEntry() != null){
                     navController.getPreviousBackStackEntry()
                             .getSavedStateHandle()
                             .set("location", Parcels.wrap(adLocation));
-                    navController.popBackStack(R.id.addProductFragment, false, true);
+                    navController.popBackStack();
                 }
 
             }else{

@@ -5,12 +5,9 @@ import static android.app.Activity.RESULT_OK;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
@@ -21,17 +18,8 @@ import android.view.ViewGroup;
 import com.firebase.ui.auth.AuthMethodPickerLayout;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
-import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
-import com.google.android.gms.auth.api.identity.Identity;
-import com.google.android.gms.auth.api.identity.SignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,10 +28,8 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import github.hmasum52.campusdeal.R;
-import github.hmasum52.campusdeal.databinding.FragmentLoginBinding;
 import github.hmasum52.campusdeal.databinding.FragmentOnBoardingBinding;
 import github.hmasum52.campusdeal.model.User;
-import github.hmasum52.campusdeal.util.Constants;
 import github.hmasum52.campusdeal.util.PromptDialog;
 
 @AndroidEntryPoint
@@ -103,7 +89,7 @@ public class OnBoardingFragment extends SplashFragment {
             if(auth.getCurrentUser() != null){
                 // navigate to home screen
                 //NavHostFragment.findNavController(this).navigate(R.id.action_onBoardingFragment_to_homeFragment);
-                createUserIsNotExists();
+                checkIfUserExist();
                 return;
             }
             signInLauncher.launch(signInIntent);
@@ -113,7 +99,7 @@ public class OnBoardingFragment extends SplashFragment {
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         if (result.getResultCode() == RESULT_OK) {
             Log.d(TAG, "onSignInResult: sign in successful");
-            createUserIsNotExists();
+            checkIfUserExist();
             // ...
         } else {
             // Sign in failed. If response is null the user canceled the

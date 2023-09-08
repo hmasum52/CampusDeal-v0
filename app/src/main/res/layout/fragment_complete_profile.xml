@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="phone"
-            android:maxLength="10"
+            android:maxLength="11"
             android:textColor="@color/text_dark" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -94,7 +94,7 @@
         tools:layout_editor_absoluteX="25dp">
 
         <AutoCompleteTextView
-            android:id="@+id/university_type_et"
+            android:id="@+id/campus_type_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"
@@ -115,6 +115,7 @@
         tools:layout_editor_absoluteX="25dp">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:editable="false"
             android:id="@+id/location_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -1,5 +1,7 @@
 package github.hmasum52.campusdeal.fragment;
 
+import static github.hmasum52.campusdeal.model.StateData.DataStatus.LOADING;
+
 import android.animation.Animator;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -27,6 +30,7 @@ import github.hmasum52.campusdeal.databinding.FragmentSplashBinding;
 import github.hmasum52.campusdeal.model.User;
 import github.hmasum52.campusdeal.util.Constants;
 import github.hmasum52.campusdeal.util.PromptDialog;
+import github.hmasum52.campusdeal.viewmodel.UserViewModel;
 
 @AndroidEntryPoint
 public class SplashFragment extends Fragment {
@@ -42,6 +46,14 @@ public class SplashFragment extends Fragment {
     FirebaseFirestore db;
     protected PromptDialog loadingDialog;
 
+    private UserViewModel userVM;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        userVM = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,6 +65,7 @@ public class SplashFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         loadingDialog = new PromptDialog(getActivity(), R.layout.dialog_loading);
+
         mVB.cdLogoLottie.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(@NonNull Animator animation) {
@@ -63,16 +76,11 @@ public class SplashFragment extends Fragment {
             public void onAnimationEnd(@NonNull Animator animation) {
                 // check if user is logged in
                 if(auth.getCurrentUser() != null) {
-                    // user is logged in
-                    // go to home fragment using
-                    /*MainActivity.navigateToNewStartDestination(
-                            getActivity(),
-                            R.id.action_splashFragment_to_homeFragment,
-                            R.id.homeFragment // new start destination
-                    );*/
-                    createUserIsNotExists();
+                    Log.d(TAG, "onAnimationEnd: user is logged in");
+                    checkIfUserExist();
                 }else{
                     // user is not logged in
+                    Log.d(TAG, "onAnimationEnd: user is not logged in. Navigating to login onBoardingFragment");
                     // go to login fragment
                     MainActivity.navigateToNewStartDestination(
                             getActivity(),
@@ -108,59 +116,61 @@ public class SplashFragment extends Fragment {
         loadingDialog.hideDialog();
     }
 
-    protected void createUserIsNotExists() {
+    protected void checkIfUserExist() {
+
         loadingDialog.showDialog("Please wait...", R.id.message_tv);
 
         // check if the user data is in users firestore collection
         // if not then create one
-        Log.d(TAG, "createUserIsNotExists: checking if user exists in firestore user collection");
+        Log.d(TAG, "checkIfUserExist: checking if user exists in firestore user collection");
         // Successfully signed in
         FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
         if(fUser == null){
-            Log.d(TAG, "createUserIsNotExists: user is null");
+            Log.d(TAG, "checkIfUserExist: user is null");
             showErrorMessage();
             return;
         }
-        Log.d("createUserIsNotExists: firebase auth user display name: ", fUser.getDisplayName());
-        db.collection(Constants.USER_COLLECTION)
-                .document(fUser.getUid())
-                .get()
-                .addOnCompleteListener(task -> {
-                    if(!task.isSuccessful()){
-                        showErrorMessage();
-                        return;
-                    }
-                    // check if the user exists
-
-                    if(!task.getResult().exists()){ // user does not exists
-                        Log.d(TAG, "onComplete: user does not exists. Creating new user");
-                        // create a new user
-                        db.collection(Constants.USER_COLLECTION)
-                                .document(fUser.getUid())
-                                .set(new User(fUser))
-                                .addOnSuccessListener((aVoid) ->{
-                                    Log.d(TAG, "onSuccess: user saved successfully in firestore");
-                                    // navigate to home fragment
-                                    NavHostFragment.findNavController(this)
-                                            .navigate(R.id.action_onBoardingFragment_to_homeFragment);
-                                })
-                                .addOnFailureListener(e -> {
-                                    Log.d(TAG, "onFailure: user saved failed in firestore");
-                                    showErrorMessage();
-                                });
-                    }else {
-                        // user exists: get user data
-                        User user = task.getResult().toObject(User.class);
-                        if(user == null){
+        Log.d("checkIfUserExist: firebase auth user display name: ", fUser.getDisplayName());
+        userVM.getUserLiveData().observe(
+                requireActivity(),
+                userState -> {
+                    switch (userState.getStatus()){
+                        case LOADING:
+                            Log.d(TAG, "checkIfUserExist: loading user data");
+                            break;
+                        case SUCCESS:
+                            Log.d(TAG, "checkIfUserExist: user data loaded successfully");
+                            loadingDialog.hideDialog();
+                            navigate(userState.getData());
+                            break;
+                        case ERROR:
+                            if(userState.getError().getMessage().equals("User does not exists")) {
+                                userVM.saveUserData().observe(
+                                        requireActivity(),
+                                        saveUserState -> {
+                                            switch (saveUserState.getStatus()) {
+                                                case LOADING:
+                                                    Log.d(TAG, "checkIfUserExist: saving user data");
+                                                    break;
+                                                case SUCCESS:
+                                                    Log.d(TAG, "checkIfUserExist: user data saved successfully");
+                                                    loadingDialog.hideDialog();
+                                                    navigate(userState.getData());
+                                                    break;
+                                                case ERROR:
+                                                    Log.d(TAG, "checkIfUserExist: error while saving user data");
+                                                    showErrorMessage();
+                                                    break;
+                                            }
+                                        }
+                                );
+                            }
+                            Log.d(TAG, "checkIfUserExist: error while loading user data");
                             showErrorMessage();
-                            return;
-                        }
-                        Log.d(TAG, "User already exists. User name is "+user.getName());
-
-                        loadingDialog.hideDialog();
-                        navigate(user);
+                            break;
                     }
-                });
+                }
+        );
     }
 
     protected void navigate(User user){
@@ -168,6 +178,7 @@ public class SplashFragment extends Fragment {
         if(user.checkIfProfileIsComplete()){
             // user is not logged in
             // go to login fragment
+            Log.d(TAG, "navigate: user profile is complete");
             MainActivity.navigateToNewStartDestination(
                     getActivity(),
                     R.id.action_splashFragment_to_onBoardingFragment,
@@ -177,6 +188,7 @@ public class SplashFragment extends Fragment {
             // navigate to complete profile fragment
             // user is not logged in
             // go to login fragment
+            Log.d(TAG, "navigate: user profile is not complete");
             MainActivity.navigateToNewStartDestination(
                     getActivity(),
                     R.id.action_splashFragment_to_completeProfileFragment,
