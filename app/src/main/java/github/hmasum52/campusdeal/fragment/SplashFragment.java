@@ -182,7 +182,7 @@ public class SplashFragment extends Fragment {
             MainActivity.navigateToNewStartDestination(
                     getActivity(),
                     R.id.action_splashFragment_to_homeFragment,
-                    R.id.onBoardingFragment // new start destination
+                    R.id.homeFragment // new start destination
             );
         }else{
             // navigate to complete profile fragment
