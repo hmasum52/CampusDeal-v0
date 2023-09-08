@@ -28,6 +28,8 @@ public class Constants {
     // ad key
     public static final String AD_KEY = "ad";
 
+    public static final String DEAL_KEY = "deal_key";
+
     // buy request collection
     public static final String DEAL_REQUEST_COLLECTION = "deal_request";
 

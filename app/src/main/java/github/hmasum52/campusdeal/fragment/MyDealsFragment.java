@@ -23,10 +23,9 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 import github.hmasum52.campusdeal.adapter.FragmentViewPagerAdapter;
 import github.hmasum52.campusdeal.databinding.FragmentDealRequestBinding;
-import github.hmasum52.campusdeal.util.Constants;
 
 @AndroidEntryPoint
-public class DealRequestFragment extends Fragment {
+public class MyDealsFragment extends Fragment {
     @Inject
     FirebaseFirestore db;
 

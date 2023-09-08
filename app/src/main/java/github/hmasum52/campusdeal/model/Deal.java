@@ -4,8 +4,11 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
 
+import org.parceler.Parcel;
+
 import java.util.Date;
 
+@Parcel
 public class Deal {
     private Ad ad;
     private Date date;

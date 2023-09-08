@@ -4,7 +4,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+
+import github.hmasum52.campusdeal.R;
 
 // https://www.youtube.com/watch?v=Zi6rccophco
 public class PromptDialog {
@@ -27,6 +30,14 @@ public class PromptDialog {
         if(textView!=null)
             textView.setText(message);
         dialog.show();
+    }
+
+    public Button getYestButton(){
+        return dialog.findViewById(R.id.yes_btn);
+    }
+
+    public Button getNoButton(){
+        return dialog.findViewById(R.id.no_btn);
     }
 
     public void showDialog(){

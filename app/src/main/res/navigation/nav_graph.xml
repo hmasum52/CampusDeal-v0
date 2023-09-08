@@ -96,7 +96,7 @@
         tools:layout="@layout/fragment_category" />
     <fragment
         android:id="@+id/dealRequestFragment"
-        android:name="github.hmasum52.campusdeal.fragment.DealRequestFragment"
+        android:name="github.hmasum52.campusdeal.fragment.MyDealsFragment"
         android:label="fragment_buy_request"
         tools:layout="@layout/fragment_deal_request" >
         <argument
@@ -111,6 +111,9 @@
         <action
             android:id="@+id/action_dealRequestFragment_to_adDetailsFragment"
             app:destination="@id/adDetailsFragment" />
+        <action
+            android:id="@+id/action_dealRequestFragment_to_dealHistoryDetailsFragment"
+            app:destination="@id/dealHistoryDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -195,5 +198,10 @@
             android:id="@+id/action_completeProfileFragment_to_mapLocationInputFragment"
             app:destination="@id/mapLocationInputFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/dealHistoryDetailsFragment"
+        android:name="github.hmasum52.campusdeal.fragment.DealHistoryDetailsFragment"
+        tools:layout="@layout/fragment_ad_details"
+        android:label="DealHistoryDetailsFragment" />
 
 </navigation>

@@ -124,10 +124,10 @@ public class ActiveDealsFragment extends Fragment {
     private void navigateToAdsFragmentFromDealHistory(Deal deal){
         Log.d(TAG, "navigateToAdsFragmentFromDealHistory: called");
         Bundle bundle = new Bundle();
-        bundle.putParcelable(Constants.AD_KEY, Parcels.wrap(deal.getAd()));
+        bundle.putParcelable(Constants.DEAL_KEY, Parcels.wrap(deal));
         NavHostFragment.findNavController(this)
                 .navigate(
-                        R.id.action_dealRequestFragment_to_adDetailsFragment,
+                        R.id.action_dealRequestFragment_to_dealHistoryDetailsFragment,
                        bundle
                 );
     }
