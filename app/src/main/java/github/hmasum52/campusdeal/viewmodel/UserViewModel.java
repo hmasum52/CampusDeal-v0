@@ -37,10 +37,7 @@ public class UserViewModel extends ViewModel {
 
     public StateLiveData<User> getUserLiveData() {
         // check if user is logged in
-        if(userLiveData.getValue() == null){
-            Log.d(TAG, "getUserLiveData: user is not logged in");
-            fetchUserProfile();
-        }
+        fetchUserProfile();
         return userLiveData;
     }
 
@@ -134,6 +131,9 @@ public class UserViewModel extends ViewModel {
     // used in profile complete
     public StateLiveData<Boolean> saveProfileCompleteData(String phone, Campus campus){
         StateLiveData<Boolean> profileCompleteLiveData = new StateLiveData<>();
+
+        userLiveData.getValue().getData().setPhone(phone);
+        userLiveData.getValue().getData().setCampus(campus);
 
         // saving profile complete data
         FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
