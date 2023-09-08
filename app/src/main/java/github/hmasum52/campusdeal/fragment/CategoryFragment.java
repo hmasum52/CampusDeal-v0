@@ -24,9 +24,11 @@ import github.hmasum52.campusdeal.adapter.RecyclerItemClickListener;
 import github.hmasum52.campusdeal.databinding.FragmentCategoryBinding;
 import github.hmasum52.campusdeal.model.Ad;
 import github.hmasum52.campusdeal.model.StateData;
+import github.hmasum52.campusdeal.model.User;
 import github.hmasum52.campusdeal.util.Constants;
 import github.hmasum52.campusdeal.util.Util;
 import github.hmasum52.campusdeal.viewmodel.AdViewModel;
+import github.hmasum52.campusdeal.viewmodel.UserViewModel;
 
 @AndroidEntryPoint
 public class CategoryFragment extends Fragment {
@@ -39,7 +41,11 @@ public class CategoryFragment extends Fragment {
     private AdViewModel adViewModel;
 
     private AdItemAdapter urgentAdItemAdapter;
+    private AdItemAdapter nearestAdItemAdapter;
     private AdItemAdapter allAdItemAdapter;
+
+    private UserViewModel userVB;
+    private User user;
 
 
     public CategoryFragment(){
@@ -61,7 +67,8 @@ public class CategoryFragment extends Fragment {
         Log.d(TAG, "onCreate: called "+this);
         updateCategoryName();
         // init view models
-        adViewModel = new ViewModelProvider(this).get(AdViewModel.class);
+        adViewModel = new ViewModelProvider(requireActivity()).get(AdViewModel.class);
+        userVB = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
     }
 
     @Override
@@ -88,17 +95,44 @@ public class CategoryFragment extends Fragment {
                     .navigate(R.id.action_homeFragment_to_adDetailsFragment, bundle);
         };
 
+        userVB.getUserLiveData().observe(
+                requireActivity(),
+                userLV -> {
+                    if(userLV.getStatus() == StateData.DataStatus.SUCCESS){
+                        user = userLV.getData();
+                        initUI();
+                    }
+                }
+        );
+    }
+
+    private void initUI(){
+        if(user == null){
+            Log.d(TAG, "initUI: user is null");
+            return;
+        }
         // set adapters
-        allAdItemAdapter = new AdItemAdapter();
+        allAdItemAdapter = new AdItemAdapter(user);
         allAdItemAdapter.setRecyclerItemClickListener(onAdClickListener);
-        urgentAdItemAdapter = new AdItemAdapter();
+
+        nearestAdItemAdapter = new AdItemAdapter(user);
+        nearestAdItemAdapter.setRecyclerItemClickListener(onAdClickListener);
+
+        urgentAdItemAdapter = new AdItemAdapter(user);
         urgentAdItemAdapter.setRecyclerItemClickListener(onAdClickListener);
+
+
         mVB.urgentRv.setAdapter(urgentAdItemAdapter);
+        mVB.nearestAdRv.setAdapter(nearestAdItemAdapter);
         mVB.allAdRv.setAdapter(allAdItemAdapter);
 
         // shared view model
         // get the top 5 urgent ad list
         adViewModel.getTopUrgentAdList(categoryName, 5).observe(requireActivity(), this::updateTopUrgentAdRecyclerView);
+
+        // get top 5 nearest ad list with in 1 km
+        adViewModel.getNearAdList(categoryName, user.makeCampusLatLng(), 1, 5)
+                .observe(requireActivity(), this::updateNearestAdRecyclerView);
 
         // get all Product
         adViewModel.getAllAds(categoryName).observe(requireActivity(), this::updateAllAdRecyclerView);
@@ -110,6 +144,28 @@ public class CategoryFragment extends Fragment {
         // https://stackoverflow.com/questions/55728719/get-current-fragment-with-viewpager2
         int index = Util.getViewPagerFragmentIndex(this, Constants.CATEGORY_LIST.size());
         categoryName = Constants.CATEGORY_LIST.get(index);
+    }
+
+    // update nearest ad RecyclerView
+    private void updateNearestAdRecyclerView(@NonNull StateData<List<Ad>> ads){
+        Log.d(TAG, "updateNearestAdRecyclerView: category name = "+ categoryName);
+        switch (ads.getStatus()){
+            case SUCCESS:
+                setLoading(false);
+                Log.d(TAG, "updateNearestAdRecyclerView: total nearest ads = "+ads.getData().size());
+                nearestAdItemAdapter.differ.submitList(ads.getData());
+                break;
+            case ERROR:
+                Log.d(TAG, "updateNearestAdRecyclerView:"+ads.getError().getMessage());
+                setLoading(false);
+                break;
+            case LOADING:
+                setLoading(true);
+                break;
+            case COMPLETE:
+                setLoading(false);
+                break;
+        }
     }
 
 

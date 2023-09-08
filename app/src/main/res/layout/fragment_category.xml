@@ -21,7 +21,7 @@
 
         <TextView
             android:id="@+id/urgent_selling_tv"
-            style="@style/MaterialAlertDialog.Material3.Title.Text.CenterStacked"
+            style="@style/TextAppearance.Material3.TitleMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -41,17 +41,42 @@
             tools:itemCount="5"
             tools:listitem="@layout/card_ad" />
 
+        <TextView
+            android:id="@+id/near_your_campus_tv"
+            style="@style/TextAppearance.Material3.TitleMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Near your campus"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/urgent_rv"
+            app:layout_constraintTop_toBottomOf="@+id/urgent_rv" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/nearest_ad_rv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/urgent_selling_tv"
+            app:layout_constraintTop_toBottomOf="@+id/near_your_campus_tv"
+            app:spanCount="1"
+            tools:itemCount="5"
+            tools:listitem="@layout/card_ad" />
+
 
         <TextView
             android:id="@+id/All"
-            style="@style/MaterialAlertDialog.Material3.Title.Text.CenterStacked"
+            style="@style/TextAppearance.Material3.TitleMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="All"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/urgent_rv"
-            app:layout_constraintTop_toBottomOf="@+id/urgent_rv" />
+            app:layout_constraintStart_toStartOf="@+id/nearest_ad_rv"
+            app:layout_constraintTop_toBottomOf="@+id/nearest_ad_rv" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/all_ad_rv"

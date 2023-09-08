@@ -1,5 +1,6 @@
 package github.hmasum52.campusdeal.adapter;
 
+import android.location.Location;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,13 +16,18 @@ import com.bumptech.glide.Glide;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import github.hmasum52.campusdeal.R;
 import github.hmasum52.campusdeal.databinding.CardAdBinding;
 import github.hmasum52.campusdeal.model.Ad;
+import github.hmasum52.campusdeal.model.User;
 import github.hmasum52.campusdeal.util.Util;
+import github.hmasum52.campusdeal.viewmodel.UserViewModel;
 
 public class AdItemAdapter extends RecyclerView.Adapter<AdItemAdapter.ViewHolder> {
+    UserViewModel userViewModel;
+    User user;
 
     private final DiffUtil.ItemCallback<Ad> diffCallback = new DiffUtil.ItemCallback<Ad>() {
         @Override
@@ -34,6 +40,10 @@ public class AdItemAdapter extends RecyclerView.Adapter<AdItemAdapter.ViewHolder
             return oldItem.equals(newItem);
         }
     };
+
+    public AdItemAdapter(User user) {
+        this.user = user;
+    }
 
     public AsyncListDiffer<Ad> differ = new AsyncListDiffer<>(this, diffCallback);
 
@@ -89,8 +99,8 @@ public class AdItemAdapter extends RecyclerView.Adapter<AdItemAdapter.ViewHolder
         holder.mVB.ownerNameTv.setText(ad.getSellerName());
 
         // set distance/**/
-
-        holder.mVB.distanceTv.setText("1.2 km");
+        String distanceDesc = String.format(Locale.getDefault() , "%.2f", distance(ad))+" km";
+        holder.mVB.distanceTv.setText(distanceDesc);
 
         // set upload date
         String timeAlgo = Util.calculateTimeAlgo(ad.getUploadDate());
@@ -103,6 +113,20 @@ public class AdItemAdapter extends RecyclerView.Adapter<AdItemAdapter.ViewHolder
             }
         });
 
+    }
+
+    // return distance in km
+    // https://stackoverflow.com/a/17983974/13877490
+    private double distance(Ad ad){
+        Location userLocation = new Location("");
+        userLocation.setLatitude(user.getCampus().getLatitude());
+        userLocation.setLongitude(user.getCampus().getLongitude());
+
+        Location adLocation = new Location("");
+        adLocation.setLatitude(ad.getAdLocation().getLatitude());
+        adLocation.setLongitude(ad.getAdLocation().getLongitude());
+
+        return userLocation.distanceTo(adLocation)/1000.0;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{

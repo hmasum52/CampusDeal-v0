@@ -2,6 +2,7 @@ package github.hmasum52.campusdeal.model;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 
@@ -77,6 +78,10 @@ public class User{
     }
     public Campus getCampus() {
         return campus;
+    }
+
+    public LatLng makeCampusLatLng(){
+        return new LatLng(campus.getLatitude(), campus.getLongitude());
     }
 
     public boolean checkIfProfileIsComplete(){

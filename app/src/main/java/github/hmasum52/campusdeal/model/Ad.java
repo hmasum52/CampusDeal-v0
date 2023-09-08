@@ -1,5 +1,6 @@
 package github.hmasum52.campusdeal.model;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -108,6 +109,10 @@ public class Ad {
 
     public AdLocation getAdLocation() {
         return adLocation;
+    }
+
+    public LatLng locationLatLng(){
+        return new LatLng(adLocation.getLatitude(), adLocation.getLongitude());
     }
 
     @Override
