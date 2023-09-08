@@ -5,6 +5,8 @@ import android.util.Log;
 import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -50,13 +52,26 @@ public class AdViewModel extends ViewModel {
     // fetch urgent ad list from firebase fire store ads collection
     public void fetchUrgentAdList(String category, long limit){
         Log.d(TAG, "fetchUrgentAdList: fetching urgent ad list for category: "+category);
+        if(!topUrgentAdListMap.containsKey(category)){
+            topUrgentAdListMap.put(category, new StateLiveData<>());
+        }
+        String userId = FirebaseAuth.getInstance().getUid();
         // this query need indexing
-        db.collection("ads")
-                .whereEqualTo("category", category)
-                .whereEqualTo("urgent", true)
-                .orderBy("uploadDate", Query.Direction.DESCENDING)
-                .limit(5)
-                .get().addOnCompleteListener(task -> {
+        Query query =  db.collection("ads")
+                .where(
+                        Filter.and(
+                                Filter.equalTo("category", category),
+                                Filter.notEqualTo("sellerId", userId),
+                                Filter.equalTo("urgent", true)
+                        )
+                )
+                .orderBy("sellerId", Query.Direction.DESCENDING)
+                .orderBy("uploadDate", Query.Direction.DESCENDING);
+
+        if(limit>0)
+            query.limit(limit);
+
+        query.get().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 List<Ad> urgentAdList = task.getResult().toObjects(Ad.class);
                 if(topUrgentAdListMap.get(category) == null){
@@ -105,10 +120,17 @@ public class AdViewModel extends ViewModel {
     // --------------------------------------------------------------
 
     public void fetchAds(String category, long limit){
-        Log.d(TAG, "fetchNewAdList: fetching new ad list for category: "+category);
+        Log.d(TAG, "fetchAds: fetching all ad list for category: "+category);
+        String userId = FirebaseAuth.getInstance().getUid();
         // this query need indexing
         Query query = db.collection("ads")
-                .whereEqualTo("category", category)
+                .where(
+                        Filter.and(
+                                Filter.equalTo("category", category),
+                                Filter.notEqualTo("sellerId", userId)
+                        )
+                )
+                .orderBy("sellerId", Query.Direction.DESCENDING)
                 .orderBy("uploadDate", Query.Direction.DESCENDING);
 
         if(limit > 0){
@@ -155,11 +177,19 @@ public class AdViewModel extends ViewModel {
     public StateLiveData<List<Ad>> fetchNearAds(String category, LatLng latLng, double radius, int limit) {
         StateLiveData<List<Ad>> nearAdListSLD = new StateLiveData<>();
 
+        String userId = FirebaseAuth.getInstance().getUid();
+
         Log.d(TAG, "fetchNearAds: fetching near ad list for category: " + category);
         Log.d(TAG, "fetchNearAds: lat = " + latLng.latitude + " long = " + latLng.longitude + " radius = " + radius);
 
         db.collection("ads")
-                .whereEqualTo("category", category)
+                .where(
+                        Filter.and(
+                                Filter.equalTo("category", category),
+                                Filter.notEqualTo("sellerId", userId)
+                        )
+                )
+                .orderBy("sellerId", Query.Direction.DESCENDING)
                 .orderBy("uploadDate", Query.Direction.DESCENDING)
                 .get().addOnCompleteListener(task -> {
                     if(task.isSuccessful()){

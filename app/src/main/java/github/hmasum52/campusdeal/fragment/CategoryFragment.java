@@ -67,7 +67,7 @@ public class CategoryFragment extends Fragment {
         Log.d(TAG, "onCreate: called "+this);
         updateCategoryName();
         // init view models
-        adViewModel = new ViewModelProvider(requireActivity()).get(AdViewModel.class);
+        adViewModel = new ViewModelProvider(this).get(AdViewModel.class);
         userVB = new ViewModelProvider(this).get(UserViewModel.class);
     }
 
@@ -137,7 +137,7 @@ public class CategoryFragment extends Fragment {
                 .observe(getViewLifecycleOwner(), this::updateNearestAdRecyclerView);
 
         // get all Product
-        adViewModel.getAllAds(categoryName).observe(requireActivity(), this::updateAllAdRecyclerView);
+        adViewModel.getAllAds(categoryName).observe(getViewLifecycleOwner(), this::updateAllAdRecyclerView);
     }
 
     // get category name from class tag
