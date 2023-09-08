@@ -83,8 +83,8 @@ public class AdViewModel extends ViewModel {
         if(topUrgentAdListMap.get(category) == null){
             topUrgentAdListMap.put(category, new StateLiveData<>());
             topUrgentAdListMap.get(category).postLoading();
-            fetchUrgentAdList(category, limit);
         }
+        fetchUrgentAdList(category, limit);
         return topUrgentAdListMap.get(category);
     }
 
@@ -141,8 +141,8 @@ public class AdViewModel extends ViewModel {
         if(allAdsMap.get(category) == null){
             allAdsMap.put(category, new StateLiveData<>());
             allAdsMap.get(category).postLoading();
-            fetchAds(category, -1L);
         }
+        fetchAds(category, -1L);
         return allAdsMap.get(category);
     }
 
@@ -207,8 +207,9 @@ public class AdViewModel extends ViewModel {
     public StateLiveData<List<Ad>> getNearAdList(String category, LatLng latLng, double radius, int limit){
         // check if the list is already fetched
         if(nearAdListMap.get(category) == null){
-            nearAdListMap.put(category, fetchNearAds(category, latLng, radius, limit));
+            nearAdListMap.put(category, new StateLiveData<>());
         }
+        nearAdListMap.put(category, fetchNearAds(category, latLng, radius, limit));
         return nearAdListMap.get(category);
     }
 

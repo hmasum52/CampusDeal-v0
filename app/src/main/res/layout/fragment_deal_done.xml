@@ -61,11 +61,10 @@
         app:layout_constraintTop_toBottomOf="@+id/message_tv" />
 
     <Button
-        android:visibility="gone"
-        android:id="@+id/view_deals_btn"
+        android:id="@+id/deal_done_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="See all deals"
+        android:text="Done"
         app:cornerRadius="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="16dp" />

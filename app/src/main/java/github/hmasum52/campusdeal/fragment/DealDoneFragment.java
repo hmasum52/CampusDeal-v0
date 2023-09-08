@@ -28,7 +28,11 @@ public class DealDoneFragment extends Fragment {
         // on back button pressed
         // go back to home fragment
         mVB.backBtn.setOnClickListener(v -> {
-            NavHostFragment.findNavController(this).popBackStack();
+            NavHostFragment.findNavController(this).popBackStack(R.id.homeFragment, false);
+        });
+
+        mVB.dealDoneBtn.setOnClickListener(v -> {
+            NavHostFragment.findNavController(this).popBackStack(R.id.homeFragment, false);
         });
     }
 }
