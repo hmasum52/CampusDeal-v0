@@ -73,9 +73,12 @@ public class EditProfileFragment extends Fragment {
                             .setDuration(1000).show();
                    return;
                }
-               selectedCampus = user.getCampus();
-               if(mVB.nameEt.getText().toString().isEmpty())
-                    updateUI(user);
+
+               if(mVB.nameEt.getText().toString().isEmpty()){
+                   selectedCampus = user.getCampus();
+                   updateUI(user);
+               }
+
            }
         });
 

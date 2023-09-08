@@ -173,6 +173,9 @@ public class UserViewModel extends ViewModel {
             return null;
         }
 
+        Log.d(TAG, "updateProfile: updating profile of user "+fUser.getUid());
+        Log.d(TAG, "updateProfile: new address = "+campus.getFullAddress());
+
         // save phone number and campus to firebase
         db.collection(Constants.USER_COLLECTION)
                 .document(fUser.getUid())
