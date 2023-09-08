@@ -181,7 +181,7 @@ public class SplashFragment extends Fragment {
             Log.d(TAG, "navigate: user profile is complete");
             MainActivity.navigateToNewStartDestination(
                     getActivity(),
-                    R.id.action_splashFragment_to_onBoardingFragment,
+                    R.id.action_splashFragment_to_homeFragment,
                     R.id.onBoardingFragment // new start destination
             );
         }else{
