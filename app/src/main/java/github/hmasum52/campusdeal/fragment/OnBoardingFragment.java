@@ -9,6 +9,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -26,8 +27,11 @@ import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.Identity;
 import com.google.android.gms.auth.api.identity.SignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,9 +42,13 @@ import dagger.hilt.android.AndroidEntryPoint;
 import github.hmasum52.campusdeal.R;
 import github.hmasum52.campusdeal.databinding.FragmentLoginBinding;
 import github.hmasum52.campusdeal.databinding.FragmentOnBoardingBinding;
+import github.hmasum52.campusdeal.model.User;
+import github.hmasum52.campusdeal.util.Constants;
+import github.hmasum52.campusdeal.util.PromptDialog;
 
 @AndroidEntryPoint
-public class OnBoardingFragment extends Fragment {
+public class OnBoardingFragment extends SplashFragment {
+    private static final String TAG = "OnBoardingFragment";
 
     private FragmentOnBoardingBinding mVB;
 
@@ -65,6 +73,7 @@ public class OnBoardingFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        loadingDialog = new PromptDialog(getContext(), R.layout.dialog_loading);
 
         //https://github.com/firebase/FirebaseUI-Android/blob/master/auth/README.md#custom-layout
         AuthMethodPickerLayout customLayout = new AuthMethodPickerLayout
@@ -93,7 +102,8 @@ public class OnBoardingFragment extends Fragment {
             // check if user is already logged in
             if(auth.getCurrentUser() != null){
                 // navigate to home screen
-                NavHostFragment.findNavController(this).navigate(R.id.action_onBoardingFragment_to_homeFragment);
+                //NavHostFragment.findNavController(this).navigate(R.id.action_onBoardingFragment_to_homeFragment);
+                createUserIsNotExists();
                 return;
             }
             signInLauncher.launch(signInIntent);
@@ -101,20 +111,30 @@ public class OnBoardingFragment extends Fragment {
     }
 
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
-        IdpResponse response = result.getIdpResponse();
         if (result.getResultCode() == RESULT_OK) {
-            // Successfully signed in
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            Log.d("MainActivity", user.toString());
-
-            // navigate using nav controller
-            NavHostFragment.findNavController(this).navigate(R.id.action_onBoardingFragment_to_homeFragment);
+            Log.d(TAG, "onSignInResult: sign in successful");
+            createUserIsNotExists();
             // ...
         } else {
             // Sign in failed. If response is null the user canceled the
             // sign-in flow using the back button. Otherwise check
             // response.getError().getErrorCode() and handle the error.
             // ...
+            showErrorMessage();
+        }
+    }
+
+    @Override
+    protected void navigate(User user){
+        // check if user has completed profile
+        if(user.checkIfProfileIsComplete()){
+            // navigate to home fragment
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_onBoardingFragment_to_homeFragment);
+        }else{
+            // navigate to complete profile fragment
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_onBoardingFragment_to_completeProfileFragment);
         }
     }
 }

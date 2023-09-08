@@ -1,8 +1,9 @@
 package github.hmasum52.campusdeal.model;
 
-import com.google.firebase.auth.FirebaseUser;
+import androidx.annotation.NonNull;
 
-import java.util.Objects;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.Gson;
 
 public class User{
     private String uid;
@@ -13,6 +14,9 @@ public class User{
 
     private String phone;
     private String address;
+
+    private Campus campus;
+
     private String profileImageUrl;
 
     public User() {
@@ -64,15 +68,25 @@ public class User{
         return profileImageUrl;
     }
 
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setCampus(String address) {
+        this.address = address;
+    }
+    public Campus getCampus() {
+        return campus;
+    }
+
+    public boolean checkIfProfileIsComplete(){
+        return phone != null && campus != null;
+    }
+
+
+    @NonNull
     @Override
     public String toString() {
-        return "User{" +
-                "uid='" + uid + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
-                ", profileImageUrl='" + profileImageUrl + '\'' +
-                '}';
+        return new Gson().toJson(this);
     }
 }

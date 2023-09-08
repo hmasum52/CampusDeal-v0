@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="campus_type">
+        <item>University</item>
+        <item>College</item>
+        <item>School</item>
+    </string-array>
+</resources>

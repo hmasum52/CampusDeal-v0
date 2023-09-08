@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".fragment.CompleteProfileFragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp"
+    >
+
+
+    <!--https://lottiefiles.com/animations/completed-happiness-qDO6Eo0pDv-->
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnimation"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="25dp"
+        android:elevation="25dp"
+        android:padding="0dp"
+        app:layout_anchorGravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/message_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="complete_profile.json"
+        app:lottie_loop="true"
+        app:lottie_speed="1" />
+
+    <TextView
+        android:id="@+id/message_tv"
+        style="@style/TextAppearance.Material3.TitleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Complete your profile!"
+        android:textAlignment="center"
+        android:textColor="@color/text_dark"
+        app:layout_constraintBottom_toTopOf="@+id/phone_number_til"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- take phone number as input in material text input editext wrapped with text input layout -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/phone_number_til"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="16dp"
+        android:hint="Phone number"
+        app:layout_constraintBottom_toTopOf="@+id/campus_name_til"
+        tools:layout_editor_absoluteX="25dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/phone_number_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:maxLength="10"
+            android:textColor="@color/text_dark" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- take campus name as input in material text input editext wrapped with text input layout -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/campus_name_til"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="16dp"
+        android:hint="Campus name"
+        app:layout_constraintBottom_toTopOf="@+id/university_type_til"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/campus_name_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textColor="@color/text_dark" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- take university type as input in material dropdown wrapped with text input layout -->
+    <!--https://github.com/material-components/material-components-android/blob/master/docs/components/Menu.md-->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/university_type_til"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="16dp"
+        android:hint="Campus type"
+        app:layout_constraintBottom_toTopOf="@+id/location_til"
+        tools:layout_editor_absoluteX="25dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/university_type_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:textColor="@color/text_dark"
+            app:simpleItems="@array/campus_type" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- add text input which can't take input but clicking it opens map to select location -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/location_til"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="16dp"
+        android:hint="Location"
+        app:layout_constraintBottom_toTopOf="@+id/complete_profile_btn"
+        app:startIconDrawable="@drawable/baseline_add_location_alt_24"
+        tools:layout_editor_absoluteX="25dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/location_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:textColor="@color/text_dark" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- add a button to complete profile -->
+    <Button
+        android:id="@+id/complete_profile_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:text="Complete profile"
+        app:cornerRadius="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="25dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
