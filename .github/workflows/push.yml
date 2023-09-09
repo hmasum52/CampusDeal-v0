@@ -1,4 +1,4 @@
-name: internal-release v0.1.1
+name: latest release v0.1.2 on push to master
 
 on:
   push:
