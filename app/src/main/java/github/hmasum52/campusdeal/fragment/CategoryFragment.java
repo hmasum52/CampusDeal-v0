@@ -86,6 +86,37 @@ public class CategoryFragment extends Fragment {
 
         setLoading(true);
 
+
+        initAdapters();
+
+        userVB.getUserLiveData().observe(getViewLifecycleOwner(), userStateData -> {
+            if(userStateData.getStatus() == StateData.DataStatus.SUCCESS){
+                user = userStateData.getData();
+
+                // set user to adapts
+                urgentAdItemAdapter.setUser(user);
+                nearestAdItemAdapter.setUser(user);
+                allAdItemAdapter.setUser(user);
+
+                // shared view model
+                // get the top 5 urgent ad list
+                adViewModel.getTopUrgentAdList(categoryName, 5)
+                        .observe(
+                                getViewLifecycleOwner(), this::updateTopUrgentAdRecyclerView);
+
+                // get top 5 nearest ad list with in 1 km
+                adViewModel.getNearAdList(categoryName, user.makeCampusLatLng(), 1, 5)
+                        .observe(getViewLifecycleOwner(), this::updateNearestAdRecyclerView);
+
+                // get all Product
+                adViewModel.getAllAds(categoryName).observe(getViewLifecycleOwner(), this::updateAllAdRecyclerView);
+            }
+        });
+
+
+    }
+
+    private void initAdapters(){
         onAdClickListener = ad -> {
             // open ad details fragment
             // send ad objecdt to ad details fragment
@@ -95,49 +126,19 @@ public class CategoryFragment extends Fragment {
                     .navigate(R.id.action_homeFragment_to_adDetailsFragment, bundle);
         };
 
-        userVB.getUserLiveData().observe(
-                getViewLifecycleOwner(),
-                userLV -> {
-                    if(userLV.getStatus() == StateData.DataStatus.SUCCESS){
-                        user = userLV.getData();
-                        initUI();
-                    }
-                }
-        );
-    }
-
-    private void initUI(){
-        if(user == null){
-            Log.d(TAG, "initUI: user is null");
-            return;
-        }
         // set adapters
-        allAdItemAdapter = new AdItemAdapter(user);
+        allAdItemAdapter = new AdItemAdapter();
         allAdItemAdapter.setRecyclerItemClickListener(onAdClickListener);
 
-        nearestAdItemAdapter = new AdItemAdapter(user);
+        nearestAdItemAdapter = new AdItemAdapter();
         nearestAdItemAdapter.setRecyclerItemClickListener(onAdClickListener);
 
-        urgentAdItemAdapter = new AdItemAdapter(user);
+        urgentAdItemAdapter = new AdItemAdapter();
         urgentAdItemAdapter.setRecyclerItemClickListener(onAdClickListener);
-
 
         mVB.urgentRv.setAdapter(urgentAdItemAdapter);
         mVB.nearestAdRv.setAdapter(nearestAdItemAdapter);
         mVB.allAdRv.setAdapter(allAdItemAdapter);
-
-        // shared view model
-        // get the top 5 urgent ad list
-        adViewModel.getTopUrgentAdList(categoryName, 5)
-                .observe(
-                getViewLifecycleOwner(), this::updateTopUrgentAdRecyclerView);
-
-        // get top 5 nearest ad list with in 1 km
-        adViewModel.getNearAdList(categoryName, user.makeCampusLatLng(), 1, 5)
-                .observe(getViewLifecycleOwner(), this::updateNearestAdRecyclerView);
-
-        // get all Product
-        adViewModel.getAllAds(categoryName).observe(getViewLifecycleOwner(), this::updateAllAdRecyclerView);
     }
 
     // get category name from class tag

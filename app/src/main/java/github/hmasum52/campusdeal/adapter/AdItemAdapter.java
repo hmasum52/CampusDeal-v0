@@ -41,7 +41,7 @@ public class AdItemAdapter extends RecyclerView.Adapter<AdItemAdapter.ViewHolder
         }
     };
 
-    public AdItemAdapter(User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
@@ -99,8 +99,14 @@ public class AdItemAdapter extends RecyclerView.Adapter<AdItemAdapter.ViewHolder
         holder.mVB.ownerNameTv.setText(ad.getSellerName());
 
         // set distance/**/
-        String distanceDesc = String.format(Locale.getDefault() , "%.2f", distance(ad))+" km";
-        holder.mVB.distanceTv.setText(distanceDesc);
+        if(user != null){
+            holder.mVB.distanceTv.setVisibility(View.VISIBLE);
+            String distanceDesc = String.format(Locale.getDefault() , "%.2f", distance(ad))+" km";
+            holder.mVB.distanceTv.setText(distanceDesc);
+        }else{
+            holder.mVB.distanceTv.setVisibility(View.GONE);
+        }
+
 
         // set upload date
         String timeAlgo = Util.calculateTimeAlgo(ad.getUploadDate());
