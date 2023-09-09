@@ -2,9 +2,12 @@ package github.hmasum52.campusdeal.fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +28,10 @@ import github.hmasum52.campusdeal.MainActivity;
 import github.hmasum52.campusdeal.R;
 import github.hmasum52.campusdeal.adapter.ProfileOptionListAdapter;
 import github.hmasum52.campusdeal.databinding.FragmentProfileBinding;
+import github.hmasum52.campusdeal.model.StateData;
+import github.hmasum52.campusdeal.model.User;
 import github.hmasum52.campusdeal.util.ProfileOption;
+import github.hmasum52.campusdeal.viewmodel.UserViewModel;
 
 @AndroidEntryPoint
 public class ProfileFragment extends Fragment {
@@ -38,6 +44,13 @@ public class ProfileFragment extends Fragment {
     @Inject
     FirebaseAuth fAuth;
 
+    private UserViewModel userVM;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        userVM = new ViewModelProvider(this).get(UserViewModel.class);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,11 +76,31 @@ public class ProfileFragment extends Fragment {
             mVB.nameInitialsText.setText(fUser.getDisplayName().substring(0,1));
         }
 
-        // set the name to username text view
-        mVB.usernameTv.setText(fUser.getDisplayName());
+        userVM.getUserLiveData().observe(getViewLifecycleOwner(), userStateData -> {
+            if(userStateData.getStatus() == StateData.DataStatus.SUCCESS){
+                User user = userStateData.getData();
 
-        // set the email to email text view
-        mVB.emailTv.setText(fUser.getEmail());
+                if(user!=null){
+                    Log.d("TAG", "onViewCreated: user data found");
+                    // set the name to username text view
+                    mVB.usernameTv.setText(user.getName());
+
+                    // set the email to email text view
+                    mVB.emailTv.setText(user.getEmail());
+                    return;
+                }
+
+                Log.d("TAG", "onViewCreated: user data not found. rendering Firebase auth user data.");
+
+                // set the name to username text view
+                mVB.usernameTv.setText(fUser.getDisplayName());
+
+                // set the email to email text view
+                mVB.emailTv.setText(fUser.getEmail());
+            }
+        });
+
+
 
         // option recycler view init
         optionRecyclerViewInit();
