@@ -56,10 +56,11 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        mVB.pager.setUserInputEnabled(false);
         // https://androidwave.com/viewpager2-with-tablayout-android-example/
         // https://developer.android.com/guide/navigation/advanced/swipe-view-2
         // https://www.geeksforgeeks.org/how-to-implement-dynamic-tablayout-in-android/
-        createUserIsNotExists();
+        //createUserIsNotExists();
 
         // add product floating action button listener
         mVB.addProductFab.setOnClickListener(v -> {
