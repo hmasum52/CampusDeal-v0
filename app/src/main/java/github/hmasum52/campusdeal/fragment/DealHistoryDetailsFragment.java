@@ -60,12 +60,11 @@ public class DealHistoryDetailsFragment extends AdReviewFragment{
         deletePromptDialog = new PromptDialog(getContext(), R.layout.dialog_cancel_deal_request);
 
         if(isBuyer()){
-            super.mVB.dealerInfoTv.setText("Buyer");
-            super.fetchUserInfoAndUpdateUI(deal.getDealInfo().getBuyerId());
-
-        }else{
             super.mVB.dealerInfoTv.setText("Sale By");
             super.fetchUserInfoAndUpdateUI(deal.getDealInfo().getSellerId());
+        }else{
+            super.mVB.dealerInfoTv.setText("Buyer");
+            super.fetchUserInfoAndUpdateUI(deal.getDealInfo().getBuyerId());
         }
 
 
