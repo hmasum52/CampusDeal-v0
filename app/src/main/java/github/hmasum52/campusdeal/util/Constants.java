@@ -41,6 +41,7 @@ public class Constants {
         add("Sports");
         add("Tutoring");
         add("Musical Instruments");
+        add("Others");
     }};
 
     // category icons
@@ -52,6 +53,7 @@ public class Constants {
         add(R.drawable.man_bouncing_ball_svgrepo_com);
         add(R.drawable.teacher_light_skin_tone_svgrepo_com);
         add(R.drawable.guitar_svgrepo_com);
+        add(R.drawable.baseline_category_24);
     }};
 
 }
