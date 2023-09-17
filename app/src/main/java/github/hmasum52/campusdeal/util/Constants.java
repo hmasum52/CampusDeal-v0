@@ -18,6 +18,8 @@ public class Constants {
     // users/{userId}/deals/{adId}
     public static final String USER_DEALS_COLLECTION = "deals";
 
+    public static final String CAMPUS = "campus";
+
     // user buy history collection
     // users/{userId}/buy_history/{adId}
     public static final String USER_BUY_HISTORY_COLLECTION = "buy_history";

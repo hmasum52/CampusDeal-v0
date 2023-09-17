@@ -16,8 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CampusDeal"
         tools:targetApi="31">
+        <!-- https://pspdfkit.com/blog/2016/keyboard-handling-on-android/-->
         <activity
             android:name=".MainActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -29,6 +29,12 @@ public class AdLocation {
         this.longitude = longitude;
     }
 
+    public AdLocation(double latitude, double longitude, String fullAddress) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.addressLine = fullAddress;
+    }
+
     public String getAddressLine() {
         return addressLine;
     }
@@ -62,7 +68,18 @@ public class AdLocation {
     }
 
     public String getFullAddress(){
-        return addressLine + ", " + locality + ", " + subAdminArea + ", " + adminArea + ", " + countryName;
+        String fullAddress = "";
+        if(addressLine!=null)
+            fullAddress += addressLine;
+        if(locality!=null)
+            fullAddress += ", " + locality;
+        if(subAdminArea!=null)
+            fullAddress += ", " + subAdminArea;
+        if(adminArea!=null)
+            fullAddress += ", " + adminArea;
+        if(countryName!=null)
+            fullAddress += ", " + countryName;
+        return fullAddress;
     }
 
     @NonNull

@@ -144,6 +144,18 @@ public class UserViewModel extends ViewModel {
             return null;
         }
 
+        // save the campus on "campus" collection
+        db.collection(Constants.CAMPUS)
+                .document(campus.getName())
+                .set(campus)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "saveProfileCompleteData: campus saved successfully");
+                })
+                .addOnFailureListener(e -> {
+                    Log.d(TAG, "saveProfileCompleteData: failed to save campus");
+                });
+
+
         // save phone number and campus to firebase
         db.collection(Constants.USER_COLLECTION)
                 .document(fUser.getUid())

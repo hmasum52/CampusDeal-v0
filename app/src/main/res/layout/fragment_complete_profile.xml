@@ -30,7 +30,7 @@
 
     <TextView
         android:id="@+id/message_tv"
-        style="@style/TextAppearance.Material3.TitleLarge"
+        style="@style/TextAppearance.Material3.TitleMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -69,15 +69,15 @@
         android:layout_marginHorizontal="10dp"
         android:layout_marginBottom="16dp"
         android:hint="Campus name"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         app:layout_constraintBottom_toTopOf="@+id/university_type_til"
         >
-
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/campus_name_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:textColor="@color/text_dark" />
+            android:textColor="@color/text_dark"
+            />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- take university type as input in material dropdown wrapped with text input layout -->
