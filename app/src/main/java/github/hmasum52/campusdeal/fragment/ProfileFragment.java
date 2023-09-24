@@ -1,5 +1,7 @@
 package github.hmasum52.campusdeal.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -109,6 +111,14 @@ public class ProfileFragment extends Fragment {
         // sign out button click listener
         mVB.signOutBtn.setOnClickListener(v -> {
             signOut();
+        });
+
+
+        mVB.courseCard.setOnClickListener(v -> {
+            // https://developer.android.com/guide/components/intents-common#Browser
+            // open link in browser with browser chooser
+            Uri uri = Uri.parse("https://android.codervai.com/");
+            startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), "Choose browser"));
         });
     }
 
