@@ -1,7 +1,4 @@
-# About the App
-
-## Title:
-Campus Deal
+# Campus Deal
 ## Short Description: 
 It's a marketplace app where students can buy and sell items like textbooks, electronics etc.
 Someone will login and select the category and post the details along with the picture of the product.
