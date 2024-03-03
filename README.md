@@ -1,13 +1,12 @@
 # Campus Deal
 ## Short Description: 
-It's a marketplace app where students can buy and sell items like textbooks, electronics etc.
-Someone will login and select the category and post the details along with the picture of the product.
-Again, by going under the category, users can see the details of the seller's product and contact the seller.
+Campus Deal is a mobile application that empowers students to buy and sell various items on their campus, fostering a vibrant community and facilitating a convenient marketplace.
+In this app students can buy and sell items like textbooks, electronics etc.
 
 ## Features:
 - Authentication: Student can login and register with both email and google account.
 - Complete profile: Student have to complete profile with their phone number and campus info before continuing to the app.
-- Student can browse all the ads by category in the homepage.
+- Student can browse all the ads by category in the homepage - recent products and product near the user location will be shown
 - Search Ads: Student can search ads by title.
 - Ads Details: Student can see the details of an ad.
 - Deal Requests: Student can send deal request to the seller and also cancel the request.
