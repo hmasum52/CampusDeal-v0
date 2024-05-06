@@ -50,7 +50,10 @@ jobs:
           base64 -d keystore-b64.txt > $SIGNING_KEY_STORE_PATH
 
       - name: echo sign in path
-        run: echo ${{ secrets.SIGNING_KEY_STORE_PATH }}
+        run: echo ${{ secrets.SIGNING_KEY_STORE_PATH }} > test.txt
+
+      - name: cat
+        run: cat test.txt
 
       #3
       # - name: Build Release apk
