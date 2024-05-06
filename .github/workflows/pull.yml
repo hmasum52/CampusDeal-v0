@@ -5,7 +5,7 @@ name: pull on master
 #     branches: [ main ]
 on: 
   push:
-    branches: [ main ]
+    branches: [ master ]
 
 
 jobs:
